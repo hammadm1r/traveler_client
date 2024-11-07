@@ -9,9 +9,11 @@ export default {
       colors: {
         bgPrimary: "#41789f",
         bgSecondary: "#eef2f6",
+        textBox:"#EFEFEF"
       },
       backgroundImage: {
         'hero-pattern': "url('/src/assets/Images/bg-Img.png')",
+        'logoLight':"url('/src/assets/Images/logoLight.png')"
       },
     },
   },

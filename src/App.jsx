@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Home from "./Pages/Home";
 import Login from "./Pages/Authentication/Login";
+import Signup from "./Pages/Authentication/Signup";
 import "./App.css";
 
 function App() {
@@ -8,7 +9,7 @@ function App() {
 
   return (
     <>
-    <Login/>
+    <Signup/>
     </>
   );
 }
