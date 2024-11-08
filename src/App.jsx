@@ -1,15 +1,15 @@
 import { useState } from "react";
-import Home from "./Pages/Home";
-import Login from "./Pages/Authentication/Login";
-import Signup from "./Pages/Authentication/Signup";
 import "./App.css";
-
+import Login from "./Pages/Authentication/Login"
+import Signup from "./Pages/Authentication/Signup"
+import Stepper from "./Components/Stepper";
+import StepperControl from "./Components/StepperControl";
 function App() {
   const [count, setCount] = useState(0);
 
   return (
     <>
-    <Signup/>
+      <Signup/>
     </>
   );
 }
