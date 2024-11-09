@@ -13,7 +13,11 @@ export default {
       },
       backgroundImage: {
         'hero-pattern': "url('/src/assets/Images/bg-Img.png')",
+        'image-home':"url('src/assets/Images/bg-img-3.png')",
         'logoLight':"url('/src/assets/Images/logoLight.png')"
+      },
+      fontFamily: {
+        custom: ['Roboto', 'sans-serif'],
       },
     },
   },
