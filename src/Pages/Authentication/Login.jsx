@@ -1,6 +1,7 @@
 import React from "react";
 import authPng from "../../assets/Images/Tokyo-pana 1.png";
 import logoLight from "../../assets/Images/logoLight.png";
+import { Link } from 'react-router-dom';
 
 function Home() {
   return (
@@ -8,9 +9,7 @@ function Home() {
       {/* Left Section */}
       <div className="col-span-3 h-screen bg-[#C7A5EA] hidden sm:flex flex-col items-center justify-center relative">
         {/* Logo aligned to top-left */}
-        <div className="absolute top-0 left-4 sm:left-10">
-          <img src={logoLight} alt="logo" className="w-24 h-auto sm:w-32" />
-        </div>
+
         <div className="text-left text-2xl font-bold text-[rgba(0,0,0,0.55)] sm:ml-10 mt-20 sm:mt-0">
           <p>
             Get reliable and accurate travel
@@ -26,7 +25,7 @@ function Home() {
           <div className="absolute top-4 right-4 sm:right-10">
             <p className="text-right text-sm sm:text-base">
               Not a Member Yet?{" "}
-              <span className="text-[#AC68F7] cursor-pointer">Sign Up</span>
+              <span className="text-[#AC68F7] cursor-pointer"><Link to="/signup">Sign Up</Link></span>
             </p>
           </div>
           <div className="sm:ml-10">
