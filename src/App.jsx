@@ -8,17 +8,20 @@ import Stepper from "./Components/Stepper";
 import StepperControl from "./Components/StepperControl";
 import { Routes,Route } from "react-router-dom";
 import Navbar from "./Components/Navbar";
+import Story from "./Pages/Story";
+import UnderConstruction from "./Pages/UnderConstruction";
 function App() {
-  const [count, setCount] = useState(0);
 
   return (
     <>
     <Navbar/>
     <Routes>
       <Route path="/" element={<Landing />} />
+      <Route path="/underconstruction" element={<UnderConstruction />} />
       <Route path="/login"  element={<Login />}/>
       <Route path="/signup" element={<Signup />}/>
       <Route path="/home" element={<Home />} />
+      <Route path="/story" element={<Story />} />
     </Routes>
 
     </>

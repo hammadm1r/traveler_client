@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
 function Home() {
@@ -77,7 +78,7 @@ function Home() {
       
 
       {/* Grid Container for Sections */}
-      <div className="h-full bg-cover bg-center overflow-x-hidden grid md:grid-cols-7 gap-4 mt-2 px-4 sm:px-8">
+      <div className="h-full bg-cover bg-center overflow-x-hidden grid md:grid-cols-7 gap-4 mt-2 px-4 sm:px-8 sm:gap">
         {/* Left Section */}
         <div className="col-span-3 sm:flex flex-col items-center mt-10">
           <div>
@@ -89,8 +90,8 @@ function Home() {
             <p className="text-white text-md font-semibold md:text-lg lg:text-xl">
               No trip scheduled
             </p>
-            <button className="text-white bg-opacity-30 backdrop-blur-sm p-2 rounded-lg border border-white mt-4 hover:bg-opacity-50 transition duration-300 ease-in-out">
-              + Add new trip
+            <button className="text-white bg-opacity-30 backdrop-blur-sm p-2 rounded-lg border border-white mt-4 hover:bg-opacity-50 transition duration-300 ease-in-out"><Link to="/UnderConstruction">
+              + Add new trip</Link>
             </button>
           </div>
         </div>

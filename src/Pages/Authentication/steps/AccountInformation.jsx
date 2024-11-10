@@ -1,5 +1,5 @@
 import React from "react";
-
+import { Link } from "react-router-dom";
 const AccountInformation = ({ setCurrentStep }) => {
   return (
     <div className="w-full max-w-md mx-auto sm:mx-0">
@@ -8,7 +8,7 @@ const AccountInformation = ({ setCurrentStep }) => {
         <p className="text-right text-sm sm:text-base">
           Already have an Account?{" "}
           <span className="text-[#AC68F7] cursor-pointer hover:underline">
-            Log In
+          <Link to="/signup">Log In</Link>
           </span>
         </p>
       </div>
