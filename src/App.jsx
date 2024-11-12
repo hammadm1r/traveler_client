@@ -10,6 +10,7 @@ import { Routes,Route } from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import Story from "./Pages/Story";
 import UnderConstruction from "./Pages/UnderConstruction";
+import Forum from "./Pages/Forum";
 function App() {
 
   return (
@@ -22,6 +23,7 @@ function App() {
       <Route path="/signup" element={<Signup />}/>
       <Route path="/home" element={<Home />} />
       <Route path="/story" element={<Story />} />
+      <Route path="/forum" element={<Forum />} />
     </Routes>
 
     </>
