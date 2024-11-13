@@ -11,7 +11,8 @@ export default {
         bgSecondary: "#eef2f6",
         bgWhite:"ffffff",
         textBox:"#EFEFEF",
-        lightText : '#5F5F5F'
+        lightText : '#5F5F5F',
+        default : '#2A2B2C'
       },
       backgroundImage: {
         'hero-pattern': "url('/src/assets/Images/bg-Img.png')",

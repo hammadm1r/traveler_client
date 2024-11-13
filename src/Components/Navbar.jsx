@@ -1,5 +1,5 @@
 import React from 'react';
-import Logo from "../assets/Images/logoColor.png";
+import Logo from "../assets/Images/logolight.png";
 import { FaCircleUser } from "react-icons/fa6";
 import { IoReorderThreeOutline } from "react-icons/io5";
 import { Link } from 'react-router-dom';
