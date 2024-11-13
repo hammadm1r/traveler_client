@@ -3,5 +3,9 @@
 @tailwind utilities;
 
 body {
+ 
   @apply bg-bgWhite;
+}
+.container {
+  @apply mx-auto px-4;
 }
