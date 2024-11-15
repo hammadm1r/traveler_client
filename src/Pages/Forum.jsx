@@ -3,6 +3,7 @@ import pana from "../assets/Images/Onlineworld-pana1.png";
 import Header from "../Components/Header";
 import PostCard from "../Components/PostCard";
 import profileImage from "../assets/Images/UserImage.jpeg";
+import Sidebar from "../Components/Sidebar"
 const Forum = () => {
   const postData = [
     {
@@ -58,7 +59,7 @@ const Forum = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 ">
+    <div className=" bg-gray-100 ">
       {/* Header Section */}
       <Header
         titlePage="Forum"
@@ -69,10 +70,8 @@ const Forum = () => {
       {/* Content Section */}
       <div className="container mx-auto mt-6 grid grid-cols-12 gap-4 px-4 absolute">
         {/* Sidebar or Additional Content Placeholder */}
-        <div className="col-span-12 md:col-span-3 p-4 bg-white shadow rounded-lg hidden md:block">
-          <p className="text-gray-500">
-            Additional content or navigation can go here.
-          </p>
+        <div className="col-span-12 md:col-span-3 p-4 bg-white shadow rounded-lg hidden md:block sticky">
+          <Sidebar/>
         </div>
 
         {/* Main Content Area */}
