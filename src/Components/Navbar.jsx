@@ -17,7 +17,7 @@ const menuHandler = () => {
             <ul className='flex gap-7'>
                 <li className='text-white text-lg font-semibold'><Link to="/home">Home</Link></li>
                 <li className='text-white text-lg font-semibold'><Link to="/story">Story</Link></li>
-                <li className='text-white text-lg font-semibold'>Forum</li>
+                <li className='text-white text-lg font-semibold'><Link to="/forum">Forum</Link></li>
                 <li className='text-white text-lg font-semibold'>Travel Advisor</li>
                 <li className='text-white text-right text-3xl font-semibold'><FaCircleUser /></li>
             </ul>
