@@ -11,6 +11,7 @@ import Navbar from "./Components/Navbar";
 import Story from "./Pages/Story";
 import UnderConstruction from "./Pages/UnderConstruction";
 import Forum from "./Pages/Forum";
+import Post from "./Pages/Post"
 function App() {
 
   return (
@@ -24,6 +25,7 @@ function App() {
       <Route path="/home" element={<Home />} />
       <Route path="/story" element={<Story />} />
       <Route path="/forum" element={<Forum />} />
+      <Route path="/post" element={<Post />} />
     </Routes>
 
     </>

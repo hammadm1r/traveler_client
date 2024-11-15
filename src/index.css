@@ -4,7 +4,7 @@
 
 body {
  
-  @apply bg-bgWhite;
+  @apply bg-[#E5E5E5];
 }
 .container {
   @apply mx-auto px-4;
