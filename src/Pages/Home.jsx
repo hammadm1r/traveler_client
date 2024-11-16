@@ -78,7 +78,7 @@ function Home() {
       
 
       {/* Grid Container for Sections */}
-      <div className="h-full bg-cover bg-center overflow-x-hidden grid md:grid-cols-7 gap-4 mt-2 px-4 sm:px-8 sm:gap">
+      <div className="h-auto bg-cover bg-center overflow-x-hidden grid md:grid-cols-7 gap-4 mt-2 px-4 sm:px-8 sm:gap">
         {/* Left Section */}
         <div className="col-span-3 sm:flex flex-col items-center mt-10">
           <div>

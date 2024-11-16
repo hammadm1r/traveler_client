@@ -3,7 +3,7 @@ import userImage from "../assets/Images/UserImage.jpeg";
 import ProfileImage from "./ProfileImage";
 const CommentCard = () => {
   return (
-    <div className=" border-b-2 pb-6 px-8 ">
+    <div className=" border-b-2 pb-6 pt-6 px-8 ">
       <div className="flex items-center justify-between mb-4">
         {/* User Information */}
         <div className="flex items-center space-x-3">
