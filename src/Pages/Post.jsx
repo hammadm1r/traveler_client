@@ -35,6 +35,7 @@ const Post = () => {
             <p className="m-3 text-2xl font-semibold">Comments</p>
             <AddComment />
             <CommentCard />
+            <CommentCard />
           </div>
         </div>
       </div>

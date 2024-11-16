@@ -4,7 +4,7 @@ import ProfileImage from "./ProfileImage";
 
 const AddComment = () => {
   return (
-    <div className="border-b-2 pb-6 w-full mx-auto bg-white p-4 mb-4">
+    <div className="border-b-2  w-full mx-auto bg-white p-4 mb-4">
       <div className="flex items-center justify-between mb-4">
         {/* User Information */}
         <div className="flex items-center space-x-3">
