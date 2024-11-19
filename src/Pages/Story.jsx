@@ -9,9 +9,6 @@ const Story = () => {
         <p>Story Section</p>
       </div>
       <div className="flex">
-        <div className="w-96 bg-gray-200 p-2">
-          <p>Video Will Be Shown Here</p>
-        </div>
         <div className="flex-grow h-[80vh]">
           <MapContainer 
             center={[51.505, -0.09]} 
