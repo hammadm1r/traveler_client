@@ -4,10 +4,17 @@ import ProfileImage from "./ProfileImage";
 import { AiOutlineLike } from "react-icons/ai";
 import { MdOutlineModeComment } from "react-icons/md";
 import { CiLocationOn } from "react-icons/ci";
+import { useNavigate } from 'react-router-dom';
 
 const PostCard = ({userImage,username,timesAgo,title,desc,likes,comments,loc}) => {
+  const navigate = useNavigate();
+  const openPost = (e) =>{
+    e.preventDefault();
+    navigate(`/post`, { replace: true });
+
+  }
   return (
-    <div className="p-4 bg-white border-b-2">
+    <div className="p-4 bg-white border-b-2" onClick={openPost}>
       {/* User Info and Interaction Icons */}
       <div className="flex items-center justify-between mb-4">
         {/* User Information */}
