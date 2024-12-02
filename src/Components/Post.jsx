@@ -3,6 +3,7 @@ import { AiOutlineLike } from "react-icons/ai";
 import { MdOutlineModeComment } from "react-icons/md";
 import { CiLocationOn } from "react-icons/ci";
 import ProfileImage from "./ProfileImage"; // Ensure the path is correct
+import Carousel from "./Carousel";
 
 const Post = ({
   userImage,
@@ -59,6 +60,7 @@ const Post = ({
           <h2 className="text-lg md:text-xl font-semibold text-gray-900 mt-4">
             {title}
           </h2>
+          <Carousel />
           <p className="text-md md:text-base text-gray-600 mt-2 ">
             {desc}
           </p>
