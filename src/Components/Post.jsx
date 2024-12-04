@@ -4,7 +4,11 @@ import { MdOutlineModeComment } from "react-icons/md";
 import { CiLocationOn } from "react-icons/ci";
 import ProfileImage from "./ProfileImage"; // Ensure the path is correct
 import Carousel from "./Carousel";
-
+import ImageOne from "../assets/Images/Slider/one.jpg"
+import ImageTwo from "../assets/Images/Slider/two.jpg"
+import ImageThree from "../assets/Images/Slider/three.jpg"
+import ImageFour from "../assets/Images/Slider/four.jpg"
+import ImageFive from "../assets/Images/Slider/five.jpg"
 const Post = ({
   userImage,
   username,
@@ -15,6 +19,7 @@ const Post = ({
   comments,
   loc,
 }) => {
+  
   return (
     <>
       <div className="w-full flex items-center justify-center">
