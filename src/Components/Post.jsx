@@ -19,7 +19,7 @@ const Post = ({
   comments,
   loc,
 }) => {
-  
+  const slides = [ImageOne, ImageTwo, ImageThree];
   return (
     <>
       <div className="w-full flex items-center justify-center">
@@ -65,7 +65,7 @@ const Post = ({
           <h2 className="text-lg md:text-xl font-semibold text-gray-900 mt-4">
             {title}
           </h2>
-          <Carousel />
+          <Carousel data={slides} />
           <p className="text-md md:text-base text-gray-600 mt-2 ">
             {desc}
           </p>

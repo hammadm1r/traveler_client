@@ -4,8 +4,8 @@ import ImageTwo from "../assets/Images/Slider/two.jpg";
 import ImageThree from "../assets/Images/Slider/three.jpg";
 import { CgChevronLeft, CgChevronRight } from 'react-icons/cg';
 
-const Carousel = () => {
-    const slides = [ImageOne, ImageTwo, ImageThree];
+const Carousel = ({data}) => {
+    const slides = data;
     const [currentIndex, setCurrentIndex] = useState(0);
 
     const handlePrev = () => {

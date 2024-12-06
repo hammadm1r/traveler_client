@@ -1,17 +1,15 @@
-import { useState } from "react";
 import "./App.css";
 import Login from "./Pages/Authentication/Login"
 import Signup from "./Pages/Authentication/Signup"
 import Home from "./Pages/Home";
 import Landing from "./Pages/Landing";
-import Stepper from "./Components/Stepper";
-import StepperControl from "./Components/StepperControl";
 import { Routes,Route } from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import Story from "./Pages/Story";
 import UnderConstruction from "./Pages/UnderConstruction";
 import Forum from "./Pages/Forum";
 import Post from "./Pages/Post"
+import Profile from "./Pages/Profile";
 function App() {
 
   return (
@@ -26,6 +24,7 @@ function App() {
       <Route path="/story" element={<Story />} />
       <Route path="/forum" element={<Forum />} />
       <Route path="/post" element={<Post />} />
+      <Route path="/profile/:id" element={<Profile/>} />
     </Routes>
 
     </>
