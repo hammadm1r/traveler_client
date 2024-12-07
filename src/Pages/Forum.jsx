@@ -3,7 +3,8 @@ import pana from "../assets/Images/Onlineworld-pana1.png";
 import Header from "../Components/Header";
 import PostCard from "../Components/PostCard";
 import profileImage from "../assets/Images/UserImage.jpeg";
-import Sidebar from "../Components/Sidebar"
+import Sidebar from "../Components/Sidebar";
+
 const Forum = () => {
   const postData = [
     {
@@ -14,7 +15,7 @@ const Forum = () => {
       desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ultricies risus at lectus tincidunt, in tincidunt eros volutpat...",
       likes: 14,
       comments: 3,
-      loc: "Kotli Loharan West,Pakistan",
+      loc: "Kotli Loharan West, Pakistan",
     },
     {
       userImage: profileImage,
@@ -59,7 +60,7 @@ const Forum = () => {
   ];
 
   return (
-    <div className=" bg-gray-100 ">
+    <div className="bg-gray-100">
       {/* Header Section */}
       <Header
         titlePage="Forum"
@@ -68,14 +69,16 @@ const Forum = () => {
       />
 
       {/* Content Section */}
-      <div className="container mx-auto mt-6 grid grid-cols-12 gap-4 px-4 absolute">
-        {/* Sidebar or Additional Content Placeholder */}
-        <div className="col-span-12 md:col-span-3 p-4 bg-white shadow rounded-lg hidden md:block sticky">
-          <Sidebar/>
+      <div className="container mx-auto mt-6 grid grid-cols-1 md:grid-cols-12 gap-6 px-4">
+        {/* Sidebar Section */}
+        <div className="col-span-12 md:col-span-3">
+          <div className="sticky top-24 bg-white shadow rounded-lg p-4">
+            <Sidebar />
+          </div>
         </div>
 
-        {/* Main Content Area */}
-        <div className="col-span-12 md:col-span-9 bg-white p-4 border rounded-lg">
+        {/* Main Content Section */}
+        <div className="col-span-12 md:col-span-9 bg-white shadow rounded-lg p-4">
           {postData.map((post, index) => (
             <PostCard
               key={index}
