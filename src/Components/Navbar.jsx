@@ -10,6 +10,9 @@ const Navbar = () => {
   const menuHandler = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+  console.log("Navbar component rendered");
+  console.log("User ID:", userId);
+  console.log("Menu open state:", isMenuOpen);
 
   return (
     <div className="bg-transparent absolute top-0 left-0 w-full z-10 p-4 sm:p-6 flex items-center justify-between">
@@ -31,7 +34,12 @@ const Navbar = () => {
             Travel Advisor
           </li>
           <li className="text-white text-right text-3xl font-semibold hover:text-blue-400">
-            <FaCircleUser />
+            <Link
+              to={`/profile/${userId}`}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <FaCircleUser />
+            </Link>
           </li>
         </ul>
       </div>
