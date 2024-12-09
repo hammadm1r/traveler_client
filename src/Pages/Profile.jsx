@@ -3,6 +3,7 @@ import ProfileImage from "../Components/ProfileImage";
 import UserImage from "../assets/Images/UserImage.jpeg";
 import PostCard from "../Components/PostCard";
 import profileImage from "../assets/Images/UserImage.jpeg";
+import Achivements from "../Components/Achivements";
 const Profile = () => {
   const postData = [
     {
@@ -64,7 +65,7 @@ const Profile = () => {
           <img
             src={UserImage}
             alt="User"
-            className="md:w-72 md:h-72 w-44 h-44 object-cover rounded-full"
+            className="md:w-72 md:h-72 w-44 h-44 object-cover rounded-full border-4 border-bgPrimary"
           />
         </div>
 
@@ -112,6 +113,9 @@ const Profile = () => {
             </p>
           </div>
         </div>
+      </div>
+      <div className="bg-white my-4">
+        <Achivements />
       </div>
       <div className="flex bg-bgPrimary gap-3 md:gap-10 mt-5 py-3 rounded-xl px-3">
         <p className="text-lg font-semibold text-white hover:text-default">
