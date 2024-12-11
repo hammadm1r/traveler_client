@@ -3,12 +3,14 @@ import achivementOne from '../assets/Achivements/achivement1.png';
 import achivementTwo from '../assets/Achivements/achivement2.png';
 import achivementThree from '../assets/Achivements/achivement3.png';
 import achivementFour from '../assets/Achivements/achivement4.png';
-
+import achivementFive from '../assets/Achivements/achivement5.png';
 const Achivements = () => {
     const TotalAchivements = [
+        { src: achivementOne, achieved: true },
         { src: achivementTwo, achieved: false },
         { src: achivementThree, achieved: true },
         { src: achivementFour, achieved: false },
+        { src: achivementFive, achieved: true }
     ];
 
     // Sort achievements: Achieved items come first
@@ -19,7 +21,7 @@ const Achivements = () => {
             <p className="md:text-3xl md:font-bold text-xl font-semibold text-bgSecondary p-4 bg-bgPrimary">
                 Achievements
             </p>
-            <div className="flex flex-auto gap-4">
+            <div className="flex flex-grow overflow-x-scroll gap-4">
                 {sortedAchievements.map((achievement, index) => (
                     <div
                         key={index}
