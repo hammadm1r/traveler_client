@@ -1,11 +1,26 @@
+import { useState } from "react";
 import React from "react";
 import authPng from "../../assets/Images/Tokyo-pana 1.png";
 import logoLight from "../../assets/Images/logoLight.png";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { axiosClient } from "../../utils/axiosClient";
+import { setItem,KEY_ACCESS_TOKEN } from "../../utils/LocalStorageManager";
 
 function Home() {
+  const [email,setEmail]= useState('');
+  const [password,setPassword]= useState('');
+  const navigate = useNavigate()
+  const submitHandler  = async() =>{
+    console.log(email,password)
+    const response = await axiosClient.post('auth/login',{email,password});
+    console.log(response);
+    setItem(KEY_ACCESS_TOKEN,response.data.result.token);
+    console.log(response.data.result.token)
+    navigate("/", { replace: true });
+    
+  }
   return (
-    <div className="h-screen bg-cover bg-center overflow-x-hidden grid md:grid-cols-7">
+    <div className="min-h-screen bg-cover bg-center overflow-x-hidden grid md:grid-cols-7">
       {/* Left Section */}
       <div className="col-span-3 h-screen bg-[#C7A5EA] hidden sm:flex flex-col items-center justify-center relative">
         {/* Logo aligned to top-left */}
@@ -37,8 +52,9 @@ function Home() {
             </label>
             <input
               type="text"
-              placeholder="Username"
+              placeholder="Email"
               className="px-4 py-2 bg-textBox rounded w-full mb-4 "
+              onChange={(e)=> setEmail(e.target.value)}
             />
             <label className="text-base sm:text-large text-[#2A2B2C] font-semibold mb-2 sm:mb-4">
               Password
@@ -47,11 +63,12 @@ function Home() {
               type="password"
               placeholder="Password"
               className="px-4 py-2 bg-textBox rounded w-full mb-4"
+              onChange={(e)=> setPassword(e.target.value)}
             />
             <p className="mb-6 text-right text-[#AC68F7] underline underline-offset-1 text-xs sm:text-sm mt-1 cursor-pointer">
               Forget Password?
             </p>
-            <button className="px-4 py-2 bg-[#AC68F7] text-white font-bold rounded w-full">
+            <button className="px-4 py-2 bg-[#AC68F7] text-white font-bold rounded w-full " onClick={submitHandler}>
               Sign In
             </button>
           </div>

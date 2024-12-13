@@ -25,7 +25,7 @@ const Achivements = () => {
                 {sortedAchievements.map((achievement, index) => (
                     <div
                         key={index}
-                        className={`md:w-80 md:h-80 w-20 h-20 ${!achievement.achieved ? 'grayscale' : ''}`}
+                        className={`md:w-80 md:h-80 w-20 h-20 px-2 ${!achievement.achieved ? 'grayscale' : ''}`}
                     >
                         <img
                             src={achievement.src}
