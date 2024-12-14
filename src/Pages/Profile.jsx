@@ -4,7 +4,9 @@ import UserImage from "../assets/Images/UserImage.jpeg";
 import PostCard from "../Components/PostCard";
 import profileImage from "../assets/Images/UserImage.jpeg";
 import Achivements from "../Components/Achivements";
+import { useSelector } from "react-redux";
 const Profile = () => {
+  const myProfile = useSelector((state) => state.appConfig.myProfile)
   const postData = [
     {
       userImage: profileImage,
@@ -63,7 +65,7 @@ const Profile = () => {
         {/* User Image Section */}
         <div className="md:col-span-2 flex justify-center">
           <img
-            src={UserImage}
+            src={myProfile?.profilePicture?.url}
             alt="User"
             className="md:w-72 md:h-72 w-44 h-44 object-cover rounded-full border-4 border-bgPrimary"
           />
@@ -102,14 +104,11 @@ const Profile = () => {
           {/* Name and Username Section */}
           <div className="mt-5">
             <p className="text-3xl font-bold text-bgPrimary">
-              Hammad Farooq Ahmed Meer
+              {myProfile?.fullname}
             </p>
-            <p className="text-xl font-semibold text-lightText">@hammadm1r</p>
+            <p className="text-xl font-semibold text-lightText">@{myProfile?.username}</p>
             <p className="text-md md:text-lg font-medium text-left mt-2 text-lightText">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-              Reiciendis repellendus officia sunt maiores magnam dignissimos
-              tenetur, corrupti asperiores blanditiis autem placeat, id labore?
-              Necessitatibus, nobis? Debitis atque reprehenderit nobis mollitia?
+              {myProfile?.bio}
             </p>
           </div>
         </div>

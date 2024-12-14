@@ -7,8 +7,8 @@ const AccountInformation = ({ setCurrentStep }) => {
       <div className="absolute top-4 right-4 sm:right-10">
         <p className="text-right text-sm sm:text-base">
           Already have an Account?{" "}
-          <span className="text-[#AC68F7] cursor-pointer hover:underline">
-          <Link to="/signup">Log In</Link>
+          <span className="text-[#AC68F7] cursor-pointer">
+          <Link to="/login" >Log In</Link>
           </span>
         </p>
       </div>

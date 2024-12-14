@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-
 const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
+
 function Home() {
   const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
-  
+  const myProfile = useSelector((state)=>state.appConfig.myProfile);
   useEffect(() => {
     const timerId = setInterval(() => {
       setCurrentTime(new Date().toLocaleTimeString());
@@ -68,7 +69,7 @@ function Home() {
           Welcome back,
         </p>
         <span className="text-white text-3xl font-bold sm:text-3xl md:text-4xl lg:text-5xl">
-          Hammad Farooq
+          {myProfile?.fullname}
         </span>
       </div>
       <div>        
