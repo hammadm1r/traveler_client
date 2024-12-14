@@ -2,22 +2,26 @@ import { useState } from "react";
 import React from "react";
 import authPng from "../../assets/Images/Tokyo-pana 1.png";
 import logoLight from "../../assets/Images/logoLight.png";
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { axiosClient } from "../../utils/axiosClient";
 import { setItem,KEY_ACCESS_TOKEN } from "../../utils/LocalStorageManager";
+import {setLoggedIn} from "../../Toolkit/slices/appConfigSlice"
 
 function Home() {
   const [email,setEmail]= useState('');
   const [password,setPassword]= useState('');
+  const dispatch = useDispatch();
   const navigate = useNavigate()
   const submitHandler  = async() =>{
-    console.log(email,password)
-    const response = await axiosClient.post('auth/login',{email,password});
-    console.log(response);
-    setItem(KEY_ACCESS_TOKEN,response.data.result.token);
-    console.log(response.data.result.token)
-    navigate("/", { replace: true });
-    
+    try {
+      const response = await axiosClient.post('auth/login',{email,password});
+      setItem(KEY_ACCESS_TOKEN,response.data.result.token);
+      dispatch(setLoggedIn(true));
+      navigate("/home", { replace: true });
+    } catch (err) {
+      console.log(err)
+    }
   }
   return (
     <div className="min-h-screen bg-cover bg-center overflow-x-hidden grid md:grid-cols-7">
