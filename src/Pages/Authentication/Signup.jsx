@@ -6,6 +6,7 @@ import StepperControl from "../../Components/StepperControl"; // Corrected capit
 import Complete from "./steps/Complete";
 import authPng from "../../assets/Images/NewYork-pana1.png";
 import logoLight from "../../assets/Images/logoLight.png";
+import { Link } from "react-router-dom";
 
 const Signup = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -46,6 +47,12 @@ const Signup = () => {
           {displayStep(currentStep)}
           <Stepper steps={steps} currentStep={currentStep} />
           <StepperControl currentStep={currentStep} setCurrentStep={setCurrentStep} />
+          <p className="text-center text-sm sm:text-base">
+          Already have an Account?{" "}
+          <span className="text-[#AC68F7] cursor-pointer">
+          <Link to="/login" >Log In</Link>
+          </span>
+        </p>
         </div>
       </div>
     </div>
