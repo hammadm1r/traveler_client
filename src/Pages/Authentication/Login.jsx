@@ -41,12 +41,6 @@ function Home() {
       {/* Right Section */}
       <div className="col-span-4 flex items-center justify-center bg-white h-screen px-4 sm:px-0">
         <div className="w-full max-w-md">
-          <div className="absolute top-4 right-4 sm:right-10">
-            <p className="text-right text-sm sm:text-base">
-              Not a Member Yet?{" "}
-              <span className="text-[#AC68F7] cursor-pointer"><Link to="/signup">Sign Up</Link></span>
-            </p>
-          </div>
           <div className="sm:ml-10">
             <p className="text-xl sm:text-2xl font-bold text-[#2A2B2C] mb-4">
               Log In to Traveler
@@ -75,6 +69,10 @@ function Home() {
             <button className="px-4 py-2 bg-[#AC68F7] text-white font-bold rounded w-full " onClick={submitHandler}>
               Sign In
             </button>
+            <p className="text-center text-sm sm:text-base mt-4">
+              Not a Member Yet?{" "}
+              <span className="text-[#AC68F7] cursor-pointer"><Link to="/signup">Sign Up</Link></span>
+            </p>
           </div>
         </div>
       </div>
