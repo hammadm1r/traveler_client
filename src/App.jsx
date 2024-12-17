@@ -6,6 +6,7 @@ import Signup from "./Pages/Authentication/Signup"; // Ensure this is correct
 import Home from "./Pages/Home";
 import Landing from "./Pages/Landing";
 import { Routes, Route } from "react-router-dom";
+import { PageNotFound } from "./Pages/PageNotFound";
 import Navbar from "./Components/Navbar";
 import Story from "./Pages/Story";
 import UnderConstruction from "./Pages/UnderConstruction";
@@ -23,7 +24,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/underconstruction" element={<UnderConstruction />} />
-        
+        <Route path="/*" element={<PageNotFound />} />
         {/* Only show login/signup routes if the user is not logged in */}
         <Route element={<OnlyIfUserNotLoggedIn />}>
           <Route path="/" element={<Landing />} />
