@@ -1,20 +1,18 @@
 import React from "react";
 import userImage from "../assets/Images/UserImage.jpeg";
 import ProfileImage from "./ProfileImage";
-
+import { useSelector } from "react-redux";
 const AddComment = () => {
+  const myProfile = useSelector((state)=>state.appConfig.myProfile)
   return (
     <div className="border-b-2  w-full mx-auto bg-white p-4 mb-4">
       <div className="flex items-center justify-between mb-4">
         {/* User Information */}
         <div className="flex items-center space-x-3">
-          <ProfileImage userProfileImage={userImage} />
+          <ProfileImage userProfileImage={myProfile.profilePicture.url} />
           <div>
             <p className="text-base md:text-lg font-semibold text-gray-800">
-              Hammad Farooq
-            </p>
-            <p className="text-xs md:text-sm font-medium text-gray-500">
-              4 hours ago
+              {myProfile.fullname}
             </p>
           </div>
         </div>

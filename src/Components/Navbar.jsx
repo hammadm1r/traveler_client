@@ -2,14 +2,23 @@ import React, { useState, useEffect } from "react";
 import Logo from "../assets/Images/logoColor.png";
 import { FaCircleUser } from "react-icons/fa6";
 import { IoReorderThreeOutline } from "react-icons/io5";
-import { Link } from "react-router-dom";
-import { getItem, KEY_ACCESS_TOKEN } from '../utils/LocalStorageManager';
-import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  removeItem,
+  getItem,
+  KEY_ACCESS_TOKEN,
+} from "../utils/LocalStorageManager";
+import { useDispatch, useSelector } from "react-redux";
+import { IoIosLogOut } from "react-icons/io";
+import { setLoggedIn } from "../Toolkit/slices/appConfigSlice";
 
 const Navbar = () => {
   // State to handle mobile menu
-  const isLoggedIn = useSelector((state) =>state.appConfig.isLoggedIn);
-  const myProfile = useSelector((state)=>state.appConfig.myProfile);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state) => state.appConfig.isLoggedIn);
+  const user = getItem(KEY_ACCESS_TOKEN);
+  const myProfile = useSelector((state) => state.appConfig.myProfile);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // State to check if the user is logged in
@@ -18,6 +27,16 @@ const Navbar = () => {
   // Toggle mobile menu visibility
   const menuHandler = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+  const handleLogout = () => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this item?"
+    );
+    if (confirmed) {
+      removeItem(KEY_ACCESS_TOKEN);
+      navigate("/login");
+      dispatch(setLoggedIn(false));
+    }
   };
 
   // Common Menu Items
@@ -37,17 +56,21 @@ const Navbar = () => {
       </li>
       {isLoggedIn && (
         <li className="text-white text-3xl font-semibold hover:text-blue-400">
-        <Link to={`/profile/${userId}`}>
-          {/* If no profile picture, fall back to an icon */}
-          <img 
-            src={myProfile?.profilePicture?.url || ''} 
-            alt={myProfile?.profilePicture?.url ? "Profile Picture" : "User Icon"} 
-            className="w-8 h-8 object-cover border-2 border-bgPrimary rounded-full" 
-          />
-        </Link>
-      </li>
-      
+          <Link to={`/profile/${userId}`}>
+            {/* If no profile picture, fall back to an icon */}
+            <img
+              src={myProfile?.profilePicture?.url || ""}
+              alt={
+                myProfile?.profilePicture?.url ? "Profile Picture" : "User Icon"
+              }
+              className="w-8 h-8 object-cover border-2 border-bgPrimary rounded-full"
+            />
+          </Link>
+        </li>
       )}
+      <li className="text-white text-lg font-semibold hover:text-blue-400">
+        <IoIosLogOut className="text-3xl" onClick={handleLogout} />
+      </li>
     </>
   );
 
@@ -58,17 +81,23 @@ const Navbar = () => {
       </Link>
 
       {/* Desktop Navigation */}
-      <div className={`justify-center hidden ${isLoggedIn ? "md:block" : "md:hidden" }`}>
+      <div
+        className={`justify-center hidden ${
+          isLoggedIn ? "md:block" : "md:hidden"
+        }`}
+      >
         <ul className="flex gap-7">{menuItems}</ul>
       </div>
 
       {/* Mobile Navigation */}
-      <div className={`md:hidden ${isLoggedIn ? "hidden" : "block" }`}>
+      <div className={`md:hidden ${isLoggedIn ? "hidden" : "block"}`}>
         <button
           onClick={menuHandler}
           aria-expanded={isMenuOpen}
           aria-label="Toggle menu"
-          className={`text-white text-right text-3xl font-semibold transform transition-transform duration-300 ${isMenuOpen ? "rotate-90" : ""}`}
+          className={`text-white text-right text-3xl font-semibold transform transition-transform duration-300 ${
+            isMenuOpen ? "rotate-90" : ""
+          }`}
         >
           <IoReorderThreeOutline />
         </button>
