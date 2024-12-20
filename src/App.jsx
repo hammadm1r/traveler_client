@@ -16,6 +16,7 @@ import Profile from "./Pages/Profile";
 import { getMyInfo } from "./Toolkit/slices/appConfigSlice";
 import OnlyIfUserNotLoggedIn from "./Components/OnlyIfUserNotLoggedIn";
 import RequireUser from "./Components/RequireUser";
+import CreatePost from "./Pages/CreatePost";
 
 function App() {
 
@@ -35,9 +36,10 @@ function App() {
         {/* Other routes that require authentication */}
         <Route element={<RequireUser/>}>
         <Route path="/home" element={<Home />} />
+        <Route path="/createpost" element={<CreatePost />} />
         <Route path="/story" element={<Story />} />
         <Route path="/forum" element={<Forum />} />
-        <Route path="/post" element={<Post />} />
+        <Route path="/post/:id" element={<Post />} />
         <Route path="/profile/:id" element={<Profile />} />
         </Route>
       </Routes>

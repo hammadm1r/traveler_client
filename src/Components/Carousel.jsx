@@ -30,7 +30,7 @@ const Carousel = ({data}) => {
                 {slides.map((slide, index) => (
                     <img
                         key={index}
-                        src={slide}
+                        src={slide.url}
                         alt={`Slide ${index + 1}`}
                         className="w-full h-full object-contain flex-shrink-0"
                     />

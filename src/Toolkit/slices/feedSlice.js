@@ -2,8 +2,7 @@ import { createSlice,asyncThunkCreator, createAsyncThunk } from "@reduxjs/toolki
 import { axiosClient } from "../../utils/axiosClient"
 export const getFeedData = createAsyncThunk('/user/feed',async()=>{
     const response = await axiosClient.get("/user/feed");
-    console.log('response')
-    return response.data;
+    return response.data.result;
 })
 
 const feedSlice = createSlice({
@@ -15,8 +14,15 @@ const feedSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(getFeedData.fulfilled,(state,action) =>{
-            state.feedData = action.payload;
-    })
+            state.feed = action.payload;
+            state.status = 'succeeded';
+    });
+        builder.addCase(getFeedData.pending, (state) => {
+        state.status = 'loading'; // Handle loading state
+      });
+        builder.addCase(getFeedData.rejected, (state) => {
+        state.status = 'failed'; // Handle failed state
+      });
     }
 })
 export default feedSlice.reducer;

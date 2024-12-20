@@ -1,66 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import pana from "../assets/Images/Onlineworld-pana1.png";
 import Header from "../Components/Header";
 import PostCard from "../Components/PostCard";
-import profileImage from "../assets/Images/UserImage.jpeg";
 import Sidebar from "../Components/Sidebar";
+import { useSelector } from "react-redux";
 
 const Forum = () => {
-  const postData = [
-    {
-      userImage: profileImage,
-      username: "Hammad Farooq Meer",
-      timesAgo: "14 minutes ago",
-      title: "Journey to the African Safari! Bring your mosquito repellent!",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ultricies risus at lectus tincidunt, in tincidunt eros volutpat...",
-      likes: 14,
-      comments: 3,
-      loc: "Kotli Loharan West, Pakistan",
-    },
-    {
-      userImage: profileImage,
-      username: "Sara Ali",
-      timesAgo: "1 hour ago",
-      title: "Exploring the Swiss Alps!",
-      desc: "The breathtaking views of the Alps are a must-see for every traveler. From snowy peaks to charming villages...",
-      likes: 25,
-      comments: 7,
-      loc: "Zurich, Switzerland",
-    },
-    {
-      userImage: profileImage,
-      username: "John Doe",
-      timesAgo: "3 hours ago",
-      title: "Discovering the Beaches of Bali",
-      desc: "Golden sands, azure waters, and perfect sunsets—Bali is a dream destination for beach lovers...",
-      likes: 38,
-      comments: 15,
-      loc: "Bali, Indonesia",
-    },
-    {
-      userImage: profileImage,
-      username: "Emily Davis",
-      timesAgo: "5 hours ago",
-      title: "A Taste of Japan",
-      desc: "From sushi to ramen, Japan's culinary delights are endless. Each dish tells a story and showcases deep traditions...",
-      likes: 45,
-      comments: 20,
-      loc: "Tokyo, Japan",
-    },
-    {
-      userImage: profileImage,
-      username: "Ahmed Khan",
-      timesAgo: "2 days ago",
-      title: "Camping Under the Northern Lights",
-      desc: "Witnessing the aurora borealis was a surreal experience. We camped out in freezing temperatures, but it was worth every second...",
-      likes: 52,
-      comments: 10,
-      loc: "Tromsø, Norway",
-    },
-  ];
+  const feedStatus = useSelector((state) => state.feed.status);
+  const feed = useSelector((state) => state.feed.feed);
+  console.log('Feed data:', feed);
+  console.log('Feed status:', feedStatus); // Ensure the feed data is logged correctly
 
   return (
-    <div className="bg-gray-100">
+    <div className="bg-gray-100 h-screen">
       {/* Header Section */}
       <Header
         titlePage="Forum"
@@ -69,29 +21,29 @@ const Forum = () => {
       />
 
       {/* Content Section */}
-      <div className="container mx-auto mt-6 grid grid-cols-1 md:grid-cols-12 gap-6 px-4">
+      <div className="container h-3/4 mx-auto mt-6 grid grid-cols-1 md:grid-cols-12 gap-6 px-4">
         {/* Sidebar Section */}
         <div className="col-span-12 md:col-span-3">
-          <div className="sticky top-24 bg-white shadow rounded-lg p-4">
+          <div className="sticky top-24 h-full bg-white shadow rounded-lg p-4">
             <Sidebar />
           </div>
         </div>
 
         {/* Main Content Section */}
-        <div className="col-span-12 md:col-span-9 bg-white shadow rounded-lg p-4">
-          {postData.map((post, index) => (
-            <PostCard
-              key={index}
-              userImage={post.userImage}
-              username={post.username}
-              timesAgo={post.timesAgo}
-              title={post.title}
-              desc={post.desc}
-              likes={post.likes}
-              comments={post.comments}
-              loc={post.loc}
-            />
-          ))}
+        <div className="col-span-12 md:col-span-9 overflow-y-scroll bg-white shadow rounded-lg p-4">
+          {feedStatus === "loading" && <div>Loading posts...</div>}
+          
+          {/* Only render feed posts if feed is an array and has data */}
+          {Array.isArray(feed) && feed.length > 0 ? (
+            feed.map((post) => (
+              <PostCard
+              key={post.id}
+              post={post}
+              />
+            ))
+          ) : (
+            <div>No posts available.</div> // If feed is empty or not an array
+          )}
         </div>
       </div>
     </div>

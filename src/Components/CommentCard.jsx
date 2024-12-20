@@ -2,6 +2,7 @@ import React from "react";
 import userImage from "../assets/Images/UserImage.jpeg";
 import ProfileImage from "./ProfileImage";
 const CommentCard = () => {
+  const myProfile = useSelector((state)=>state.appConfig.myProfile)
   return (
     <div className=" border-b-2 pb-6 pt-6 px-0 md:px-8  ">
       <div className="flex items-center justify-between mb-4">
