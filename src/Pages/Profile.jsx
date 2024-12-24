@@ -1,38 +1,80 @@
-import React from "react";
-import ProfileImage from "../Components/ProfileImage";
-import UserImage from "../assets/Images/UserImage.jpeg";
-import PostCard from "../Components/PostCard";
-import profileImage from "../assets/Images/UserImage.jpeg";
-import Achivements from "../Components/Achivements";
-import { useSelector } from "react-redux";
-import NewPostPrompt from "../Components/NewPostPrompt";
-import CreatePost from "./CreatePost";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams, useNavigate } from "react-router-dom";
 import { FaUserEdit } from "react-icons/fa";
-const Profile = () => {
-  const feed = useSelector((state) => state.feed.feed);
-  const myProfile = useSelector((state) => state.appConfig.myProfile);
+import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
+import { followAndUnfollowUser, getUserProfile } from "../Toolkit/slices/userProfileSlice";
+import NewPostPrompt from "../Components/NewPostPrompt";
+import PostCard from "../Components/PostCard";
+import Achivements from "../Components/Achivements";
 
-  // Check if feed and myProfile are available before proceeding
-  if (!feed || !myProfile) {
-    console.error("Feed or Profile is not available.");
-    return null;
+const Profile = () => {
+  const { id } = useParams(); // User profile id from URL params
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  // Get profile and posts from Redux state
+  const myProfile = useSelector((state) => state.appConfig.myProfile);
+  const myPosts = useSelector((state) => state.appConfig.myPosts);
+  const userProfile = useSelector((state) => state.userProfile.user);
+  const userPosts = useSelector((state) => state.userProfile.posts);
+  const isFollowing = useSelector((state) => state.userProfile.isFollowing);
+
+  const [owner, setOwner] = useState(true);
+  const [profile, setProfile] = useState(null);
+  const [posts, setPosts] = useState([]);
+  const [isContentOpen, setIsContentOpen] = useState(false);
+  useEffect(()=>{
+  console.log(profile?.follower);},[profile?.follower])
+  // First useEffect: fetch user profile if the id doesn't match myProfile._id
+  useEffect(() => {
+    if (!id) return; // If no id in the URL, do nothing
+
+    // If the current profile is the logged-in user (myProfile), use that data
+    if (id === myProfile?._id) {
+      setProfile(myProfile);
+      setPosts(myPosts);
+      setOwner(true);
+      console.log(posts);
+    } else {
+      // If it's not the logged-in user, dispatch to fetch the user profile
+      if (!userProfile || userProfile._id !== id) {
+        dispatch(getUserProfile(id)); // Fetch user profile and posts from API
+      }
+    }
+  }, [id, myProfile, userProfile, dispatch, myPosts]);
+
+  // Second useEffect: update the local state when userProfile and userPosts change
+  useEffect(() => {
+    if (userProfile && userPosts && userProfile._id === id) {
+      setProfile(userProfile);
+      setPosts(userPosts);
+      setOwner(false);
+      console.log(posts);
+    }
+  }, [userProfile, userPosts, id]);
+
+  const handleToggleContent = () => {
+    setIsContentOpen(!isContentOpen);
+  };
+  const handleFollow = () =>{
+    const body = {
+      followId:id
+    }
+    dispatch(followAndUnfollowUser(body));
+  } 
+  // If the profile data is still loading, show a loading message
+  if (!profile) {
+    return <p>Loading...</p>;
   }
 
-  // Find the post created by the current user (matching by owner._id)
-  const posts = feed.filter((post) => post.owner._id === myProfile._id);
-
-  // Log the post to the console with more descriptive information
-  console.log(
-    posts ? "Post found:" : posts,
-    "No post found for the current user"
-  );
   return (
     <div className="mt-24 md:mx-20 mx-4">
       <div className="grid grid-cols-1 md:grid-cols-6 gap-6 items-center">
         {/* User Image Section */}
         <div className="md:col-span-2 flex justify-center relative">
           <img
-            src={myProfile?.profilePicture?.url}
+            src={profile?.profilePicture?.url}
             alt="User"
             className="md:w-72 md:h-72 w-44 h-44 object-cover rounded-full border-4 border-bgPrimary"
           />
@@ -44,7 +86,7 @@ const Profile = () => {
           <div className="max-w-md mx-auto md:mx-0 justify-center bg-bgPrimary rounded-2xl grid grid-cols-3 gap-4 p-4">
             <div className="text-center">
               <p className="md:text-2xl text-lg font-bold text-bgSecondary">
-                {myProfile?.followers?.length}
+                {profile?.followers?.length}
               </p>
               <p className="md:text-md text-sm font-medium text-bgSecondary">
                 Followers
@@ -52,15 +94,15 @@ const Profile = () => {
             </div>
             <div className="border-x-2 border-t-textBox text-center">
               <p className="md:text-2xl text-lg font-bold text-bgSecondary">
-                {myProfile?.following?.length}
+                {profile?.following?.length}
               </p>
               <p className="md:text-md text-sm font-medium text-bgSecondary">
-                Followings
+                Following
               </p>
             </div>
             <div className="text-center">
               <p className="md:text-2xl text-lg font-bold text-bgSecondary">
-                {myProfile?.posts?.length}
+                {profile?.posts?.length}
               </p>
               <p className="md:text-md text-sm font-medium text-bgSecondary">
                 Posts
@@ -70,50 +112,82 @@ const Profile = () => {
 
           {/* Name and Username Section */}
           <div className="mt-5 space-y-3">
-            {/* Full Name with Edit Icon */}
-            <div className="flex items-center justify-between">
-              <p className="text-3xl font-bold text-bgPrimary">
-                {myProfile?.fullname}
+            <div className="flex items-center justify-between flex-wrap">
+              <p className="text-3xl font-bold text-bgPrimary w-full sm:w-auto text-center sm:text-left">
+                {profile?.fullname}
               </p>
-              <FaUserEdit
-                className="text-2xl text-gray-600 hover:text-bgPrimary cursor-pointer"
-                onClick={() => navigate("/ProfileUpdate")}
-                title="Edit Profile"
-              />
+
+              {owner && (
+                <FaUserEdit
+                  className="text-2xl text-gray-600 hover:text-bgPrimary cursor-pointer"
+                  onClick={() => navigate("/updateprofile")}
+                  title="Edit Profile"
+                />
+              )}
+
+              {!owner && (
+                <div className="flex justify-center w-full sm:w-auto mt-2 sm:mt-0">
+                  <button className="bg-bgPrimary text-2xl font-bold text-white px-6 py-3 rounded-xl hover:bg-blue-500 w-full sm:w-auto" onClick={handleFollow}>
+                  {isFollowing ? "Unfollow" : "Follow"}
+                  </button>
+                </div>
+              )}
             </div>
 
-            {/* Username */}
             <p className="text-xl font-semibold text-lightText">
-              @{myProfile?.username}
+              @{profile?.username}
             </p>
-
-            {/* Bio */}
             <p className="text-md md:text-lg font-medium text-left mt-2 text-lightText">
-              {myProfile?.bio}
+              {profile?.bio}
             </p>
           </div>
         </div>
       </div>
-      <div className="bg-white my-4">
-        <NewPostPrompt />
-      </div>
+
+      {/* New Post Prompt */}
+      {owner && (
+        <div className=" my-4">
+          <NewPostPrompt />
+        </div>
+      )}
+
+      {/* Achievements */}
       <div className="bg-white rounded-t-xl my-4 w-full">
         <Achivements />
       </div>
-      
-      <div>
-      
-        <div className="rounded-t-xl overflow-hidden shadow-lg col-span-12 md:col-span-9 bg-white  mt-2">
-        <div className="flex bg-bgPrimary gap-3 md:gap-10 rounded-t-xl px-3">
-        <p className="text-xl md:text-3xl font-semibold text-bgSecondary p-4 bg-bgPrimary">
-        My Journeys
-      </p>
-      </div>
-          {posts?.length > 0 ? (
-            posts?.map((post, index) => <PostCard key={index} post={post} />)
-          ) : (
-            <p>No posts available.</p>
-          )}
+
+      {/* User's Posts */}
+      <div className="rounded-t-xl overflow-hidden col-span-12 md:col-span-9 bg-white mt-2 mb-3 shadow-lg">
+        <div className="text-bgSecondary p-4 bg-bgPrimary flex justify-between items-center">
+          <p className="text-xl md:text-3xl font-semibold text-left">
+            My Journeys
+          </p>
+          <p
+            className="text-xl md:text-3xl text-right cursor-pointer"
+            onClick={handleToggleContent}
+          >
+            {isContentOpen ? <IoMdArrowDropup /> : <IoMdArrowDropdown />}
+          </p>
+        </div>
+
+        {/* Content Section with smooth transition */}
+        <div
+          className={`flex flex-col transition-all duration-500 ease-in-out ${
+            isContentOpen
+              ? "h-auto opacity-100"
+              : "h-0 opacity-0 pointer-events-none"
+          }`}
+          style={{
+            transitionProperty: "height, opacity",
+          }}
+        >
+          {isContentOpen && posts?.length > 0
+            ? posts?.map((post, index) => <PostCard key={index} post={post} />)
+            : isContentOpen && (
+                <p className=" text-center font-bold text-xl text-lightText  p-6">
+                  No posts available.
+                </p>
+              )}
         </div>
       </div>
     </div>

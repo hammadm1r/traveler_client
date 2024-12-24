@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import UserImage from "../assets/Images/UserImage.jpeg";
 import { CiLocationOn } from "react-icons/ci";
 import ReactStars from "react-rating-stars-component"; // Import the star rating component
+import { useSelector } from "react-redux";
 
 export const CreatePost = () => {
+  const myProfile = useSelector((state) => state.appConfig.myProfile)
   const [loc, setLoc] = useState("Sialkot, Pakistan"); // Default location
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
@@ -55,13 +57,13 @@ export const CreatePost = () => {
           <div className="flex items-center">
             <div>
               <img
-                src={UserImage}
+                src={myProfile?.profilePicture?.url}
                 alt="User"
                 className="w-8 h-8 object-cover rounded-full mr-3"
               />
             </div>
             <div>
-              <p className="text-md">Rabeel Ahmed</p>
+              <p className="text-md">{myProfile.fullname}</p>
               <div className="flex items-center justify-center gap-x-1">
                 <CiLocationOn className="text-sm" />
                 <p className="text-xs">{loc}</p>
