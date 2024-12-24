@@ -7,8 +7,8 @@ export const getMyInfo = createAsyncThunk(
     async () => {
         try {
             const response = await axiosClient.get("/auth/profile");
-            console.log(response.data.result);
-            return response.data.result; // Assuming 'result' contains the user data
+            console.log(response.data);
+            return response.data; // Assuming 'result' contains the user data
         } catch (error) {
             return Promise.reject(error); // Return the error for handling
         }
@@ -21,6 +21,7 @@ const appConfigSlice = createSlice({
     initialState: {
         isLoading: false,
         myProfile: {},
+        myPosts:{},
         toastData: {},
         status: 'idle', // 'idle' indicates no request in progress
         isLoggedIn: false,
@@ -43,7 +44,8 @@ const appConfigSlice = createSlice({
                 state.isLoading = true; // Set loading state for UI feedback
             })
             .addCase(getMyInfo.fulfilled, (state, action) => {
-                state.myProfile = action.payload; // Assuming the API response contains 'user'
+                state.myProfile = action.payload.data.userProfile; // Assuming the API response contains 'user'
+                state.myPosts = action.payload.data.posts
                 state.status = 'succeeded';
                 state.isLoading = false; // Stop loading when the request is done
             })

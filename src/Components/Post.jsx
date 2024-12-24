@@ -4,10 +4,23 @@ import { MdOutlineModeComment } from "react-icons/md";
 import { CiLocationOn } from "react-icons/ci";
 import ProfileImage from "./ProfileImage"; // Ensure the path is correct
 import Carousel from "./Carousel";
+import { getUserProfile } from "../Toolkit/slices/userProfileSlice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
+import { likeAndUnlikePost } from "../Toolkit/slices/feedSlice";
 const Post = ({
  post
 }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const formattedHashtags = post?.hashtags?.join(' ') || "";
+  const handleUserProfile = (e) =>{
+    e.stopPropagation();
+    navigate(`/profile/${post.owner._id}`);
+  };
+  const handleLike = () => {
+    dispatch(likeAndUnlikePost({ postId : post.id}));
+  }
   return (
     <>
       <div className="w-full flex items-center justify-center">
@@ -16,9 +29,9 @@ const Post = ({
         <div className="flex items-center justify-between mb-4">
           {/* User Information */}
           <div className="flex items-center space-x-3">
-            <ProfileImage userProfileImage={post?.owner?.avatar?.url} />
+            <ProfileImage userProfileImage={post?.owner?.avatar?.url} userId={post?.owner?._id} />
             <div>
-              <p className="text-base md:text-lg font-semibold text-gray-800">
+              <p className="text-base md:text-lg font-semibold text-gray-800" onClick={handleUserProfile}>
               {post?.owner?.name}
               </p>
               <p className="text-xs md:text-sm font-medium text-gray-500">
@@ -32,7 +45,11 @@ const Post = ({
             <button
               type="button"
               aria-label="Like post"
-              className="flex items-center space-x-1 cursor-pointer hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-150 ease-in-out rounded-full bg-slate-200 px-2 py-1"
+              className={`flex items-center space-x-1 cursor-pointer ${
+                post?.isLikedByUser ? 'text-blue-500' : 'text-gray-700'
+              } hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-150 ease-in-out rounded-full bg-slate-200 px-2 py-1`}
+              
+              onClick={handleLike}
             >
               <AiOutlineLike className="text-xl" />
               <p className="text-sm">{post?.likesCount}</p>

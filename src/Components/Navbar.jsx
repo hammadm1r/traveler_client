@@ -30,11 +30,11 @@ const Navbar = () => {
   };
   const handleLogout = () => {
     const confirmed = window.confirm(
-      "Are you sure you want to delete this item?"
+      "Are you sure you want to Logout?"
     );
     if (confirmed) {
       removeItem(KEY_ACCESS_TOKEN);
-      navigate("/login");
+      navigate("/");
       dispatch(setLoggedIn(false));
     }
   };
@@ -60,6 +60,7 @@ const Navbar = () => {
             {/* If no profile picture, fall back to an icon */}
             <img
               src={myProfile?.profilePicture?.url || ""}
+              
               alt={
                 myProfile?.profilePicture?.url ? "Profile Picture" : "User Icon"
               }
@@ -90,7 +91,7 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Navigation */}
-      <div className={`md:hidden ${isLoggedIn ? "hidden" : "block"}`}>
+      <div className={`md:hidden ${isLoggedIn ? "block" : "hidden"}`}>
         <button
           onClick={menuHandler}
           aria-expanded={isMenuOpen}

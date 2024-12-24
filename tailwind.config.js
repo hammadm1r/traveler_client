@@ -22,6 +22,7 @@ export default {
       fontFamily: {
         custom: ['Roboto', 'sans-serif'],
       },
+      
     },
   },
   plugins: [require('tailwindcss'), require('autoprefixer')],

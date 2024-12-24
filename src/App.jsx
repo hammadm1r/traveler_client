@@ -1,6 +1,6 @@
 import "./App.css";
-import React, { useEffect } from 'react'; // Use 'React' (capitalized) in imports
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect } from "react"; // Use 'React' (capitalized) in imports
+import { useDispatch, useSelector } from "react-redux";
 import Login from "./Pages/Authentication/Login";
 import Signup from "./Pages/Authentication/Signup"; // Ensure this is correct
 import Home from "./Pages/Home";
@@ -17,9 +17,10 @@ import { getMyInfo } from "./Toolkit/slices/appConfigSlice";
 import OnlyIfUserNotLoggedIn from "./Components/OnlyIfUserNotLoggedIn";
 import RequireUser from "./Components/RequireUser";
 import CreatePost from "./Pages/CreatePost";
+import ProfileUpdate from "./Pages/ProfileUpdate";
+import FeedLoad from "./Components/feedLoad";
 
 function App() {
-
   return (
     <>
       <Navbar />
@@ -32,15 +33,18 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} /> {/* Corrected */}
         </Route>
-        
+
         {/* Other routes that require authentication */}
-        <Route element={<RequireUser/>}>
-        <Route path="/home" element={<Home />} />
-        <Route path="/createpost" element={<CreatePost />} />
-        <Route path="/story" element={<Story />} />
-        <Route path="/forum" element={<Forum />} />
-        <Route path="/post/:id" element={<Post />} />
-        <Route path="/profile/:id" element={<Profile />} />
+        <Route element={<RequireUser />}>
+          <Route path="/home" element={<Home />} />
+          <Route path="/createpost" element={<CreatePost />} />
+          <Route path="/updateprofile" element={<ProfileUpdate />} />
+          <Route path="/story" element={<Story />} />
+          <Route path="/" element={<FeedLoad />}>
+            <Route path="/forum" element={<Forum />} />
+          </Route>
+          <Route path="/post/:id" element={<Post />} />
+          <Route path="/profile/:id" element={<Profile />} />
         </Route>
       </Routes>
     </>

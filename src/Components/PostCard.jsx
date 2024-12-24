@@ -7,13 +7,16 @@ import { CiLocationOn } from "react-icons/ci";
 import { useNavigate } from 'react-router-dom';
 
 const PostCard = ({post}) => {
-  console.log(post?.id);
   const navigate = useNavigate();
   const openPost = (e) =>{
     e.preventDefault();
     navigate(`/post/${post?.id}`);
 
   }
+  const handleUserProfile = (e) =>{
+    e.stopPropagation();
+    navigate(`/profile/${post.owner._id}`);
+  };
   return (
     <div className="p-4 bg-white border-b-2" onClick={openPost}>
       {/* User Info and Interaction Icons */}
@@ -21,10 +24,10 @@ const PostCard = ({post}) => {
         {/* User Information */}
         <div className="flex items-center space-x-3 ">
           <div className="border-2 border-bgPrimary rounded-full">
-          <ProfileImage userProfileImage={post?.owner?.avatar?.url}  className=""/>
+          <ProfileImage userProfileImage={post?.owner?.avatar?.url}  userId={post?.owner?._id} className=""/>
           </div>
           <div>
-            <p className="text-base md:text-lg font-semibold text-gray-800">
+            <p className="text-base md:text-lg font-semibold text-gray-800" onClick={handleUserProfile}>
               {post?.owner?.name}
             </p>
             <p className="text-xs md:text-sm font-medium text-gray-500">
