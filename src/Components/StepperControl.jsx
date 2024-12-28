@@ -1,13 +1,6 @@
 import React from "react";
 
-const StepperControl = ({ currentStep, setCurrentStep }) => {
-  // Handle "Next" button click
-  console.log(currentStep);
-  const handleNext = () => {
-    if (currentStep < 3) {
-      setCurrentStep(currentStep + 1); // Go to the next step
-    }
-  };
+const StepperControl = ({ currentStep, setCurrentStep, handleNext }) => {
 
   // Handle "Back" button click
   const handleBack = () => {

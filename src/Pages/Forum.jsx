@@ -3,15 +3,21 @@ import pana from "../assets/Images/Onlineworld-pana1.png";
 import Header from "../Components/Header";
 import PostCard from "../Components/PostCard";
 import Sidebar from "../Components/Sidebar";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Loader from "../Components/Loader";
+import { getFeedData } from "../Toolkit/slices/feedSlice";
+
 const Forum = () => {
+  const dispatch = useDispatch();
   const [active, setActive] = useState("feed");
   const myProfile = useSelector((state) => state.appConfig.myProfile);
   const feedStatus = useSelector((state) => state.feed.status);
   const feed = useSelector((state) => state.feed.feed);
-  const followerPosts = feed.filter((post) =>myProfile.following.includes(post.owner._id))
+  const followerPosts = feed.filter((post) =>myProfile?.following?.includes(post.owner._id))
   const myPosts = feed.filter((post) => post.owner._id === myProfile._id);
+  if(!feed){
+    dispatch(getFeedData());
+  }
   return (
     <div className="bg-gray-100 h-screen">
       {/* Header Section */}

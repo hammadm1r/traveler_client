@@ -10,18 +10,53 @@ import { Link } from "react-router-dom";
 
 const Signup = () => {
   const [currentStep, setCurrentStep] = useState(1);
+  const [accountInfo, setAccountInfo] = useState({
+    username: "",
+    email: "",
+    password: "",
+    // Add other fields as necessary
+  });
+  const [accountSetupInfo, setAccountSetupInfo] = useState({
+    fullname: "",
+    bio: "",
+    dateOfBirth: "",
+    profilePicture: null,
+    interests: [],
+  });
 
   // Removed unused state `step` since displayStep function handles component rendering
   const steps = ["Account Information", "Account Setup", "Complete"];
 
+  const handleNext = () => {
+    if (currentStep === 1) {
+      console.log(accountInfo);
+      // Perform validation for AccountInformation step
+      if (!accountInfo.username || !accountInfo.email || !accountInfo.password) {
+        alert("All fields are required.");
+        return;
+      }
+    }
+    if (currentStep === 2 ){
+      console.log(accountSetupInfo);
+      if(!accountSetupInfo.fullname || !accountSetupInfo.bio ||!accountSetupInfo.dateOfBirth || !accountSetupInfo.profilePicture || !accountSetupInfo. interests){
+        alert("Please fill in all required fields in the Account Setup step.");
+      return; // Do not proceed if fields are not filled
+      }
+    }
+    // Proceed to the next step
+    if (currentStep < 3) {
+      setCurrentStep(currentStep + 1); // Go to the next step
+    }
+  };
+
   const displayStep = (step) => {
     switch (step) {
       case 1:
-        return <AccountInformation setCurrentStep={setCurrentStep} />;
+        return <AccountInformation setCurrentStep={setCurrentStep} accountInfo={accountInfo} setAccountInfo={setAccountInfo} />;
       case 2:
-        return <AccountSetup setCurrentStep={setCurrentStep} />;
+        return <AccountSetup setCurrentStep={setCurrentStep}  accountSetupInfo={accountSetupInfo} setAccountSetupInfo={setAccountSetupInfo}/>;
       case 3:
-        return <Complete />;
+        return <Complete  accountInfo={accountInfo} accountSetupInfo={accountSetupInfo} />;
       default:
         return null;
     }
@@ -46,7 +81,7 @@ const Signup = () => {
           {/* Optional: control width */}
           {displayStep(currentStep)}
           <Stepper steps={steps} currentStep={currentStep} />
-          <StepperControl currentStep={currentStep} setCurrentStep={setCurrentStep} />
+          <StepperControl currentStep={currentStep} setCurrentStep={setCurrentStep} handleNext={handleNext}/>
           <p className="text-center text-sm sm:text-base">
           Already have an Account?{" "}
           <span className="text-[#AC68F7] cursor-pointer">
