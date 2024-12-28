@@ -42,8 +42,9 @@ function App() {
           <Route path="/story" element={<Story />} />
           <Route path="/" element={<FeedLoad />}>
             <Route path="/forum" element={<Forum />} />
+            <Route path="/post/:id" element={<Post />} />
           </Route>
-          <Route path="/post/:id" element={<Post />} />
+          
           <Route path="/profile/:id" element={<Profile />} />
         </Route>
       </Routes>

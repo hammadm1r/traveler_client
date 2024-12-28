@@ -4,13 +4,14 @@ import { MdOutlineModeComment } from "react-icons/md";
 import { CiLocationOn } from "react-icons/ci";
 import ProfileImage from "./ProfileImage"; // Ensure the path is correct
 import Carousel from "./Carousel";
-import { getUserProfile } from "../Toolkit/slices/userProfileSlice";
-import { useDispatch } from "react-redux";
+import { getUserProfile, toggleLike } from "../Toolkit/slices/userProfileSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { likeAndUnlikePost } from "../Toolkit/slices/feedSlice";
 const Post = ({
  post
 }) => {
+  const myProfile = useSelector((state)=>state.appConfig.myProfile);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const formattedHashtags = post?.hashtags?.join(' ') || "";
@@ -20,6 +21,7 @@ const Post = ({
   };
   const handleLike = () => {
     dispatch(likeAndUnlikePost({ postId : post.id}));
+    dispatch(toggleLike({ postId : post.id ,curUserId : myProfile._id}));
   }
   return (
     <>

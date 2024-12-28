@@ -1,20 +1,35 @@
-import React, { useState } from "react";
+import React from "react";
 
-const AccountSetup = ({ setCurrentStep }) => {
-  const [fullname, setFullname] = useState("");
-  const [bio, setBio] = useState("");
-  const [dateOfBirth, setDateOfBirth] = useState("");
-  const [profilePicture, setProfilePicture] = useState(null);
-  const [interests, setInterests] = useState([]);
-
+const AccountSetup = ({ accountSetupInfo, setAccountSetupInfo }) => {
+  // Handle checkbox changes for user interests
   const handleInterestChange = (event) => {
     const value = event.target.value;
-    setInterests((prevInterests) =>
-      prevInterests.includes(value)
-        ? prevInterests.filter((interest) => interest !== value)
-        : [...prevInterests, value]
-    );
-  }
+    setAccountSetupInfo((prevInfo) => ({
+      ...prevInfo,
+      interests: prevInfo.interests.includes(value)
+        ? prevInfo.interests.filter((interest) => interest !== value)
+        : [...prevInfo.interests, value],
+    }));
+  };
+
+  // Handle input field changes
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    setAccountSetupInfo((prevInfo) => ({
+      ...prevInfo,
+      [id]: value,
+    }));
+  };
+
+  // Handle file input for profile picture
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setAccountSetupInfo((prevInfo) => ({
+      ...prevInfo,
+      profilePicture: file,
+    }));
+  };
+
   return (
     <div className="w-full max-w-md mx-auto sm:mx-0">
       <div className="sm:ml-10 mt-12 sm:mt-20">
@@ -32,8 +47,8 @@ const AccountSetup = ({ setCurrentStep }) => {
         <input
           id="fullname"
           type="text"
-          value={fullname}
-          onChange={(e) => setFullname(e.target.value)}
+          value={accountSetupInfo.fullname}
+          onChange={handleInputChange}
           placeholder="Enter Full Name"
           className="px-4 py-2 bg-textBox border border-gray-300 rounded w-full mb-4 focus:outline-none focus:ring focus:ring-[#AC68F7]"
         />
@@ -47,8 +62,8 @@ const AccountSetup = ({ setCurrentStep }) => {
         </label>
         <textarea
           id="bio"
-          value={bio}
-          onChange={(e) => setBio(e.target.value)}
+          value={accountSetupInfo.bio}
+          onChange={handleInputChange}
           placeholder="Tell us about yourself"
           className="px-4 py-2 bg-textBox border border-gray-300 rounded w-full mb-4 focus:outline-none focus:ring focus:ring-[#AC68F7]"
           maxLength="300"
@@ -64,8 +79,8 @@ const AccountSetup = ({ setCurrentStep }) => {
         <input
           id="dateOfBirth"
           type="date"
-          value={dateOfBirth}
-          onChange={(e) => setDateOfBirth(e.target.value)}
+          value={accountSetupInfo.dateOfBirth}
+          onChange={handleInputChange}
           className="px-4 py-2 bg-textBox border border-gray-300 rounded w-full mb-4 focus:outline-none focus:ring focus:ring-[#AC68F7]"
         />
 
@@ -80,7 +95,7 @@ const AccountSetup = ({ setCurrentStep }) => {
           id="profilePicture"
           type="file"
           accept="image/*"
-          onChange={(e) => setProfilePicture(e.target.files[0])}
+          onChange={handleFileChange}
           className="px-4 py-2 bg-textBox border border-gray-300 rounded w-full mb-4 focus:outline-none focus:ring focus:ring-[#AC68F7]"
         />
 
@@ -98,7 +113,7 @@ const AccountSetup = ({ setCurrentStep }) => {
                 type="checkbox"
                 value={interest}
                 onChange={handleInterestChange}
-                checked={interests.includes(interest)}
+                checked={accountSetupInfo.interests.includes(interest)}
                 className="mr-2"
               />
               {interest}

@@ -3,7 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { FaUserEdit } from "react-icons/fa";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
-import { followAndUnfollowUser, getUserProfile } from "../Toolkit/slices/userProfileSlice";
+import {
+  followAndUnfollowUser,
+  getUserProfile,
+} from "../Toolkit/slices/userProfileSlice";
 import NewPostPrompt from "../Components/NewPostPrompt";
 import PostCard from "../Components/PostCard";
 import Achivements from "../Components/Achivements";
@@ -15,54 +18,38 @@ const Profile = () => {
 
   // Get profile and posts from Redux state
   const myProfile = useSelector((state) => state.appConfig.myProfile);
-  const myPosts = useSelector((state) => state.appConfig.myPosts);
-  const userProfile = useSelector((state) => state.userProfile.user);
-  const userPosts = useSelector((state) => state.userProfile.posts);
+  const profile = useSelector((state) => state.userProfile.user);
+  const posts = useSelector((state) => state.userProfile.posts);
   const isFollowing = useSelector((state) => state.userProfile.isFollowing);
 
-  const [owner, setOwner] = useState(true);
-  const [profile, setProfile] = useState(null);
-  const [posts, setPosts] = useState([]);
+  const [owner, setOwner] = useState(false);
   const [isContentOpen, setIsContentOpen] = useState(false);
-  useEffect(()=>{
-  console.log(profile?.follower);},[profile?.follower])
+  
+
   // First useEffect: fetch user profile if the id doesn't match myProfile._id
   useEffect(() => {
-    if (!id) return; // If no id in the URL, do nothing
-
-    // If the current profile is the logged-in user (myProfile), use that data
-    if (id === myProfile?._id) {
-      setProfile(myProfile);
-      setPosts(myPosts);
-      setOwner(true);
-      console.log(posts);
-    } else {
-      // If it's not the logged-in user, dispatch to fetch the user profile
-      if (!userProfile || userProfile._id !== id) {
-        dispatch(getUserProfile(id)); // Fetch user profile and posts from API
+    if (!id) return;
+  
+    // Fetch the profile for the given ID
+    dispatch(getUserProfile(id)).then(() => {
+      // Check ownership after fetching the profile
+      if (id === myProfile?._id) {
+        setOwner(true);
+      } else {
+        setOwner(false);
       }
-    }
-  }, [id, myProfile, userProfile, dispatch, myPosts]);
-
-  // Second useEffect: update the local state when userProfile and userPosts change
-  useEffect(() => {
-    if (userProfile && userPosts && userProfile._id === id) {
-      setProfile(userProfile);
-      setPosts(userPosts);
-      setOwner(false);
-      console.log(posts);
-    }
-  }, [userProfile, userPosts, id]);
+    });
+  }, [id, dispatch, myProfile]);
 
   const handleToggleContent = () => {
     setIsContentOpen(!isContentOpen);
   };
-  const handleFollow = () =>{
+  const handleFollow = () => {
     const body = {
-      followId:id
-    }
+      followId: id,
+    };
     dispatch(followAndUnfollowUser(body));
-  } 
+  };
   // If the profile data is still loading, show a loading message
   if (!profile) {
     return <p>Loading...</p>;
@@ -127,8 +114,11 @@ const Profile = () => {
 
               {!owner && (
                 <div className="flex justify-center w-full sm:w-auto mt-2 sm:mt-0">
-                  <button className="bg-bgPrimary text-2xl font-bold text-white px-6 py-3 rounded-xl hover:bg-blue-500 w-full sm:w-auto" onClick={handleFollow}>
-                  {isFollowing ? "Unfollow" : "Follow"}
+                  <button
+                    className="bg-bgPrimary text-2xl font-bold text-white px-6 py-3 rounded-xl hover:bg-blue-500 w-full sm:w-auto"
+                    onClick={handleFollow}
+                  >
+                    {isFollowing ? "Unfollow" : "Follow"}
                   </button>
                 </div>
               )}

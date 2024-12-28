@@ -3,9 +3,10 @@ import UserImage from "../assets/Images/UserImage.jpeg";
 import { CiLocationOn } from "react-icons/ci";
 import ReactStars from "react-rating-stars-component"; // Import the star rating component
 import { useSelector } from "react-redux";
+import { axiosClient } from "../utils/axiosClient";
 
 export const CreatePost = () => {
-  const myProfile = useSelector((state) => state.appConfig.myProfile)
+  const myProfile = useSelector((state) => state.appConfig.myProfile);
   const [loc, setLoc] = useState("Sialkot, Pakistan"); // Default location
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
@@ -22,8 +23,7 @@ export const CreatePost = () => {
       setErrorMsg("You can only upload a maximum of 5 images.");
     } else {
       setErrorMsg(""); // Clear error message
-      const newImages = files.map((file) => URL.createObjectURL(file));
-      setSelectedImages((prevImages) => [...prevImages, ...newImages]);
+      setSelectedImages((prevImages) => [...prevImages, ...files]);
     }
   };
 
@@ -35,10 +35,29 @@ export const CreatePost = () => {
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Post created with title:", title, "location:", loc, "rating:", rating);
+  
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", desc);
+    formData.append("location", loc);
+    formData.append("rating", rating);
+  
+    selectedImages.forEach((image) => {
+      formData.append("media[]", image);
+    });
+  
+    try {
+      const response = await axiosClient.post("post/createpost", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
   };
+  
 
   // Function to handle the star rating
   const ratingChanged = (newRating) => {
@@ -47,7 +66,6 @@ export const CreatePost = () => {
 
   return (
     <div className="mt-24 md:mx-20 mx-4 flex justify-center">
-        
       <div className="bg-white max-w-2xl p-6 rounded-lg shadow-md">
         <h1 className="text-2xl font-bold mb-6 text-center text-bgPrimary">
           Create Post
@@ -97,7 +115,6 @@ export const CreatePost = () => {
               >
                 {selectedImages.length < 5 ? (
                   <div className="text-center">
-                   
                     <p>Drag and Drop files to upload</p>
                     <p>or</p>
                     <span className="bg-bgPrimary text-white px-4 py-1 rounded-md">
@@ -132,7 +149,7 @@ export const CreatePost = () => {
               {selectedImages.map((image, index) => (
                 <div key={index} className="relative">
                   <img
-                    src={image}
+                    src={URL.createObjectURL(image)}
                     alt={`upload-preview-${index}`}
                     className="h-24 w-24 object-cover rounded"
                   />
@@ -190,7 +207,6 @@ export const CreatePost = () => {
           </form>
         </div>
       </div>
-     
     </div>
   );
 };

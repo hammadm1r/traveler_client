@@ -1,26 +1,28 @@
 import React from "react";
 import userImage from "../assets/Images/UserImage.jpeg";
 import ProfileImage from "./ProfileImage";
-const CommentCard = () => {
+import { useSelector } from "react-redux";
+const CommentCard = ({comment}) => {
   const myProfile = useSelector((state)=>state.appConfig.myProfile)
+  console.log(comment);
   return (
     <div className=" border-b-2 pb-6 pt-6 px-0 md:px-8  ">
       <div className="flex items-center justify-between mb-4">
         {/* User Information */}
         <div className="flex items-center space-x-3">
-          <ProfileImage userProfileImage={userImage} />
+          <ProfileImage userProfileImage={comment.userProfileImage} userId={comment.userId}/>
           <div>
             <p className="text-base md:text-lg font-semibold text-gray-800">
-              Hammad Farooq
+              {comment.commentUserName}
             </p>
             <p className="text-xs md:text-sm font-medium text-gray-500">
-              4 Hours ago
+              {comment.commentedAt}
             </p>
           </div>
         </div>
       </div>
       <div>
-        <p className="text-sm md:text-base text-gray-600 mt-2">Awesome Picture And Fun You Have on Trip!!</p>
+        <p className="text-sm md:text-base text-gray-600 mt-2">{comment.commentText}</p>
       </div>
     </div>
   );
