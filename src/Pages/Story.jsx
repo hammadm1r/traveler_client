@@ -3,6 +3,8 @@ import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import { createPortal } from "react-dom"; // Import createPortal
 import "leaflet/dist/leaflet.css";
 import { FcLikePlaceholder } from "react-icons/fc";
+import { AiOutlinePlus } from "react-icons/ai"; // Add icon for the button
+import Header from "../Components/Header";
 
 // Example video data with location and video URL
 const videoData = [
@@ -20,51 +22,53 @@ const videoData = [
       "https://videos.pexels.com/video-files/4434242/4434242-uhd_2160_3840_24fps.mp4", // Replace with valid URL
     title: "Video 2",
   },
-  // Add more data as needed
 ];
 
 const Story = () => {
-  const [selectedVideo, setSelectedVideo] = useState(null); // Track the selected video
-  const [isPlaying, setIsPlaying] = useState(false); // Track if the video is playing
+  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef(null);
 
-  const videoRef = useRef(null); // Reference to the video element
-
-  // Open video popup
   const openPopup = (video) => {
     setSelectedVideo(video);
-    setIsPlaying(false); // Reset playing state when a new video is selected
+    setIsPlaying(false);
   };
 
-  // Close video popup
   const closePopup = () => {
     setSelectedVideo(null);
-    setIsPlaying(false); // Reset playing state when closing the popup
+    setIsPlaying(false);
   };
 
-  // Prevent video close if clicked inside the video player
   const handleVideoClick = (e) => {
-    e.stopPropagation(); // Prevent closing when clicking on the video player
+    e.stopPropagation();
   };
 
-  // Handle video play
   const handlePlay = () => {
-    setIsPlaying(true); // Mark the video as playing when the play event occurs
+    setIsPlaying(true);
+  };
+
+  const handleAddStory = () => {
+    alert("Add Story button clicked!");
   };
 
   return (
     <>
       {/* Title Section */}
-      <div className="bg-gradient-to-r from-blue-400 to-teal-400 text-white py-4 text-center">
-        <h1 className="text-4xl font-bold">Story Section</h1>
-        <p className="mt-2 text-lg">Discover videos at various locations</p>
-      </div>
-
+      <Header />
       <div className="flex flex-col md:flex-row">
         {/* Map Section */}
         <div className="flex-grow h-[80vh] md:w-2/3 relative z-0">
-          {/* Set z-index for the map */}
+          {/* Add Story Button */}
+          <button
+            onClick={handleAddStory}
+            className="absolute top-4 right-4 bg-teal-500 hover:bg-teal-600 text-white p-3 rounded-full shadow-md z-50"
+            style={{ zIndex: 1000 }}
+          >
+            <AiOutlinePlus className="text-2xl" />
+          </button>
+
           <MapContainer
-            center={[51.505, -0.09]} // Default position
+            center={[51.505, -0.09]}
             zoom={13}
             scrollWheelZoom={false}
             style={{ height: "100%", width: "100%" }}
@@ -84,7 +88,6 @@ const Story = () => {
                 }}
               />
             ))}
-            <p>Hello World</p>
           </MapContainer>
         </div>
 
@@ -93,45 +96,40 @@ const Story = () => {
           createPortal(
             <div
               className="fixed inset-0 z-50 flex justify-center items-center p-4"
-              onClick={closePopup} // Close video when clicking outside
+              onClick={closePopup}
             >
-              {/* Video Content */}
               <div
                 className="relative w-full md:w-1/2 lg:w-1/3 max-w-full max-h-[90vh]"
-                onClick={handleVideoClick} // Prevent close when clicking inside the video
+                onClick={handleVideoClick}
               >
-                {/* Video */}
                 <video
                   ref={videoRef}
                   className="w-full h-auto rounded-lg shadow-md"
                   controls
                   autoPlay
-                  volume={1} // Set video to full volume
+                  volume={1}
                   style={{ maxHeight: "60vh" }}
-                  onPlay={handlePlay} // Trigger when the video starts playing
+                  onPlay={handlePlay}
                 >
                   <source src={selectedVideo.videoUrl} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
 
-                {/* Wrapper for both elements */}
                 {isPlaying && (
                   <>
                     <div className="absolute top-4 left-1/2 transform -translate-x-1/2 space-y-4">
-                      {/* Title */}
                       <div className="text-white text-lg font-semibold bg-black bg-opacity-60 px-4 py-2 rounded-md">
                         {selectedVideo.title}
                       </div>
                     </div>
                     <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 space-y-4">
-                      {/* Like Button */}
-                      <FcLikePlaceholder className="text-3xl text-white hover:text-yellow-400 transition duration-300" />
+                      <FcLikePlaceholder className="text-3xl hover:text-yellow-400 transition duration-300" />
                     </div>
                   </>
                 )}
               </div>
             </div>,
-            document.body // Attach the popup to the body, not the map container
+            document.body
           )}
       </div>
     </>
