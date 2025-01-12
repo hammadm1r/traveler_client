@@ -18,6 +18,7 @@ const Complete = ({ accountSetupInfo, accountInfo }) => {
     formData.append("fullname", accountSetupInfo.fullname);
     formData.append("bio", accountSetupInfo.bio);
     formData.append("dateOfBirth", accountSetupInfo.dateOfBirth);
+    formData.append("kofi", accountSetupInfo.kofi);
     formData.append("interests", JSON.stringify(accountSetupInfo.interests));
     if (accountSetupInfo.profilePicture) {
       formData.append("profilePicture", accountSetupInfo.profilePicture);

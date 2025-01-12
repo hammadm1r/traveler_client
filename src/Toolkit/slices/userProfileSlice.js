@@ -7,10 +7,11 @@ export const getUserProfile = createAsyncThunk(
     try {
       // Make sure you are sending the correct API call and parameters
       const response = await axiosClient.get(`/user/getUserProfile/${userId}`);
+      console.log(response);
       return response.data; // Adjust based on your response structure
     } catch (error) {
       console.log(error);
-      return error.response;
+      return error;
     }
   }
 );
@@ -35,6 +36,7 @@ const userProfileSlice = createSlice({
     posts: [],
     loading: false,
     error: null,
+    message:"",
   },
   reducers: {
     addPost: (state,action) =>{
@@ -65,13 +67,14 @@ const userProfileSlice = createSlice({
       })
       .addCase(getUserProfile.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload.data.userProfile; // Store user profile data
-        state.posts = action.payload.data.posts;
-        state.isFollowing = action.payload.data.isFollowing;
+        state.user = action?.payload?.data?.userProfile; // Store user profile data
+        state.posts = action?.payload?.data?.posts;
+        state.message = action?.payload?.message;
+        state.isFollowing = action?.payload?.data?.isFollowing;
       })
       .addCase(getUserProfile.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload.data.message; // Store error message if request fails
+        state.error = action.payload; // Store error message if request fails
       })
       .addCase(followAndUnfollowUser.pending, (state) => {
         state.loading = true;

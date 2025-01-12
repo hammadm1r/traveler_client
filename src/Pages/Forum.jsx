@@ -28,7 +28,7 @@ const Forum = () => {
       />
 
       {/* Content Section */}
-      <div className="container h-3/4 mx-auto mt-6 grid grid-cols-1 md:grid-cols-12 gap-6 px-4">
+      <div className="container h-4/5 mx-auto mt-4 grid grid-cols-1 md:grid-cols-12 gap-6 px-4">
         {/* Sidebar Section */}
         <div className="col-span-12 md:col-span-3">
           <div className="sticky top-24 h-full bg-white shadow rounded-lg p-4">

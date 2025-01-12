@@ -34,7 +34,7 @@ const AddComment = ({ postId }) => {
       <div className="flex items-center justify-between mb-4">
         {/* User Information */}
         <div className="flex items-center space-x-3">
-          <ProfileImage userProfileImage={myProfile.profilePicture.url} />
+          <ProfileImage userProfileImage={myProfile.profilePicture.url} userId={myProfile._id} />
           <div>
             <p className="text-base md:text-lg font-semibold text-gray-800">
               {myProfile.fullname}

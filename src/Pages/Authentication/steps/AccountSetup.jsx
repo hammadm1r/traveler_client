@@ -58,7 +58,7 @@ const AccountSetup = ({ accountSetupInfo, setAccountSetupInfo }) => {
           htmlFor="bio"
           className="text-base sm:text-lg text-[#2A2B2C] font-semibold mb-2 sm:mb-4 block"
         >
-          Bio (Optional)
+          Bio
         </label>
         <textarea
           id="bio"
@@ -80,6 +80,19 @@ const AccountSetup = ({ accountSetupInfo, setAccountSetupInfo }) => {
           id="dateOfBirth"
           type="date"
           value={accountSetupInfo.dateOfBirth}
+          onChange={handleInputChange}
+          className="px-4 py-2 bg-textBox border border-gray-300 rounded w-full mb-4 focus:outline-none focus:ring focus:ring-[#AC68F7]"
+        />
+                <label
+          htmlFor="dateOfBirth"
+          className="text-base sm:text-lg text-[#2A2B2C] font-semibold mb-2 sm:mb-4 block"
+        >
+          Link For Buy Me <a href="https://ko-fi.com">KoFi*</a>
+        </label>
+        <input
+          id="kofi"
+          type="text"
+          value={accountSetupInfo.kofi}
           onChange={handleInputChange}
           className="px-4 py-2 bg-textBox border border-gray-300 rounded w-full mb-4 focus:outline-none focus:ring focus:ring-[#AC68F7]"
         />
