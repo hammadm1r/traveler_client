@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { axiosClient } from "../utils/axiosClient";
 
 export const ProfileUpdate = () => {
   const myProfile = useSelector((state) => state.appConfig.myProfile);
@@ -30,22 +31,34 @@ export const ProfileUpdate = () => {
     setImagePreview(URL.createObjectURL(file)); // Preview the uploaded image
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-
-    // Gather the updated profile info (you'll send this to your server)
-    const updatedProfileData = {
-      fullname,
-      username,
-      email,
-      password: password || undefined, // Send password only if provided
-      dateOfBirth,
-      profileImage, // Include the profile image if updated
-    };
-
-    console.log("Profile Updated: ", updatedProfileData);
-    alert("Profile updated successfully!");
-    // Here you can call your API to update the profile
+    const formData = new FormData();
+    formData.append("fullname", fullname);
+    formData.append("username", username);
+    formData.append("email", email);
+    formData.append("password", password || ""); // Only include password if provided
+    formData.append("dateOfBirth", dateOfBirth);
+    
+    // Append the profile image if it has been updated
+    if (profileImage) {
+      formData.append("profileImage", profileImage); 
+    }
+  
+    try {
+      // Make the POST request to update the profile
+      const response = await axiosClient.post("/auth/updateProfile", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data", // Important for file upload
+        },
+      });
+  
+      console.log("Profile Updated: ", response.data);
+      alert("Profile updated successfully!");
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      alert("Error updating profile. Please try again.");
+    }
   };
 
   return (

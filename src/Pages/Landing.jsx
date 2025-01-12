@@ -14,7 +14,7 @@ const Landing = () => {
                discussion forum 💬,<br/>
               currency converter 💵,<br/>
                and more... all on Traveler.</pre>
-               <button className="bg-bgPrimary px-5 py-3 mt-6 rounded-lg font-semibold"><Link to="/signup" >Get started</Link></button>
+               <Link to="/signup" ><button className="bg-bgPrimary px-5 py-3 mt-6 rounded-lg font-semibold">Get started</button></Link>
       </div>
     </div>
   </>

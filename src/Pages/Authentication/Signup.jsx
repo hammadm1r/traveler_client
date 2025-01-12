@@ -20,6 +20,7 @@ const Signup = () => {
     fullname: "",
     bio: "",
     dateOfBirth: "",
+    kofi:"",
     profilePicture: null,
     interests: [],
   });

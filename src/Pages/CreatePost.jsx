@@ -4,6 +4,7 @@ import { CiLocationOn } from "react-icons/ci";
 import ReactStars from "react-rating-stars-component"; // Import the star rating component
 import { useSelector } from "react-redux";
 import { axiosClient } from "../utils/axiosClient";
+import { replace } from "react-router";
 
 export const CreatePost = () => {
   const myProfile = useSelector((state) => state.appConfig.myProfile);
@@ -52,7 +53,10 @@ export const CreatePost = () => {
       const response = await axiosClient.post("post/createpost", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      console.log(response.data);
+      if(response.statusCode = 201){
+        alert("Post Has Been Uploaded")
+        replace('/forum');
+      }
     } catch (error) {
       console.error(error);
     }

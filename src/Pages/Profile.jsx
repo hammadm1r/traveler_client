@@ -10,7 +10,9 @@ import {
 import NewPostPrompt from "../Components/NewPostPrompt";
 import PostCard from "../Components/PostCard";
 import Achivements from "../Components/Achivements";
-
+import { FaShare } from "react-icons/fa";
+import { FaFacebookF, FaTwitter, FaWhatsapp, FaCopy } from "react-icons/fa";
+import Loader from "../Components/Loader";
 const Profile = () => {
   const { id } = useParams(); // User profile id from URL params
   const dispatch = useDispatch();
@@ -21,15 +23,30 @@ const Profile = () => {
   const profile = useSelector((state) => state.userProfile.user);
   const posts = useSelector((state) => state.userProfile.posts);
   const isFollowing = useSelector((state) => state.userProfile.isFollowing);
+  const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
 
+  const [isCopied, setIsCopied] = useState(false);
+  const postUrl = window.location.href;
+  // Function to handle the opening of the popup
+  const handleShareClick = () => {
+    setIsPopupOpen(true); // Open the popup when the button is clicked
+  };
+  const handleClosePopup = () => {
+    setIsPopupOpen(false); // Close the popup
+  };
+  const handleCopyClick = () => {
+    navigator.clipboard.writeText(postUrl).then(() => {
+      setIsCopied(true); // Set copied state to true
+      setTimeout(() => setIsCopied(false), 2000); // Reset copied state after 2 seconds
+    });
+  };
   const [owner, setOwner] = useState(false);
   const [isContentOpen, setIsContentOpen] = useState(false);
-  
 
   // First useEffect: fetch user profile if the id doesn't match myProfile._id
   useEffect(() => {
     if (!id) return;
-  
+
     // Fetch the profile for the given ID
     dispatch(getUserProfile(id)).then(() => {
       // Check ownership after fetching the profile
@@ -51,8 +68,24 @@ const Profile = () => {
     dispatch(followAndUnfollowUser(body));
   };
   // If the profile data is still loading, show a loading message
+  const handleFacebookShare = () => {
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(postUrl)}`;
+    window.open(facebookUrl, '_blank', 'width=600,height=400');
+  };
+
+  const handleTwitterShare = () => {
+    const text = "Check out this post!";
+    const twitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(postUrl)}&text=${encodeURIComponent(text)}`;
+    window.open(twitterUrl, '_blank', 'width=600,height=400');
+  };
+
+  const handleWhatsAppShare = () => {
+    const text = "Check out this Profile!";
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}%20${encodeURIComponent(postUrl)}`;
+    window.open(whatsappUrl, '_blank');
+  };
   if (!profile) {
-    return <p>Loading...</p>;
+    return <Loader/>;
   }
 
   return (
@@ -106,7 +139,7 @@ const Profile = () => {
 
               {owner && (
                 <FaUserEdit
-                  className="text-2xl text-gray-600 hover:text-bgPrimary cursor-pointer"
+                  className="text-2xl text-gray-600 hover:text-bgPrimary cursor-pointer hidden md:block"
                   onClick={() => navigate("/updateprofile")}
                   title="Edit Profile"
                 />
@@ -130,6 +163,107 @@ const Profile = () => {
             <p className="text-md md:text-lg font-medium text-left mt-2 text-lightText">
               {profile?.bio}
             </p>
+            <div className="mt-4 flex items-center justify-center text-gray-700 gap-5">
+            {owner && (
+                <FaUserEdit
+                  className="text-2xl text-gray-600 hover:text-bgPrimary cursor-pointer block md:hidden"
+                  onClick={() => navigate("/updateprofile")}
+                  title="Edit Profile"
+                />
+              )}
+              {profile?.koFiUrl ? (
+                <a
+                  href={profile?.koFiUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    height="36"
+                    style={{ border: "0px", height: "36px" }}
+                    src="https://storage.ko-fi.com/cdn/kofi5.png?v=6"
+                    alt="Buy Me a Coffee at ko-fi.com"
+                  />
+                </a>
+              ) : null}
+              <button
+                type="button"
+                aria-label="Like post"
+                className={`flex items-center text-right  space-x-1 cursor-pointer ${
+                  isPopupOpen ? "text-blue-500" : "text-gray-700"
+                } hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-150 ease-in-out rounded-full bg-slate-200 px-2 py-1`}
+                onClick={handleShareClick}
+              >
+                <FaShare className="text-xl" />
+              </button>
+            </div>
+            {isPopupOpen && (
+              <div
+                className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center"
+                onClick={handleClosePopup}
+              >
+                {/* Popup Box */}
+                <div
+                  className="bg-white rounded-lg p-6 shadow-lg max-w-sm w-full"
+                  onClick={(e) => e.stopPropagation()} // Prevent popup from closing when clicked inside
+                >
+                  <div className="flex justify-between items-center mb-4">
+                    {/* Heading aligned to the left */}
+                    <h2 className="text-xl text-left">Share this post</h2>
+
+                    {/* Close button aligned to the right */}
+                    <button
+                      className="bg-gray-500 text-white py-2 px-4 rounded-full"
+                      onClick={handleClosePopup}
+                    >
+                      Close
+                    </button>
+                  </div>
+
+                  {/* URL Field and Copy Button */}
+                  <div className="flex items-center space-x-2 mb-4">
+                    <input
+                      type="text"
+                      value={postUrl}
+                      readOnly
+                      className="border border-gray-300 rounded-md p-2 w-full text-sm"
+                    />
+                    <button
+                      className="bg-gray-500 text-white p-2 rounded-full"
+                      onClick={handleCopyClick}
+                    >
+                      <FaCopy />
+                    </button>
+                  </div>
+                  {isCopied && (
+                    <div className="text-green-500 text-sm mb-2">
+                      URL copied to clipboard!
+                    </div>
+                  )}
+
+                  {/* Share Buttons */}
+                  <div className="space-x-4 mb-4 flex">
+                    <button
+                      className="bg-blue-600 text-white py-2 px-4 rounded-full flex items-center space-x-2"
+                      onClick={handleFacebookShare}
+                    >
+                      <FaFacebookF />
+                    </button>
+                    <button
+                      className="bg-blue-400 text-white py-2 px-4 rounded-full flex items-center space-x-2"
+                      onClick={handleTwitterShare}
+                    >
+                      <FaTwitter />
+                    </button>
+                    <button
+                      className="bg-green-500 text-white py-2 px-4 rounded-full flex items-center space-x-2"
+                      onClick={handleWhatsAppShare}
+                    >
+                      <FaWhatsapp />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

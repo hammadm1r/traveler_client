@@ -31,7 +31,7 @@ const Sidebar = ({active,setActive}) => {
       <IoSearchSharp className="text-2xl absolute right-3 top-5 transform -translate-y-1/2 text-gray-500" />
     </div>
       {/* Render buttons dynamically */}
-
+      <div className="hidden md:block">
       {menuItems.map((item) => (
         <button
           key={item.id}
@@ -39,7 +39,7 @@ const Sidebar = ({active,setActive}) => {
             setActive(item.id)
             menuHandler(item)}
           }
-          className={`px-5 py-2 mt-2 gap-3 flex items-center justify-center w-full rounded-xl text-lg font-semibold transition-all ${
+          className={`px-4 py-2 mt-2 gap-3 flex items-center justify-center w-full rounded-xl text-lg font-semibold transition-all ${
             active === item.id
               ? "bg-blue-500 text-white"
               : "bg-gray-200 text-gray-700 hover:bg-blue-100"
@@ -47,7 +47,30 @@ const Sidebar = ({active,setActive}) => {
         >
           {item.icon} {item.label}
         </button>
+
       ))}
+      </div>
+      <div className="block sm:hidden">
+        <div className="flex">
+      {menuItems.map((item) => (
+        <button
+          key={item.id}
+          onClick={() => {
+            setActive(item.id)
+            menuHandler(item)}
+          }
+          className={`px-5 py-2 mt-2 gap-3 flex items-center justify-center w-1/4  text-lg font-semibold transition-all ${
+            active === item.id
+              ? "bg-blue-500 text-white"
+              : "bg-gray-200 text-gray-700 hover:bg-blue-100"
+          }`}
+        >
+          {item.icon}
+        </button>
+
+      ))}
+      </div>
+      </div>
     </div>
   );
 };
