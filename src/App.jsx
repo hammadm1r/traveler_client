@@ -19,6 +19,7 @@ import RequireUser from "./Components/RequireUser";
 import CreatePost from "./Pages/CreatePost";
 import ProfileUpdate from "./Pages/ProfileUpdate";
 import FeedLoad from "./Components/feedLoad";
+import UploadStory from "./Components/UploadStory";
 
 function App() {
   return (
@@ -33,18 +34,17 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} /> {/* Corrected */}
         </Route>
-
         {/* Other routes that require authentication */}
         <Route element={<RequireUser />}>
           <Route path="/home" element={<Home />} />
           <Route path="/createpost" element={<CreatePost />} />
           <Route path="/updateprofile" element={<ProfileUpdate />} />
           <Route path="/story" element={<Story />} />
+          <Route path="/addstory" element={<UploadStory />} />
           <Route path="/" element={<FeedLoad />}>
             <Route path="/forum" element={<Forum />} />
             <Route path="/post/:id" element={<Post />} />
           </Route>
-          
           <Route path="/profile/:id" element={<Profile />} />
         </Route>
       </Routes>

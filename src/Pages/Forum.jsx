@@ -15,9 +15,6 @@ const Forum = () => {
   const feed = useSelector((state) => state.feed.feed);
   const followerPosts = feed.filter((post) =>myProfile?.following?.includes(post.owner._id))
   const myPosts = feed.filter((post) => post.owner._id === myProfile._id);
-  if(!feed){
-    dispatch(getFeedData());
-  }
   return (
     <div className="bg-gray-100 h-screen">
       {/* Header Section */}
