@@ -16,7 +16,7 @@ const FeedLoad = () => {
     }, [dispatch, feedStatus]);
 
     // Render Outlet when feed is available, else render loading or placeholder
-    if (!feed || feedStatus === 'loading') {
+    if (feedStatus === 'loading') {
         return <Loader/>
     }
 

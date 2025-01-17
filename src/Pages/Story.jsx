@@ -5,7 +5,8 @@ import "leaflet/dist/leaflet.css";
 import { FcLikePlaceholder } from "react-icons/fc";
 import { AiOutlinePlus } from "react-icons/ai"; // Add icon for the button
 import Header from "../Components/Header";
-
+import UploadStory from "../Components/UploadStory";
+import { Link } from "react-router-dom";
 // Example video data with location and video URL
 const videoData = [
   {
@@ -48,7 +49,7 @@ const Story = () => {
   };
 
   const handleAddStory = () => {
-    alert("Add Story button clicked!");
+    alert(<UploadStory />);
   };
 
   return (
@@ -59,13 +60,12 @@ const Story = () => {
         {/* Map Section */}
         <div className="flex-grow h-[80vh] md:w-2/3 relative z-0">
           {/* Add Story Button */}
-          <button
-            onClick={handleAddStory}
+          <Link to="/addstory"> <button
             className="absolute top-4 right-4 bg-teal-500 hover:bg-teal-600 text-white p-3 rounded-full shadow-md z-50"
             style={{ zIndex: 1000 }}
           >
             <AiOutlinePlus className="text-2xl" />
-          </button>
+          </button></Link>
 
           <MapContainer
             center={[51.505, -0.09]}

@@ -6,8 +6,14 @@ import {
 import { axiosClient } from "../../utils/axiosClient";
 
 export const getFeedData = createAsyncThunk("/user/feed", async () => {
-  const response = await axiosClient.get("/user/feed");
+  try {
+    const response = await axiosClient.get("/user/feed");
+    console.log(response.data.result)
   return response.data.result;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+  
 });
 
 export const likeAndUnlikePost = createAsyncThunk(

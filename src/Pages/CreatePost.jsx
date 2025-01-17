@@ -4,22 +4,24 @@ import { CiLocationOn } from "react-icons/ci";
 import ReactStars from "react-rating-stars-component"; // Import the star rating component
 import { useSelector } from "react-redux";
 import { axiosClient } from "../utils/axiosClient";
-import { replace } from "react-router";
+import { replace, useNavigate } from "react-router";
 
 export const CreatePost = () => {
   const myProfile = useSelector((state) => state.appConfig.myProfile);
   const [loc, setLoc] = useState("Sialkot, Pakistan"); // Default location
   const [title, setTitle] = useState("");
+  const navigate = useNavigate("");
   const [desc, setDesc] = useState("");
   const [selectedImages, setSelectedImages] = useState([]);
   const [errorMsg, setErrorMsg] = useState("");
   const [locationInput, setLocationInput] = useState("");
   const [rating, setRating] = useState(0); // State to store the rating value
-
+  const [isLoading,setIsLoading]  = useState(false);
+  const [errorMessage, setErrorMessage] = useState(""); // State to store the
+  const [successMessage, setSuccessMessage] = useState(""); 
   // Handle image upload
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
-
     if (files.length + selectedImages.length > 5) {
       setErrorMsg("You can only upload a maximum of 5 images.");
     } else {
@@ -50,15 +52,28 @@ export const CreatePost = () => {
     });
   
     try {
+      setIsLoading(true);
       const response = await axiosClient.post("post/createpost", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      if(response.statusCode = 201){
-        alert("Post Has Been Uploaded")
-        replace('/forum');
+      console.log(response);
+
+      if (response.data.statusCode === 201) {
+        // Success, notify user
+        setSuccessMessage("Post has been uploaded successfully.");
+        setTimeout(() => {
+          navigate(`/profile/${myProfile._id}`);
+        }, 2000); // Redirect after 2 seconds to show the success message
+      } else {
+        setErrorMessage("Failed to upload post. Please try again.");
       }
     } catch (error) {
+      // Error handling
+      setErrorMessage("An error occurred. Please try again.");
       console.error(error);
+    } finally {
+      // Disable loading state
+      setIsLoading(false);
     }
   };
   
@@ -202,12 +217,11 @@ export const CreatePost = () => {
               />
             </div>
 
-            <button
-              type="submit"
-              className="bg-bgPrimary font-semibold text-white py-2 px-8 rounded-lg"
-            >
-              Post
-            </button>
+            <button type="submit" disabled={isLoading} className={` text-white px-4 py-1 rounded-md ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-bgPrimary  hover:bg-blue-600"} text-white`}>
+      {isLoading ? "Uploading..." : "Post"}
+    </button>
+    {successMessage && <div className="success-message">{successMessage}</div>}
+    {errorMessage && <div className="error-message">{errorMessage}</div>}
           </form>
         </div>
       </div>
