@@ -1,6 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
 
 const AccountInformation = ({ accountInfo, setAccountInfo }) => {
+  // State for validation errors
+  const [errors, setErrors] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+
+  // Validate form inputs on change
+  const validateField = (id, value) => {
+    let error = "";
+
+    // Username validation: should not be an email or empty
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (id === "username") {
+      if (!value.trim()) {
+        error = "Username is required";
+      } else if (emailPattern.test(value)) {
+        error = "Username cannot be an email address";
+      }
+    }
+
+    // Email validation: should follow a valid email pattern
+    if (id === "email" && !emailPattern.test(value)) {
+      error = "Please enter a valid email";
+    }
+
+    // Password validation: at least 6 characters long
+    if (id === "password" && value.length < 6) {
+      error = "Password must be at least 6 characters";
+    }
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [id]: error,
+    }));
+  };
+
   // Handle input changes for username, email, and password
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -8,6 +45,9 @@ const AccountInformation = ({ accountInfo, setAccountInfo }) => {
       ...prevInfo,
       [id]: value,
     }));
+
+    // Validate the specific field on change
+    validateField(id, value);
   };
 
   return (
@@ -28,10 +68,15 @@ const AccountInformation = ({ accountInfo, setAccountInfo }) => {
           id="username"
           type="text"
           placeholder="Enter Username"
-          value={accountInfo.username} // Binding the value to state
-          onChange={handleInputChange} // Handling change
-          className="px-4 py-2 bg-textBox border border-gray-300 rounded w-full mb-4 focus:outline-none focus:ring focus:ring-[#AC68F7]"
+          value={accountInfo.username}
+          onChange={handleInputChange}
+          className={`px-4 py-2 bg-textBox border ${
+            errors.username ? "border-red-500" : "border-gray-300"
+          } rounded w-full mb-2 focus:outline-none focus:ring focus:ring-[#AC68F7]`}
         />
+        {errors.username && (
+          <p className="text-red-500 text-sm mb-4">{errors.username}</p>
+        )}
 
         {/* Email Label and Input */}
         <label
@@ -44,10 +89,15 @@ const AccountInformation = ({ accountInfo, setAccountInfo }) => {
           id="email"
           type="email"
           placeholder="Enter Email"
-          value={accountInfo.email} // Binding the value to state
-          onChange={handleInputChange} // Handling change
-          className="px-4 py-2 bg-textBox border border-gray-300 rounded w-full mb-4 focus:outline-none focus:ring focus:ring-[#AC68F7]"
+          value={accountInfo.email}
+          onChange={handleInputChange}
+          className={`px-4 py-2 bg-textBox border ${
+            errors.email ? "border-red-500" : "border-gray-300"
+          } rounded w-full mb-2 focus:outline-none focus:ring focus:ring-[#AC68F7]`}
         />
+        {errors.email && (
+          <p className="text-red-500 text-sm mb-4">{errors.email}</p>
+        )}
 
         {/* Password Label and Input */}
         <label
@@ -60,10 +110,15 @@ const AccountInformation = ({ accountInfo, setAccountInfo }) => {
           id="password"
           type="password"
           placeholder="Enter Password"
-          value={accountInfo.password} // Binding the value to state
-          onChange={handleInputChange} // Handling change
-          className="px-4 py-2 bg-textBox border border-gray-300 rounded w-full mb-4 focus:outline-none focus:ring focus:ring-[#AC68F7]"
+          value={accountInfo.password}
+          onChange={handleInputChange}
+          className={`px-4 py-2 bg-textBox border ${
+            errors.password ? "border-red-500" : "border-gray-300"
+          } rounded w-full mb-2 focus:outline-none focus:ring focus:ring-[#AC68F7]`}
         />
+        {errors.password && (
+          <p className="text-red-500 text-sm mb-4">{errors.password}</p>
+        )}
       </div>
     </div>
   );

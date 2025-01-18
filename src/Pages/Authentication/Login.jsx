@@ -16,6 +16,7 @@ function Home() {
   const submitHandler  = async() =>{
     try {
       const response = await axiosClient.post('auth/login',{email,password});
+      console.log(response);
       setItem(KEY_ACCESS_TOKEN,response.data.result.token);
       dispatch(setLoggedIn(true));
       navigate("/home", { replace: true });
