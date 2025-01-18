@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { axiosClient } from "../utils/axiosClient";
+import { FiUpload } from "react-icons/fi";
 
 const UploadStory = () => {
   const [file, setFile] = useState(null);
@@ -20,7 +21,6 @@ const UploadStory = () => {
     }
 
     try {
-      // Step 1: Get signature and required data from your backend
       const response = await axiosClient.get("/story/generate-signature");
       const data = response.data.result.data;
 
@@ -31,7 +31,6 @@ const UploadStory = () => {
       formData.append("signature", data.signature);
       formData.append("folder", "Story_Media");
 
-      // Step 2: Upload the file directly to Cloudinary
       const uploadResponse = await axios.post(
         `https://api.cloudinary.com/v1_1/${data.cloudName}/upload`,
         formData,
@@ -45,14 +44,12 @@ const UploadStory = () => {
         }
       );
 
-      // Step 3: Get the uploaded file's URL and public ID
       const uploadedFileUrl = uploadResponse.data.secure_url;
       const uploadedFilePublicId = uploadResponse.data.public_id;
 
       setUploadedUrl(uploadedFileUrl);
       setPublicId(uploadedFilePublicId);
 
-      // Step 4: Get user's current location
       if (!navigator.geolocation) {
         alert("Geolocation is not supported by your browser.");
         return;
@@ -63,7 +60,6 @@ const UploadStory = () => {
           const lat = position.coords.latitude;
           const long = position.coords.longitude;
 
-          // Step 5: Prepare data for your backend
           const apiData = {
             title,
             url: uploadedFileUrl,
@@ -72,9 +68,6 @@ const UploadStory = () => {
             long,
           };
 
-          console.log("Data to send to backend:", apiData);
-
-          // Optional: Send the story data to your backend
           await axiosClient.post("/story/addstory", apiData);
 
           alert("Story uploaded successfully!");
@@ -91,47 +84,63 @@ const UploadStory = () => {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
-    <div className="text-center p-6 bg-white border border-gray-300 rounded-lg shadow-md">
-      <h1 className="text-2xl font-semibold mb-6">File Upload to Cloudinary</h1>
-      <input
-        type="file"
-        onChange={handleFileChange}
-        className="block w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 mb-4"
-      />
-      <input
-              type="text"
-              placeholder="Title of the post"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="border p-2 w-full mb-4"
-              required
-            />
-      
-      <button
-        onClick={uploadFile}
-        className="px-6 py-2 bg-blue-500 text-white font-medium text-sm rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
-      >
-        Upload
-      </button>
-      {progress > 0 && (
-        <p className="mt-4 text-sm text-gray-600">Upload Progress: {progress}%</p>
-      )}
-      {uploadedUrl && (
-        <div className="mt-6">
-          <h3 className="text-lg font-medium">Uploaded File:</h3>
-          <a
-            href={uploadedUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-500 hover:underline mt-2 block"
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-lg text-center relative">
+        <h1 className="text-2xl font-semibold mb-4">Upload an Story</h1>
+
+        <div className="border border-dashed border-gray-400 p-4 rounded-lg mb-4">
+          <label
+            htmlFor="file-upload"
+            className="block w-full text-sm text-gray-700 border-dashed cursor-pointer hover:bg-gray-50"
           >
-            {uploadedUrl}
-          </a>
+            <div className="flex flex-col items-center justify-center gap-2">
+             <FiUpload className="text-4xl text-gray-700" />
+              <span className="text-sm text-gray-600 hidden md:block">Drag and drop a file, or click to select</span>
+            </div>
+          </label>
+          <input
+            id="file-upload"
+            type="file"
+            onChange={handleFileChange}
+            className="hidden"
+          />
         </div>
-      )}
+
+        <input
+          type="text"
+          placeholder="Enter a title for the story"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="border p-2 w-full mb-4"
+          required
+        />
+
+        <button
+          onClick={uploadFile}
+          className="w-full py-2 px-4 bg-bgPrimary  hover:bg-blue-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+        >
+          Upload Story
+        </button>
+
+        {progress > 0 && (
+          <p className="mt-4 text-sm text-gray-600">Upload Progress: {progress}%</p>
+        )}
+
+        {uploadedUrl && (
+          <div className="mt-6">
+            <h3 className="text-lg font-medium">Uploaded File:</h3>
+            <a
+              href={uploadedUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline"
+            >
+              {uploadedUrl}
+            </a>
+          </div>
+        )}
+      </div>
     </div>
-  </div>
   );
 };
 
