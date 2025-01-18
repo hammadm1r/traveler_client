@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import UserImage from "../assets/Images/UserImage.jpeg";
 import { CiLocationOn } from "react-icons/ci";
+import { FiUpload } from "react-icons/fi";
 import ReactStars from "react-rating-stars-component"; // Import the star rating component
 import { useSelector } from "react-redux";
 import { axiosClient } from "../utils/axiosClient";
@@ -133,12 +134,9 @@ export const CreatePost = () => {
                 className=" w-full h-32 border-2 border-dashed border-gray-400 rounded-lg cursor-pointer flex items-center justify-center"
               >
                 {selectedImages.length < 5 ? (
-                  <div className="text-center">
-                    <p>Drag and Drop files to upload</p>
-                    <p>or</p>
-                    <span className="bg-bgPrimary text-white px-4 py-1 rounded-md">
-                      Browse
-                    </span>
+                  <div className="flex flex-col items-center justify-center gap-2">
+                    <p className="text-sm text-gray-600  hidden md:block">Drag and Drop files to upload</p>
+                    <FiUpload className="text-4xl text-gray-700" />
                   </div>
                 ) : (
                   <p className="text-center text-red-600">
