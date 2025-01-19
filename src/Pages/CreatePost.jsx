@@ -1,32 +1,32 @@
 import React, { useState } from "react";
-import UserImage from "../assets/Images/UserImage.jpeg";
 import { CiLocationOn } from "react-icons/ci";
 import { FiUpload } from "react-icons/fi";
 import ReactStars from "react-rating-stars-component"; // Import the star rating component
 import { useSelector } from "react-redux";
 import { axiosClient } from "../utils/axiosClient";
-import { replace, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 
 export const CreatePost = () => {
   const myProfile = useSelector((state) => state.appConfig.myProfile);
-  const [loc, setLoc] = useState("Sialkot, Pakistan"); // Default location
+  const [loc, setLoc] = useState("Sialkot, Pakistan");
   const [title, setTitle] = useState("");
-  const navigate = useNavigate("");
+  const navigate = useNavigate();
   const [desc, setDesc] = useState("");
   const [selectedImages, setSelectedImages] = useState([]);
   const [errorMsg, setErrorMsg] = useState("");
   const [locationInput, setLocationInput] = useState("");
-  const [rating, setRating] = useState(0); // State to store the rating value
-  const [isLoading,setIsLoading]  = useState(false);
-  const [errorMessage, setErrorMessage] = useState(""); // State to store the
-  const [successMessage, setSuccessMessage] = useState(""); 
+  const [rating, setRating] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+
   // Handle image upload
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     if (files.length + selectedImages.length > 5) {
       setErrorMsg("You can only upload a maximum of 5 images.");
     } else {
-      setErrorMsg(""); // Clear error message
+      setErrorMsg("");
       setSelectedImages((prevImages) => [...prevImages, ...files]);
     }
   };
@@ -41,17 +41,17 @@ export const CreatePost = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const formData = new FormData();
     formData.append("title", title);
     formData.append("description", desc);
     formData.append("location", loc);
     formData.append("rating", rating);
-  
+
     selectedImages.forEach((image) => {
       formData.append("media[]", image);
     });
-  
+
     try {
       setIsLoading(true);
       const response = await axiosClient.post("post/createpost", formData, {
@@ -60,7 +60,6 @@ export const CreatePost = () => {
       console.log(response);
 
       if (response.data.statusCode === 201) {
-        // Success, notify user
         setSuccessMessage("Post has been uploaded successfully.");
         setTimeout(() => {
           navigate(`/profile/${myProfile._id}`);
@@ -69,15 +68,12 @@ export const CreatePost = () => {
         setErrorMessage("Failed to upload post. Please try again.");
       }
     } catch (error) {
-      // Error handling
       setErrorMessage("An error occurred. Please try again.");
       console.error(error);
     } finally {
-      // Disable loading state
       setIsLoading(false);
     }
   };
-  
 
   // Function to handle the star rating
   const ratingChanged = (newRating) => {
@@ -85,61 +81,59 @@ export const CreatePost = () => {
   };
 
   return (
-    <div className="mt-24 md:mx-20 mx-4 flex justify-center">
-      <div className="bg-white max-w-2xl p-6 rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold mb-6 text-center text-bgPrimary">
+    <div className="mt-16 md:mx-20 mx-4 flex justify-center">
+      <div className="bg-white max-w-2xl p-6 rounded-lg shadow-md transition-all hover:shadow-lg">
+        <h1 className="text-3xl font-bold mb-5 text-center text-bgPrimary tracking-normal">
           Create Post
         </h1>
 
-        <div className="p-10 border rounded-lg">
-          <div className="flex items-center">
+        <div className="p-5 border border-gray-100 rounded-lg shadow-sm bg-gradient-to-b from-gray-50 to-white">
+          <div className="flex items-center mb-5">
+            <img
+              src={myProfile?.profilePicture?.url}
+              alt="User"
+              className="w-12 h-12 object-cover rounded-full mr-3"
+            />
             <div>
-              <img
-                src={myProfile?.profilePicture?.url}
-                alt="User"
-                className="w-8 h-8 object-cover rounded-full mr-3"
-              />
-            </div>
-            <div>
-              <p className="text-md">{myProfile.fullname}</p>
-              <div className="flex items-center justify-center gap-x-1">
-                <CiLocationOn className="text-sm" />
-                <p className="text-xs">{loc}</p>
+              <p className="text-lg font-semibold">{myProfile.fullname}</p>
+              <div className="flex items-center gap-x-1">
+                <CiLocationOn className="text-xl text-bgPrimary" />
+                <p className="text-base text-gray-500">{loc}</p>
               </div>
             </div>
           </div>
 
-          {/* Form for creating post */}
-          <form onSubmit={handleSubmit} className="mt-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <input
               type="text"
               placeholder="Title of the post"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="border p-2 w-full mb-4"
+              className="border border-gray-200 p-3 w-full rounded-md focus:ring focus:ring-bgPrimary text-base shadow-sm"
               required
             />
             <textarea
               placeholder="Write something about your post..."
               value={desc}
               onChange={(e) => setDesc(e.target.value)}
-              className="border p-2 w-full mb-4"
+              className="border border-gray-200 p-3 w-full rounded-md focus:ring focus:ring-bgPrimary text-base shadow-sm"
               required
             />
 
-            {/* Image Upload Input */}
-            <div className="mb-4">
+            <div className="mb-5">
               <label
                 htmlFor="file-upload"
-                className=" w-full h-32 border-2 border-dashed border-gray-400 rounded-lg cursor-pointer flex items-center justify-center"
+                className="w-full h-32 border-2 border-dashed border-gray-300 rounded-md cursor-pointer flex items-center justify-center hover:border-bgPrimary hover:bg-gray-50 transition-all"
               >
                 {selectedImages.length < 5 ? (
-                  <div className="flex flex-col items-center justify-center gap-2">
-                    <p className="text-sm text-gray-600  hidden md:block">Drag and Drop files to upload</p>
-                    <FiUpload className="text-4xl text-gray-700" />
+                  <div className="flex flex-col items-center gap-2">
+                    <FiUpload className="text-4xl text-gray-600" />
+                    <p className="hidden md:block text-base text-gray-500">
+                      Drag and drop files or click to upload
+                    </p>
                   </div>
                 ) : (
-                  <p className="text-center text-red-600">
+                  <p className="text-center text-red-500">
                     Maximum 5 images allowed
                   </p>
                 )}
@@ -150,29 +144,26 @@ export const CreatePost = () => {
                   className="hidden"
                   onChange={handleImageChange}
                   multiple
-                  disabled={selectedImages.length >= 5} // Disable input when 5 images are uploaded
+                  disabled={selectedImages.length >= 5}
                 />
               </label>
-              <p className="text-xs text-gray-400 mt-2">
-                Supported files: JPG, PNG
+              <p className="text-sm text-gray-400 mt-2">
+                Supported formats: JPG, PNG
               </p>
-              {errorMsg && (
-                <p className="text-red-500 text-sm mt-1">{errorMsg}</p>
-              )}
+              {errorMsg && <p className="text-red-500 text-sm mt-1">{errorMsg}</p>}
             </div>
 
-            {/* Display selected images */}
-            <div className="grid grid-cols-3 gap-2 mb-4">
+            <div className="grid grid-cols-3 gap-4 mb-4">
               {selectedImages.map((image, index) => (
-                <div key={index} className="relative">
+                <div key={index} className="relative group">
                   <img
                     src={URL.createObjectURL(image)}
                     alt={`upload-preview-${index}`}
-                    className="h-24 w-24 object-cover rounded"
+                    className="h-24 w-full object-cover rounded-md shadow-sm"
                   />
                   <button
                     type="button"
-                    className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full"
+                    className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                     onClick={() => removeImage(index)}
                   >
                     X
@@ -181,11 +172,10 @@ export const CreatePost = () => {
               ))}
             </div>
 
-            {/* Location Input Field */}
-            <div className="mb-4">
+            <div>
               <label
                 htmlFor="location-input"
-                className="block mb-2 text-lg font-smeibold text-bgPrimary"
+                className="block mb-2 text-base font-medium text-bgPrimary"
               >
                 Location:
               </label>
@@ -196,31 +186,43 @@ export const CreatePost = () => {
                 value={locationInput}
                 onChange={(e) => {
                   setLocationInput(e.target.value);
-                  setLoc(e.target.value); // Set loc state when user types
+                  setLoc(e.target.value);
                 }}
-                className="border p-2 w-full"
+                className="border border-gray-200 p-3 w-full rounded-md focus:ring focus:ring-bgPrimary shadow-sm"
               />
             </div>
 
-            {/* Rating Functionality */}
-            <div className="mb-4">
-              <label className="block mb-2 text-lg font-smeibold text-bgPrimary">
+            <div>
+              <label className="block mb-2 text-base font-medium text-bgPrimary">
                 Rate this post:
               </label>
               <ReactStars
                 count={5}
                 onChange={ratingChanged}
-                size={24}
+                size={25}
                 activeColor="#ffd700"
               />
             </div>
 
-            <button type="submit" disabled={isLoading} className={` text-white px-4 py-1 rounded-md ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-bgPrimary  hover:bg-blue-600"} text-white`}>
-      {isLoading ? "Uploading..." : "Post"}
-    </button>
-    {successMessage && <div className="success-message">{successMessage}</div>}
-    {errorMessage && <div className="error-message">{errorMessage}</div>}
+            <button
+              type="submit"
+              disabled={isLoading}
+              className={`w-full py-3 rounded-md text-white font-semibold tracking-wide ${
+                isLoading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-bgPrimary hover:shadow-md hover:bg-opacity-90"
+              }`}
+            >
+              {isLoading ? "Uploading..." : "Post"}
+            </button>
           </form>
+
+          {successMessage && (
+            <p className="text-green-500 text-center mt-4">{successMessage}</p>
+          )}
+          {errorMessage && (
+            <p className="text-red-500 text-center mt-4">{errorMessage}</p>
+          )}
         </div>
       </div>
     </div>
