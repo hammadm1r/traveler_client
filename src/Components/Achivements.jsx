@@ -27,7 +27,7 @@ const Achivements = () => {
   return (
     <div className="rounded-t-xl overflow-hidden shadow-lg">
       <div className="text-bgSecondary p-4 bg-bgPrimary justify-between flex items-center">
-        <p className="text-xl md:text-3xl font-semibold text-left">
+        <p className="text-xl md:text-2xl font-semibold text-left">
           Achievements
         </p>
         <p className="text-xl md:text-3xl text-right cursor-pointer" onClick={handleToggleContent}>

@@ -86,7 +86,7 @@ const UploadStory = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-lg text-center relative">
-        <h1 className="text-2xl font-semibold mb-4">Upload an Story</h1>
+        <h1 className="text-2xl text-bgPrimary font-semibold mb-4">Upload an Story</h1>
 
         <div className="border border-dashed border-gray-400 p-4 rounded-lg mb-4">
           <label
