@@ -5,40 +5,43 @@ import "leaflet/dist/leaflet.css";
 import { FcLikePlaceholder } from "react-icons/fc";
 import { AiOutlinePlus } from "react-icons/ai"; // Add icon for the button
 import Header from "../Components/Header";
-import UploadStory from "../Components/UploadStory";
 import { Link } from "react-router-dom";
 import { axiosClient } from "../utils/axiosClient";
-
-// Example video data with location and video URL
 
 const Story = () => {
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [videoData, setVideoData] = useState([]);
-  const [lat, setLat] = useState('');
-  const [long, setLong] = useState('');
+  const [lat, setLat] = useState(null);
+  const [long, setLong] = useState(null);
   const videoRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         // Fetch geolocation
-        navigator.geolocation.getCurrentPosition((position) => {
-          setLat(position.coords.latitude);
-          setLong(position.coords.longitude);
-        });
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            setLat(position.coords.latitude);
+            setLong(position.coords.longitude);
+          },
+          (error) => {
+            console.error("Error fetching geolocation:", error);
+            setLat(51.505); // Default latitude
+            setLong(-0.09); // Default longitude
+          }
+        );
 
         // Fetch story data
-        const response = await axiosClient.get('/story/getstory');
-        console.log(response.data.result.allStory);
-        setVideoData(response.data.result.allStory);  
+        const response = await axiosClient.get("/story/getstory");
+        setVideoData(response.data.result.allStory);
       } catch (error) {
         console.error("Error fetching video data:", error);
       }
     };
 
     fetchData();
-  }, []);  // Empty dependency array means this effect runs once on mount
+  }, []);
 
   const openPopup = (video) => {
     setSelectedVideo(video);
@@ -52,14 +55,6 @@ const Story = () => {
 
   const handleVideoClick = (e) => {
     e.stopPropagation(); // Prevent closing the popup when interacting with the video
-  };
-
-  const handlePlay = () => {
-    setIsPlaying(true);
-  };
-
-  const handleAddStory = () => {
-    alert(<UploadStory />);
   };
 
   return (
@@ -80,39 +75,45 @@ const Story = () => {
           </Link>
 
           {/* Map */}
-          <MapContainer
-            center={[lat || 51.505, long || -0.09]} // Fallback to a default location if lat/long are not set
-            zoom={13}
-            scrollWheelZoom={false}
-            style={{ height: "100%", width: "100%" }}
-          >
-            <TileLayer
-              attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-
-            {/* Loop through video data and create markers */}
-            {videoData.map((video, index) => (
-              <Marker
-                key={index}
-                position={[video.location.latitude, video.location.longitude]}
-                eventHandlers={{
-                  click: () => openPopup(video),
-                }}
+          {lat && long ? (
+            <MapContainer
+              center={[lat, long]}
+              zoom={13}
+              scrollWheelZoom={false}
+              style={{ height: "100%", width: "100%" }}
+            >
+              <TileLayer
+                attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
-            ))}
-          </MapContainer>
+
+              {/* Loop through video data and create markers */}
+              {videoData.map((video) => (
+                <Marker
+                  key={video.id} // Assuming each video has a unique ID
+                  position={[video.location.latitude, video.location.longitude]}
+                  eventHandlers={{
+                    click: () => openPopup(video),
+                  }}
+                />
+              ))}
+            </MapContainer>
+          ) : (
+            <div className="flex justify-center items-center h-full">
+              Loading map...
+            </div>
+          )}
         </div>
 
         {/* Custom Popup for Selected Video */}
         {selectedVideo &&
           createPortal(
             <div
-              className="fixed inset-0 z-50 flex justify-center items-center p-4"
-              onClick={closePopup}  // Close the popup when clicking outside
+              className="fixed inset-0 z-50 flex justify-center items-center p-4 bg-black bg-opacity-50"
+              onClick={closePopup} // Close the popup when clicking outside
             >
               <div
-                className="relative w-full md:w-1/2 lg:w-1/3 max-w-full max-h-[90vh]"
+                className="relative w-full max-w-md h-auto bg-white rounded-lg shadow-md overflow-y-auto"
                 onClick={handleVideoClick} // Prevent closing the popup when interacting with the video
               >
                 <video
@@ -122,9 +123,14 @@ const Story = () => {
                   autoPlay
                   volume={1}
                   style={{ maxHeight: "60vh" }}
-                  onPlay={handlePlay}
+                  onPlay={() => setIsPlaying(true)}
+                  onPause={() => setIsPlaying(false)} // Update state on pause
                 >
-                  <source src={selectedVideo.videoUrl} type="video/mp4" />
+                  <source src={selectedVideo?.video?.url} type="video/mp4" />
+                  <source
+                    src={selectedVideo?.video?.url}
+                    type="video/x-matroska"
+                  />
                   Your browser does not support the video tag.
                 </video>
 
@@ -132,7 +138,7 @@ const Story = () => {
                   <>
                     <div className="absolute top-4 left-1/2 transform -translate-x-1/2 space-y-4">
                       <div className="text-white text-lg font-semibold bg-black bg-opacity-60 px-4 py-2 rounded-md">
-                        {selectedVideo.title}  {/* Display video title */}
+                        {selectedVideo.title} {/* Display video title */}
                       </div>
                     </div>
                     <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 space-y-4">
