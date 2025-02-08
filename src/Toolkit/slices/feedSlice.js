@@ -4,13 +4,14 @@ import {
   createAsyncThunk,
 } from "@reduxjs/toolkit";
 import { axiosClient } from "../../utils/axiosClient";
-
+import toast from "react-hot-toast";
 export const getFeedData = createAsyncThunk("/user/feed", async () => {
   try {
     const response = await axiosClient.get("/user/feed");
-    console.log(response.data.result)
+    console.log(response)
   return response.data.result;
   } catch (error) {
+    toast.error("Error Getting Feed Data")
     return Promise.reject(error);
   }
   
@@ -21,8 +22,10 @@ export const likeAndUnlikePost = createAsyncThunk(
   async (body) => {
     try {
       const response = await axiosClient.post("/post/likepost", body);
+      toast.success(response.data.result.message); 
       return response.data.result;
     } catch (error) {
+      toast.error(response.data.result.message); 
       return Promise.reject(error);
     }
   }
@@ -32,6 +35,7 @@ export const addComment = createAsyncThunk(
   async(body) => {
     try {
       const response = await axiosClient.post("/post/addcomment", body);
+      toast.success("Your Comment Added"); 
       return response.data.result;
     } catch (error) {
       return Promise.reject(error);

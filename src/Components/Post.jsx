@@ -10,6 +10,7 @@ import { useNavigate } from "react-router";
 import { likeAndUnlikePost } from "../Toolkit/slices/feedSlice";
 import { FaShare } from "react-icons/fa";
 import { FaFacebookF, FaTwitter, FaWhatsapp, FaCopy } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 const Post = ({ post, scrollToComment }) => {
   const myProfile = useSelector((state) => state.appConfig.myProfile);
@@ -42,6 +43,7 @@ const Post = ({ post, scrollToComment }) => {
   const handleLike = () => {
     dispatch(likeAndUnlikePost({ postId: post.id }));
     dispatch(toggleLike({ postId: post.id, curUserId: myProfile._id }));
+    console.log(post);
   };
 
   const handleFacebookShare = () => {

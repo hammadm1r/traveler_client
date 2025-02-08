@@ -11,6 +11,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { IoIosLogOut } from "react-icons/io";
 import { setLoggedIn } from "../Toolkit/slices/appConfigSlice";
+import Swal from 'sweetalert2'
 
 const Navbar = () => {
   // State to handle mobile menu
@@ -30,11 +31,20 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
-    const confirmed = window.confirm("Are you sure you want to Logout?");
-    if (confirmed) {
-      removeItem(KEY_ACCESS_TOKEN);
+    Swal.fire({
+      title: "Are you sure you want to Logout?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Logout!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        removeItem(KEY_ACCESS_TOKEN);
       window.location.replace("/");
-    }
+      }
+    });
   };
 
   // Common Menu Items

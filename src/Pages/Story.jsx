@@ -7,7 +7,10 @@ import { AiOutlinePlus } from "react-icons/ai"; // Add icon for the button
 import Header from "../Components/Header";
 import { Link } from "react-router-dom";
 import { axiosClient } from "../utils/axiosClient";
-
+import { toast } from "react-hot-toast";
+import Logo from "../assets/Images/logoColor.png";
+import L from "leaflet";
+import ProfileImage from "../Components/ProfileImage";
 const Story = () => {
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -35,6 +38,7 @@ const Story = () => {
         // Fetch story data
         const response = await axiosClient.get("/story/getstory");
         setVideoData(response.data.result.allStory);
+        
       } catch (error) {
         console.error("Error fetching video data:", error);
       }
@@ -89,14 +93,25 @@ const Story = () => {
 
               {/* Loop through video data and create markers */}
               {videoData.map((video) => (
-                <Marker
-                  key={video.id} // Assuming each video has a unique ID
-                  position={[video.location.latitude, video.location.longitude]}
-                  eventHandlers={{
-                    click: () => openPopup(video),
-                  }}
-                />
-              ))}
+  <Marker
+  key={video.id} // Ensure each marker has a unique key
+  position={[video.location.latitude, video.location.longitude]}
+  eventHandlers={{
+    click: () => openPopup(video),
+  }}
+  icon={L.divIcon({
+    className: "custom-marker",
+    html: `<div class="w-8 h-8 border-2 border-bgPrimary rounded-full overflow-hidden">
+      <img src="${video?.userId?.profilePicture?.url}" alt="User" class="w-full h-full object-cover" />
+    </div>`,
+    iconSize: [20, 20], // Set marker size
+    iconAnchor: [20, 20], // Adjust anchor point
+  })}
+/>
+
+))}
+
+
             </MapContainer>
           ) : (
             <div className="flex justify-center items-center h-full">
@@ -137,12 +152,15 @@ const Story = () => {
                 {isPlaying && (
                   <>
                     <div className="absolute top-4 left-1/2 transform -translate-x-1/2 space-y-4">
-                      <div className="text-white text-lg font-semibold bg-black bg-opacity-60 px-4 py-2 rounded-md">
-                        {selectedVideo.title} {/* Display video title */}
+                      <div className="">
+                      <FcLikePlaceholder className="text-3xl hover:text-yellow-400 transition duration-300" />
+ {/* Display video title */}
                       </div>
                     </div>
                     <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 space-y-4">
-                      <FcLikePlaceholder className="text-3xl hover:text-yellow-400 transition duration-300" />
+                    <div className="text-white text-lg font-semibold bg-black bg-opacity-60 px-4 py-2 rounded-md">
+                      {selectedVideo.title}
+                    </div>
                     </div>
                   </>
                 )}

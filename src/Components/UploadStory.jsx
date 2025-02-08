@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { axiosClient } from "../utils/axiosClient";
 import { FiUpload } from "react-icons/fi";
-
+import { toast } from "react-hot-toast";
 const UploadStory = () => {
   const [file, setFile] = useState(null);
   const [title, setTitle] = useState("");
@@ -39,7 +39,7 @@ const UploadStory = () => {
             const percentCompleted = Math.round(
               (progressEvent.loaded * 100) / progressEvent.total
             );
-            setProgress(percentCompleted);
+            setProgress(percentCompleted/2);
           },
         }
       );
@@ -68,13 +68,20 @@ const UploadStory = () => {
             long,
           };
 
-          await axiosClient.post("/story/addstory", apiData);
+          await axiosClient.post("/story/addstory", apiData ,{onUploadProgress:(progressEvent) => {
+            const percentCompleted = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            setProgress(50 + percentCompleted / 2);} // Scale from 50% to 100%
+          },
+        );
 
-          alert("Story uploaded successfully!");
+
+        toast.success("Story uploaded successfully!");
         },
         (error) => {
           console.error("Geolocation error:", error);
-          alert("Failed to retrieve location. Please try again.");
+          toast.error("Story uploaded successfully!");
         }
       );
     } catch (error) {

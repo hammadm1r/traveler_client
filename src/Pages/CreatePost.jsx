@@ -5,6 +5,7 @@ import ReactStars from "react-rating-stars-component"; // Import the star rating
 import { useSelector } from "react-redux";
 import { axiosClient } from "../utils/axiosClient";
 import { useNavigate } from "react-router";
+import toast from "react-hot-toast";
 
 export const CreatePost = () => {
   const myProfile = useSelector((state) => state.appConfig.myProfile);
@@ -60,15 +61,15 @@ export const CreatePost = () => {
       console.log(response);
 
       if (response.data.statusCode === 201) {
-        setSuccessMessage("Post has been uploaded successfully.");
+        toast.success("Post has been uploaded successfully.");
         setTimeout(() => {
           navigate(`/profile/${myProfile._id}`);
         }, 2000); // Redirect after 2 seconds to show the success message
       } else {
-        setErrorMessage("Failed to upload post. Please try again.");
+        toast.error("Failed to upload post. Please try again.");
       }
     } catch (error) {
-      setErrorMessage("An error occurred. Please try again.");
+      toast.error("An error occurred. Please try again.");
       console.error(error);
     } finally {
       setIsLoading(false);

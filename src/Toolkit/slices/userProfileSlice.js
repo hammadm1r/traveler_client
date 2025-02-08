@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { axiosClient } from "../../utils/axiosClient"; // Assuming you have this axios client set up.
+import toast from "react-hot-toast";
 
 export const getUserProfile = createAsyncThunk(
   "user/getUserProfile",
@@ -21,6 +22,7 @@ export const followAndUnfollowUser = createAsyncThunk(
     try {
       const response = await axiosClient.post("/user/follow", body);
       console.log(response.data.result);
+      toast.success(response.data.result.message);
       return response.data.result;
     } catch (error) {
       return Promise.reject(error);

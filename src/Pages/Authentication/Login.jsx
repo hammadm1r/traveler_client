@@ -7,7 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { axiosClient } from "../../utils/axiosClient";
 import { setItem,KEY_ACCESS_TOKEN } from "../../utils/LocalStorageManager";
 import {setLoggedIn} from "../../Toolkit/slices/appConfigSlice"
-
+import { toast } from "react-hot-toast";
 function Home() {
   const [email,setEmail]= useState('');
   const [password,setPassword]= useState('');
@@ -15,14 +15,21 @@ function Home() {
   const navigate = useNavigate()
   const submitHandler  = async() =>{
     try {
-      const response = await axiosClient.post('auth/login',{email,password});
+      const response = await axiosClient.post("auth/login", { email, password });
+    
+      if (response.data.status === "error") {  
+        return toast.error(response.data.message); 
+      }
+    
       console.log(response);
-      setItem(KEY_ACCESS_TOKEN,response.data.result.token);
+      setItem(KEY_ACCESS_TOKEN, response.data.result.token);
       dispatch(setLoggedIn(true));
       navigate("/home", { replace: true });
     } catch (err) {
-      console.log(err)
+      console.log(err);
+      toast.error("Login failed! Please try again."); // ✅ Add toast for errors
     }
+    
   }
   return (
     <div className="min-h-screen bg-cover bg-center overflow-x-hidden grid md:grid-cols-7">

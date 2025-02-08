@@ -7,6 +7,7 @@ import Complete from "./steps/Complete";
 import authPng from "../../assets/Images/NewYork-pana1.png";
 import logoLight from "../../assets/Images/logoLight.png";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Signup = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -31,19 +32,81 @@ const Signup = () => {
   const handleNext = () => {
     if (currentStep === 1) {
       console.log(accountInfo);
+    
+      // Email regex pattern
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
       // Perform validation for AccountInformation step
-      if (!accountInfo.username || !accountInfo.email || !accountInfo.password) {
-        alert("All fields are required.");
+      if (!accountInfo.username.trim()) {
+        toast.error("Username is required");
         return;
       }
-    }
-    if (currentStep === 2 ){
-      console.log(accountSetupInfo);
-      if(!accountSetupInfo.fullname || !accountSetupInfo.bio ||!accountSetupInfo.dateOfBirth || !accountSetupInfo.profilePicture || !accountSetupInfo. interests){
-        alert("Please fill in all required fields in the Account Setup step.");
-      return; // Do not proceed if fields are not filled
+      if (emailPattern.test(accountInfo.username)) {
+        toast.error("Username cannot be an email address");
+        return;
       }
+    
+      if (!accountInfo.email.trim()) {
+        toast.error("Email is required");
+        return;
+      }
+      if (!emailPattern.test(accountInfo.email)) {
+        toast.error("Please enter a valid email");
+        return;
+      }
+    
+      if (!accountInfo.password.trim()) {
+        toast.error("Password is required");
+        return;
+      }
+      if (accountInfo.password.length < 6) {
+        toast.error("Password must be at least 6 characters");
+        return;
     }
+    
+    }
+    if (currentStep === 2) {
+      console.log(accountSetupInfo);
+      let error = "";
+    
+      // Fullname validation
+      if (!accountSetupInfo.fullname.trim()) {
+        error = "Full name is required";
+        toast.error(error);
+      }
+    
+      // Bio validation
+      if (!accountSetupInfo.bio.trim()) {
+        error = "Bio is required";
+        toast.error(error);
+      }
+    
+      // Date of Birth validation
+      if (!accountSetupInfo.dateOfBirth) {
+        error = "Date of Birth is required";
+        toast.error(error);
+      }
+    
+      // Profile Picture validation
+      if (!accountSetupInfo.profilePicture) {
+        error = "Profile picture is required";
+        toast.error(error);
+      }
+    
+      // Interests validation
+      if (!accountSetupInfo.interests || accountSetupInfo.interests.length === 0) {
+        error = "At least one interest must be selected";
+        toast.error(error);
+      }
+    
+      // If any error exists, stop execution
+      if (error) {
+        return;
+      }
+    
+      // Proceed to the next step if validation passes
+    }
+    
     // Proceed to the next step
     if (currentStep < 3) {
       setCurrentStep(currentStep + 1); // Go to the next step
