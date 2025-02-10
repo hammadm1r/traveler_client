@@ -1,9 +1,13 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import { axiosClient } from "../utils/axiosClient";
 import { FiUpload } from "react-icons/fi";
 import { toast } from "react-hot-toast";
+import { replace, useNavigate } from "react-router";
 const UploadStory = () => {
+  const navigate = useNavigate();
+  const myProfile = useSelector((state) => state.appConfig.myProfile);
   const [file, setFile] = useState(null);
   const [title, setTitle] = useState("");
   const [progress, setProgress] = useState(0);
@@ -78,6 +82,9 @@ const UploadStory = () => {
 
 
         toast.success("Story uploaded successfully!");
+        setTimeout(() => {
+          navigate(`/profile/${myProfile._id}`);
+        }, 2000); 
         },
         (error) => {
           console.error("Geolocation error:", error);

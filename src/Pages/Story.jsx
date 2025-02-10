@@ -2,7 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import { createPortal } from "react-dom";
 import "leaflet/dist/leaflet.css";
-import { FcLikePlaceholder } from "react-icons/fc";
+import { FcLikePlaceholder, FcLike } from "react-icons/fc";
+import { CiHeart } from "react-icons/ci";
 import { AiOutlinePlus } from "react-icons/ai"; // Add icon for the button
 import Header from "../Components/Header";
 import { Link } from "react-router-dom";
@@ -11,41 +12,46 @@ import { toast } from "react-hot-toast";
 import Logo from "../assets/Images/logoColor.png";
 import L from "leaflet";
 import ProfileImage from "../Components/ProfileImage";
+import { useDispatch, useSelector } from "react-redux";
+import Loader from "../Components/Loader";
+import { getStoryData, likeAndUnlikeStory } from "../Toolkit/slices/storySlice";
 const Story = () => {
+  const dispatch = useDispatch();
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [videoData, setVideoData] = useState([]);
   const [lat, setLat] = useState(null);
   const [long, setLong] = useState(null);
   const videoRef = useRef(null);
-
+  const [isLiked, setIsLiked] = useState(false);
+  const [animating, setAnimating] = useState(false);
+  const story = useSelector((state) => state.story.story);
+  const storyStatus = useSelector((state) => state.story.status);
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Fetch geolocation
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            setLat(position.coords.latitude);
-            setLong(position.coords.longitude);
-          },
-          (error) => {
-            console.error("Error fetching geolocation:", error);
-            setLat(51.505); // Default latitude
-            setLong(-0.09); // Default longitude
-          }
-        );
-
-        // Fetch story data
-        const response = await axiosClient.get("/story/getstory");
-        setVideoData(response.data.result.allStory);
-        
-      } catch (error) {
-        console.error("Error fetching video data:", error);
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setLat(position.coords.latitude);
+        setLong(position.coords.longitude);
+      },
+      (error) => {
+        console.error("Error fetching geolocation:", error);
+        setLat(51.505); // Default latitude
+        setLong(-0.09); // Default longitude
       }
-    };
-
-    fetchData();
-  }, []);
+    );
+    if (storyStatus === "idle") {
+      console.log(storyStatus);
+      dispatch(getStoryData());
+    }
+  }, [dispatch, storyStatus]);
+  const handleLike = (storyId) => {
+    dispatch(likeAndUnlikeStory({ storyId }));
+    setAnimating(true);
+    setIsLiked((prev) => !prev);
+  };
+  // Render Outlet when feed is available, else render loading or placeholder
+  if (storyStatus === "loading") {
+    return <Loader />;
+  }
 
   const openPopup = (video) => {
     setSelectedVideo(video);
@@ -92,26 +98,23 @@ const Story = () => {
               />
 
               {/* Loop through video data and create markers */}
-              {videoData.map((video) => (
-  <Marker
-  key={video.id} // Ensure each marker has a unique key
-  position={[video.location.latitude, video.location.longitude]}
-  eventHandlers={{
-    click: () => openPopup(video),
-  }}
-  icon={L.divIcon({
-    className: "custom-marker",
-    html: `<div class="w-8 h-8 border-2 border-bgPrimary rounded-full overflow-hidden">
-      <img src="${video?.userId?.profilePicture?.url}" alt="User" class="w-full h-full object-cover" />
+              {story.map((video) => (
+                <Marker
+                  key={video._id} // Ensure each marker has a unique key
+                  position={[video.location.latitude, video.location.longitude]}
+                  eventHandlers={{
+                    click: () => openPopup(video),
+                  }}
+                  icon={L.divIcon({
+                    className: "custom-marker",
+                    html: `<div class="w-8 h-8 border-2 border-bgPrimary rounded-full overflow-hidden">
+      <img src="${video?.user.profilePicture?.url}" alt="User" class="w-full h-full object-contain" />
     </div>`,
-    iconSize: [20, 20], // Set marker size
-    iconAnchor: [20, 20], // Adjust anchor point
-  })}
-/>
-
-))}
-
-
+                    iconSize: [20, 20], // Set marker size
+                    iconAnchor: [20, 20], // Adjust anchor point
+                  })}
+                />
+              ))}
             </MapContainer>
           ) : (
             <div className="flex justify-center items-center h-full">
@@ -141,7 +144,7 @@ const Story = () => {
                   onPlay={() => setIsPlaying(true)}
                   onPause={() => setIsPlaying(false)} // Update state on pause
                 >
-                  <source src={selectedVideo?.video?.url} type="video/mp4" />
+                  <source src={selectedVideo?.videoUrl} type="video/mp4" />
                   <source
                     src={selectedVideo?.video?.url}
                     type="video/x-matroska"
@@ -152,15 +155,26 @@ const Story = () => {
                 {isPlaying && (
                   <>
                     <div className="absolute top-4 left-1/2 transform -translate-x-1/2 space-y-4">
-                      <div className="">
-                      <FcLikePlaceholder className="text-3xl hover:text-yellow-400 transition duration-300" />
- {/* Display video title */}
+                      <div
+                        className=""
+                        onClick={() => handleLike(selectedVideo._id)}
+                      >
+                        {isLiked ? (
+                          <CiHeart 
+                            className={`text-3xl transition-transform ${
+                              animating ? "scale-125" : ""
+                            }`}
+                          />
+                        ) : (
+                          <FcLike className="text-3xl hover:text-red-500" />
+                        )}
+                        {/* Display video title */}
                       </div>
                     </div>
                     <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 space-y-4">
-                    <div className="text-white text-lg font-semibold bg-black bg-opacity-60 px-4 py-2 rounded-md">
-                      {selectedVideo.title}
-                    </div>
+                      <div className="text-white text-lg font-semibold bg-black bg-opacity-60 px-4 py-2 rounded-md">
+                        {selectedVideo.title}
+                      </div>
                     </div>
                   </>
                 )}
