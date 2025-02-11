@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { axiosClient } from "../utils/axiosClient";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 
 export const CreatePost = () => {
   const myProfile = useSelector((state) => state.appConfig.myProfile);
@@ -62,6 +63,27 @@ export const CreatePost = () => {
 
       if (response.data.statusCode === 201) {
         toast.success("Post has been uploaded successfully.");
+        if (response.data.result.achivement) {
+          Swal.fire({
+            title: "Congratulations! You've earned the First Step  badge!",
+            text: "You Have Created Your First Post",
+            imageUrl:
+              "https://res.cloudinary.com/djiqzvcev/image/upload/v1739281946/achivement3_hlkpml.png",
+            imageWidth: 200,
+            imageHeight: 200,
+            imageAlt: "First Step",
+            padding: "3em",
+            width: 600,
+            color: "#716add",
+            background: "#fff url(/images/trees.png)",
+            backdrop: `
+    rgba(0,0,123,0.4)
+    url("/images/nyan-cat.gif")
+    left top
+    no-repeat
+  `,
+          });
+        }
         setTimeout(() => {
           navigate(`/profile/${myProfile._id}`);
         }, 2000); // Redirect after 2 seconds to show the success message
@@ -151,7 +173,9 @@ export const CreatePost = () => {
               <p className="text-sm text-gray-400 mt-2">
                 Supported formats: JPG, PNG
               </p>
-              {errorMsg && <p className="text-red-500 text-sm mt-1">{errorMsg}</p>}
+              {errorMsg && (
+                <p className="text-red-500 text-sm mt-1">{errorMsg}</p>
+              )}
             </div>
 
             <div className="grid grid-cols-3 gap-4 mb-4">
