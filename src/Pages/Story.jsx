@@ -38,11 +38,17 @@ const Story = () => {
         setLong(-0.09); // Default longitude
       }
     );
+
     if (storyStatus === "idle") {
       console.log(storyStatus);
       dispatch(getStoryData());
     }
   }, [dispatch, storyStatus]);
+  useEffect(() => {
+    if (selectedVideo) {
+      setIsLiked(selectedVideo.isLiked); // Sync when video changes
+    }
+  }, [selectedVideo]);
   const handleLike = (storyId) => {
     dispatch(likeAndUnlikeStory({ storyId }));
     setAnimating(true);
@@ -159,14 +165,16 @@ const Story = () => {
                         className=""
                         onClick={() => handleLike(selectedVideo._id)}
                       >
-                        {isLiked ? (
+                        {
+                        isLiked ? (
+                          
+                          <FcLike className="text-3xl hover:text-red-500" />
+                        ) : (
                           <CiHeart 
                             className={`text-3xl transition-transform ${
                               animating ? "scale-125" : ""
                             }`}
                           />
-                        ) : (
-                          <FcLike className="text-3xl hover:text-red-500" />
                         )}
                         {/* Display video title */}
                       </div>
