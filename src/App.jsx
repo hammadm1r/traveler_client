@@ -20,6 +20,7 @@ import CreatePost from "./Pages/CreatePost";
 import ProfileUpdate from "./Pages/ProfileUpdate";
 import FeedLoad from "./Components/feedLoad";
 import UploadStory from "./Components/UploadStory";
+import Notifications from "./Components/Notification";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
             <Route path="/post/:id" element={<Post />} />
           </Route>
           <Route path="/profile/:id" element={<Profile />} />
+          <Route path="/notification" element={<Notifications />} />
         </Route>
       </Routes>
     </>
