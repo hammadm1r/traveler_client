@@ -1,6 +1,6 @@
 import "./App.css";
-import React, { useEffect } from "react"; // Use 'React' (capitalized) in imports
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState,useEffect } from "react"; // Use 'React' (capitalized) in imports
+import { useSelector } from "react-redux";
 import Login from "./Pages/Authentication/Login";
 import Signup from "./Pages/Authentication/Signup"; // Ensure this is correct
 import Home from "./Pages/Home";
@@ -21,8 +21,28 @@ import ProfileUpdate from "./Pages/ProfileUpdate";
 import FeedLoad from "./Components/feedLoad";
 import UploadStory from "./Components/UploadStory";
 import Notifications from "./Components/Notification";
+import { io } from "socket.io-client";
+
 
 function App() {
+  const [socket,setSocket] = useState()
+  const myProfile = useSelector((state) => state.appConfig.myProfile);
+  const userId = myProfile?._id;
+
+  useEffect(() => {
+    if (!userId) return;
+
+    const newsocket = io("http://localhost:3000", { autoConnect: true });
+
+
+    newsocket.emit("join", userId);
+    setSocket(newsocket)
+
+    return () => {
+      newsocket.disconnect();
+    };
+  }, [userId]);
+
   return (
     <>
       <Navbar />
@@ -47,7 +67,7 @@ function App() {
             <Route path="/post/:id" element={<Post />} />
           </Route>
           <Route path="/profile/:id" element={<Profile />} />
-          <Route path="/notification" element={<Notifications />} />
+          <Route path="/notification" element={<Notifications socket={socket} />} />
         </Route>
       </Routes>
     </>

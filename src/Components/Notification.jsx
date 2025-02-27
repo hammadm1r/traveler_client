@@ -1,50 +1,91 @@
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { io } from 'socket.io-client';
+import { useEffect, useState } from "react";
+import ProfileImage from "./ProfileImage";
+import { axiosClient } from "../utils/axiosClient";
+import toast from "react-hot-toast";
 
-const socket = io('http://localhost:3000', { autoConnect: false }); // Prevent multiple connections
+const Notifications = ({ socket }) => {
+  const [notifications, setNotifications] = useState([]);
 
-const Notifications = () => {
-    const [notifications, setNotifications] = useState([]);
-    const myProfile = useSelector((state) => state.appConfig.myProfile);
-    const userId = myProfile._id;
-    console.log(userId);
-    useEffect(() => {
-        if (!userId) return; // Ensure userId is available
+  // Fetch Notifications
+  useEffect(() => {
+    const getNotifications = async () => {
+      try {
+        const { data } = await axiosClient.get("/user/getnotification");
+        const sortedNotifications = data.notifications.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setNotifications(sortedNotifications);
+      } catch (error) {
+        console.error("Error fetching notifications:", error);
+      }
+    };
 
-        socket.connect(); // Connect only when userId is available
-        socket.emit('join', userId); // Join the room with userId
+    getNotifications();
+  }, []);
 
-        // Listen for notifications
-        socket.on('newNotification', (notification) => {
-            console.log('Received notification:', notification); // Debugging
-            setNotifications((prev) => [notification, ...prev]);
-        });
+  // Handle Realtime Notifications
+  useEffect(() => {
+    if (!socket) return;
 
-        return () => {
-            socket.off('newNotification');
-            socket.disconnect(); // Prevent multiple connections
-        };
-    }, [userId]);
+    const handleNewNotification = (notification) => {
+      toast.success("Somthing Happen"); 
+      setNotifications((prev) =>
+        [notification, ...prev].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      );
+    };
 
-    return (
-        <div className='text-center mt-20'>
-            <h2>Notifications</h2>
-            {notifications.length > 0 ? (
-                notifications.map((notif, index) => (
-                    <div key={index} className="notification">
-                        {notif.type === 'like' ? (
-                            <p>User {notif.sender} liked your post!</p>
-                        ) : (
-                            <p>User {notif.sender} followed you!</p>
-                        )}
-                    </div>
-                ))
-            ) : (
-                <p>No new notifications</p>
-            )}
-        </div>
-    );
+    socket.on("newNotification", handleNewNotification);
+
+    return () => {
+      socket.off("newNotification", handleNewNotification);
+    };
+  }, [socket]);
+
+  // Notification Messages Map
+  const notificationMessages = {
+    like: "liked your post! ❤️",
+    comment: "commented on your post! 💬",
+    follow: "followed you! 🔥",
+  };
+
+  return (
+    <div className="max-w-2xl mx-auto mt-20 p-6 bg-white rounded-lg shadow-lg border border-gray-200">
+      <h2 className="text-xl font-bold text-gray-700 text-center mb-4">
+        🔔 Notifications
+      </h2>
+
+      {/* Scrollable Notification List */}
+      <div className="min-h-dvh overflow-y-auto space-y-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+        {notifications.length > 0 ? (
+          notifications.map((notif, index) => (
+            <div
+              key={index}
+              className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg border border-gray-300 hover:bg-gray-100 transition-all duration-300"
+            >
+              {/* Profile Image */}
+              <ProfileImage
+                userProfileImage={notif.sender.profilePicture.url}
+                userId={notif.sender._id}
+              />
+
+              {/* Notification Text */}
+              <div className="flex flex-col">
+                <p className="text-gray-700 text-sm md:text-base">
+                  <span className="font-semibold">{notif?.sender?.username}</span>{" "}
+                  {notificationMessages[notif.type] || "performed an action!"}
+                </p>
+                <p className="text-gray-500 text-xs md:text-sm">
+                  {new Date(notif.createdAt).toLocaleString()} {/* Display time */}
+                </p>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p className="text-center text-gray-500">No new notifications 🚀</p>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default Notifications;
