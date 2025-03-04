@@ -3,44 +3,7 @@ import ProfileImage from "./ProfileImage";
 import { axiosClient } from "../utils/axiosClient";
 import toast from "react-hot-toast";
 
-const Notifications = ({ socket }) => {
-  const [notifications, setNotifications] = useState([]);
-
-  // Fetch Notifications
-  useEffect(() => {
-    const getNotifications = async () => {
-      try {
-        const { data } = await axiosClient.get("/user/getnotification");
-        const sortedNotifications = data.notifications.sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-        );
-        setNotifications(sortedNotifications);
-      } catch (error) {
-        console.error("Error fetching notifications:", error);
-      }
-    };
-
-    getNotifications();
-  }, []);
-
-  // Handle Realtime Notifications
-  useEffect(() => {
-    if (!socket) return;
-
-    const handleNewNotification = (notification) => {
-      toast.success("Somthing Happen"); 
-      setNotifications((prev) =>
-        [notification, ...prev].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-      );
-    };
-
-    socket.on("newNotification", handleNewNotification);
-
-    return () => {
-      socket.off("newNotification", handleNewNotification);
-    };
-  }, [socket]);
-
+const Notifications = ({ notifications}) => {
   // Notification Messages Map
   const notificationMessages = {
     like: "liked your post! ❤️",

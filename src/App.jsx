@@ -22,21 +22,51 @@ import FeedLoad from "./Components/feedLoad";
 import UploadStory from "./Components/UploadStory";
 import Notifications from "./Components/Notification";
 import { io } from "socket.io-client";
-
+import toast from "react-hot-toast";
+import { axiosClient } from "./utils/axiosClient";
 
 function App() {
-  const [socket,setSocket] = useState()
   const myProfile = useSelector((state) => state.appConfig.myProfile);
   const userId = myProfile?._id;
+  const [notifications, setNotifications] = useState([]);
+  const notificationMessages = {
+    like: "liked your post! ❤️",
+    comment: "commented on your post! 💬",
+    follow: "followed you! 🔥",
+  };
+  // Fetch Notifications
+  useEffect(() => {
+    const getNotifications = async () => {
+      try {
+        const { data } = await axiosClient.get("/user/getnotification");
+        const sortedNotifications = data.notifications.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setNotifications(sortedNotifications);
+      } catch (error) {
+        console.error("Error fetching notifications:", error);
+      }
+    };
 
+    getNotifications();
+  }, [userId]);
+  const toasting = (message) =>{
+    toast.success(message);
+  }
   useEffect(() => {
     if (!userId) return;
 
     const newsocket = io("http://localhost:3000", { autoConnect: true });
-
-
     newsocket.emit("join", userId);
-    setSocket(newsocket)
+    const handleNewNotification = (notification) => {
+      const message = `${notification?.sender?.username} ${notificationMessages[notification?.type] || "performed an action!"}`;
+      toasting(message);
+      setNotifications((prev) =>
+        [notification, ...prev].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      );
+    };
+
+    newsocket.on("newNotification", handleNewNotification);
 
     return () => {
       newsocket.disconnect();
@@ -67,7 +97,7 @@ function App() {
             <Route path="/post/:id" element={<Post />} />
           </Route>
           <Route path="/profile/:id" element={<Profile />} />
-          <Route path="/notification" element={<Notifications socket={socket} />} />
+          <Route path="/notification" element={<Notifications notifications={notifications} />} />
         </Route>
       </Routes>
     </>
