@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { axiosClient } from "../utils/axiosClient";
+import toast from "react-hot-toast"; // Import toast
 
 export const ProfileUpdate = () => {
   const myProfile = useSelector((state) => state.appConfig.myProfile);
@@ -11,40 +12,54 @@ export const ProfileUpdate = () => {
   const [email, setEmail] = useState(myProfile?.email || "");
   const [password, setPassword] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState(myProfile?.dateOfBirth || "");
-  const [profileImage, setProfileImage] = useState(myProfile?.profilePicture?.url);
+  const [bio, setBio] = useState(myProfile?.bio || "");
+  const [profileImageUrl, setProfileImageUrl] = useState(
+    myProfile?.profilePicture?.url || ""
+  );
+  const [profileImageFile, setProfileImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
 
   useEffect(() => {
-    // When the profile data is loaded, set the initial values
     if (myProfile) {
       setFullname(myProfile.fullname || "");
       setUsername(myProfile.username || "");
       setEmail(myProfile.email || "");
-      setDateOfBirth(myProfile.dateOfBirth || "");
-      setProfileImage(myProfile.profilePicture?.url || "");
+      // Format the dateOfBirth if it exists
+      setDateOfBirth(
+        myProfile.dateOfBirth
+          ? new Date(myProfile.dateOfBirth).toISOString().split("T")[0]
+          : ""
+      );
+      setProfileImageUrl(myProfile.profilePicture?.url || "");
+      setBio(myProfile.bio || "");
     }
   }, [myProfile]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    setProfileImage(file);
+    setProfileImageFile(file);
     setImagePreview(URL.createObjectURL(file)); // Preview the uploaded image
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("fullname", fullname);
     formData.append("username", username);
     formData.append("email", email);
     formData.append("password", password || ""); // Only include password if provided
-    formData.append("dateOfBirth", dateOfBirth);
-    
+    formData.append("bio", bio);
+
     // Append the profile image if it has been updated
-    if (profileImage) {
-      formData.append("profileImage", profileImage); 
+    if (profileImageFile) {
+      formData.append("profilePicture", profileImageFile);
     }
-  
+
+    // Append date of birth only if it has been changed by the user
+    if (dateOfBirth !== myProfile?.dateOfBirth) {
+      formData.append("dateOfBirth", dateOfBirth);
+    }
+
     try {
       // Make the POST request to update the profile
       const response = await axiosClient.post("/auth/updateProfile", formData, {
@@ -52,12 +67,12 @@ export const ProfileUpdate = () => {
           "Content-Type": "multipart/form-data", // Important for file upload
         },
       });
-  
+
       console.log("Profile Updated: ", response.data);
-      alert("Profile updated successfully!");
+      toast.success("Profile updated successfully!"); // Success toast message
     } catch (error) {
       console.error("Error updating profile:", error);
-      alert("Error updating profile. Please try again.");
+      toast.error("Error updating profile. Please try again."); // Error toast message
     }
   };
 
@@ -73,7 +88,7 @@ export const ProfileUpdate = () => {
           <div className="flex flex-col items-center">
             <div className="md:col-span-2 flex justify-center">
               <img
-                src={imagePreview || profileImage}
+                src={imagePreview || profileImageUrl}
                 alt="User"
                 className="md:w-62 md:h-62 w-44 h-44 object-cover rounded-full border-4 border-bgPrimary"
               />
@@ -96,7 +111,10 @@ export const ProfileUpdate = () => {
 
           {/* Full Name Field */}
           <div>
-            <label htmlFor="fullname" className="block font-semibold text-bgPrimary">
+            <label
+              htmlFor="fullname"
+              className="block font-semibold text-bgPrimary"
+            >
               Full Name
             </label>
             <input
@@ -112,7 +130,10 @@ export const ProfileUpdate = () => {
 
           {/* Username Field */}
           <div>
-            <label htmlFor="username" className="block font-semibold text-bgPrimary">
+            <label
+              htmlFor="username"
+              className="block font-semibold text-bgPrimary"
+            >
               Username
             </label>
             <input
@@ -128,7 +149,10 @@ export const ProfileUpdate = () => {
 
           {/* Email Field */}
           <div>
-            <label htmlFor="email" className="block font-semibold text-bgPrimary">
+            <label
+              htmlFor="email"
+              className="block font-semibold text-bgPrimary"
+            >
               Email
             </label>
             <input
@@ -144,8 +168,11 @@ export const ProfileUpdate = () => {
 
           {/* Password Field */}
           <div>
-            <label htmlFor="password" className="block font-semibold text-bgPrimary">
-             New Password (Leave blank if not updating)
+            <label
+              htmlFor="password"
+              className="block font-semibold text-bgPrimary"
+            >
+              New Password (Leave blank if not updating)
             </label>
             <input
               type="password"
@@ -168,8 +195,26 @@ export const ProfileUpdate = () => {
               value={dateOfBirth}
               onChange={(e) => setDateOfBirth(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-bgPrimary focus:outline-none"
-              required
             />
+          </div>
+
+          {/* Bio Field */}
+          <div>
+            <label htmlFor="bio" className="block font-semibold text-bgPrimary">
+              Bio
+            </label>
+            <textarea
+              id="bio"
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+              placeholder="Tell us about yourself"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-bgPrimary focus:outline-none"
+              maxLength="300"
+              rows="4"
+            />
+            <p className="text-sm text-gray-500 mt-1">
+              {bio.length}/300 characters
+            </p>
           </div>
 
           {/* Submit Button */}
