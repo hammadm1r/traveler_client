@@ -24,6 +24,7 @@ import Notifications from "./Components/Notification";
 import { io } from "socket.io-client";
 import toast from "react-hot-toast";
 import { axiosClient } from "./utils/axiosClient";
+import TravelAdvisor from "./Pages/TravelAdvisor";
 
 function App() {
   const myProfile = useSelector((state) => state.appConfig.myProfile);
@@ -89,6 +90,7 @@ function App() {
         <Route element={<RequireUser />}>
           <Route path="/home" element={<Home />} />
           <Route path="/createpost" element={<CreatePost />} />
+          <Route path="/traveladvisor" element={<TravelAdvisor />} />
           <Route path="/updateprofile" element={<ProfileUpdate />} />
           <Route path="/story" element={<Story />} />
           <Route path="/addstory" element={<UploadStory />} />

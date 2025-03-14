@@ -46,14 +46,14 @@ const Sidebar = ({ active, setActive }) => {
             }}
             className={`px-4 py-2 mt-2 gap-3 flex items-center justify-center w-full rounded-xl text-lg font-semibold transition-all ${
               active === item.id
-                ? "bg-blue-500 text-white"
+                ? "bg-gradient-to-r from-blue-400 to-green-400"
                 : "bg-gray-200 text-gray-700 hover:bg-blue-100"
             }`}
           >
             {item.icon} {item.label}
           </button>
         ))}
-        <div className="mt-2  rounded-2xl p-2  mx-auto">
+        <div className="mt-2  rounded-2xl p-2  mx-auto border-2">
       <h1 className="text-blue-600 text-md font-bold text-center uppercase tracking-widest">
          Achivers of The Week 
       </h1>

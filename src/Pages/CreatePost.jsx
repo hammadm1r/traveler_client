@@ -7,6 +7,8 @@ import { axiosClient } from "../utils/axiosClient";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
+import { Tooltip } from "react-tooltip";
+import { CiCircleInfo } from "react-icons/ci";
 
 export const CreatePost = () => {
   const myProfile = useSelector((state) => state.appConfig.myProfile);
@@ -200,10 +202,18 @@ export const CreatePost = () => {
             <div>
               <label
                 htmlFor="location-input"
-                className="block mb-2 text-base font-medium text-bgPrimary"
+                className="flex mb-2 text-base font-medium text-bgPrimary"
               >
-                Location:
+                Location:{" "}
+                <span
+                  data-tooltip-id="my-tooltip"
+                  data-tooltip-content="Format: (Name, City, Province)"
+                  className="cursor-pointer flex text-slate-400 ml-2 justify-center align-middle items-center"
+                >
+                  <CiCircleInfo size={16} className="" />
+                </span>
               </label>
+              <Tooltip id="my-tooltip" place="top" />
               <input
                 id="location-input"
                 type="text"

@@ -90,7 +90,7 @@ const Navbar = () => {
         className="text-white text-lg font-semibold hover:text-blue-400"
         onClick={menuHandler}
       >
-        Travel Advisor
+        <Link to="/traveladvisor">Travel Advisor</Link>
       </li>
 
       {isLoggedIn && (
@@ -111,17 +111,28 @@ const Navbar = () => {
               ref={subMenuRef}
               className="absolute right-0 mt-2 w-40 bg-gray-800 text-white rounded-lg shadow-lg p-2 z-50"
             >
-              <li className="p-2 hover:bg-gray-700 rounded">
-                <Link to={`/profile/${userId}`}>Profile</Link>
-              </li>
-              <li className="p-2 hover:bg-gray-700 rounded">
-                <Link to="/notification">
+              <Link to={`/profile/${userId}`}>
+                <li
+                  className="p-2 hover:bg-gray-700 rounded"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Profile
+                </li>
+              </Link>
+              <Link to="/notification">
+                <li
+                  className="p-2 hover:bg-gray-700 rounded"
+                  onClick={(e) => e.stopPropagation()}
+                >
                   Notification
-                </Link>
-              </li>
+                </li>
+              </Link>
               <li
                 className="p-2 hover:bg-gray-700 rounded"
-                onClick={handleLogout}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleLogout();
+                }}
               >
                 Logout
               </li>
