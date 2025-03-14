@@ -73,6 +73,7 @@ export const ProfileUpdate = () => {
     } catch (error) {
       console.error("Error updating profile:", error);
       toast.error("Error updating profile. Please try again."); // Error toast message
+
     }
   };
 
