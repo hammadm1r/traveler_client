@@ -17,7 +17,7 @@ const Achivements = () => {
       src: "https://res.cloudinary.com/djiqzvcev/image/upload/v1739281968/achivement2_xqn8uc.png",
       alt: "adventurer",
       title: "adventurer",
-    },
+    },  
     {
       id: 3,
       src: "https://res.cloudinary.com/djiqzvcev/image/upload/v1739309183/achivement4_xeacf0_c_crop_w_400_h_400_puophi.png",
@@ -28,19 +28,19 @@ const Achivements = () => {
       id: 4,
       src: "https://res.cloudinary.com/djiqzvcev/image/upload/v1739307386/mountain-and-lake-travel-badge-with-airplane_10964465_tvmfaa.png",
       alt: "Nomad",
-      title: "Nomad",
+      title: "nomad",
     },
     {
       id: 5,
       src: "https://res.cloudinary.com/djiqzvcev/image/upload/v1739307394/pngtree-mountain-summer-time-badge-png-image_11928438_axvgod.png",
-      alt: "Nature Lover",
-      title: "Nature Lover",
+      alt: "Nature_Lover",
+      title: "Nature_Lover",
     },
     {
       id: 6,
       src: "https://res.cloudinary.com/djiqzvcev/image/upload/v1739307403/travel-badge-with-forest-lake-mountain-and-beautiful-landscape-_10964474_qagip6.png",
-      alt: "Cultural Traveler",
-      title: "Cultural Traveler",
+      alt: "Cultural_Traveler",
+      title: "Cultural_Traveler",
     },
   ];
 

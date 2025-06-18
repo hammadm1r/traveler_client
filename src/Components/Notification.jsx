@@ -2,13 +2,16 @@ import { useEffect, useState } from "react";
 import ProfileImage from "./ProfileImage";
 import { axiosClient } from "../utils/axiosClient";
 import toast from "react-hot-toast";
+import { GiAchievement } from "react-icons/gi";
+import { formatDistanceToNow } from "date-fns";
 
-const Notifications = ({ notifications}) => {
+const Notifications = ({ notifications }) => {
   // Notification Messages Map
   const notificationMessages = {
     like: "liked your post! ❤️",
     comment: "commented on your post! 💬",
     follow: "followed you! 🔥",
+    Achivement: "You Got An Achievement!",
   };
 
   return (
@@ -34,11 +37,14 @@ const Notifications = ({ notifications}) => {
               {/* Notification Text */}
               <div className="flex flex-col">
                 <p className="text-gray-700 text-sm md:text-base">
-                  <span className="font-semibold">{notif?.sender?.username}</span>{" "}
+                  <span className="font-semibold">
+                    {notif?.sender?.username}
+                  </span>{" "}
                   {notificationMessages[notif.type] || "performed an action!"}
                 </p>
                 <p className="text-gray-500 text-xs md:text-sm">
-                  {new Date(notif.createdAt).toLocaleString()} {/* Display time */}
+                  {formatDistanceToNow(new Date(notif.createdAt))} ago{" "}
+                  {/* Display time */}
                 </p>
               </div>
             </div>

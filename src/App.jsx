@@ -34,6 +34,7 @@ function App() {
     like: "liked your post! ❤️",
     comment: "commented on your post! 💬",
     follow: "followed you! 🔥",
+    Achivement: "You Got An Achievement!",
   };
   // Fetch Notifications
   useEffect(() => {

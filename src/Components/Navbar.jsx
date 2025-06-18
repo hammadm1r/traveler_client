@@ -9,6 +9,8 @@ import {
   KEY_ACCESS_TOKEN,
 } from "../utils/LocalStorageManager";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
+
 import { IoIosLogOut } from "react-icons/io";
 import { setLoggedIn } from "../Toolkit/slices/appConfigSlice";
 import Swal from "sweetalert2";
@@ -48,6 +50,13 @@ const Navbar = () => {
     };
   }, []);
 
+  const location = useLocation();
+
+useEffect(() => {
+  // Close submenu and mobile menu whenever the route changes
+  setIsSubMenuOpen(false);
+  setIsMenuOpen(false);
+}, [location.pathname]);
   const handleLogout = () => {
     Swal.fire({
       title: "Are you sure you want to Logout?",
@@ -67,7 +76,7 @@ const Navbar = () => {
 
   // Common Menu Items
   const menuItems = (
-    <>
+    <> 
       <li
         className="text-white text-lg font-semibold hover:text-blue-400"
         onClick={menuHandler}
@@ -109,7 +118,7 @@ const Navbar = () => {
           {isSubMenuOpen && (
             <ul
               ref={subMenuRef}
-              className="absolute right-0 mt-2 w-40 bg-gray-800 text-white rounded-lg shadow-lg p-2 z-50"
+              className="absolute right-0 mt-2 w-40 bg-gray-800 text-white rounded-lg shadow-lg p-2 z-100"
             >
               <Link to={`/profile/${userId}`}>
                 <li

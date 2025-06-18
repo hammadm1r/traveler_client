@@ -18,11 +18,8 @@ const Forum = () => {
   return (
     <div className="bg-gray-100 h-screen">
       {/* Header Section */}
-      <Header
-        titlePage="Forum"
-        desc="Share your travel experiences and advice with others."
-        img={pana}
-      />
+          <div className="min-h-24 bg-gradient-to-r from-blue-400 to-teal-400 text-white py-4 text-center">
+    </div>
 
       {/* Content Section */}
       <div className="container h-4/5 mx-auto mt-4 grid grid-cols-1 md:grid-cols-12 gap-6 px-4">

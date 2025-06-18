@@ -13,6 +13,7 @@
     "@reduxjs/toolkit": "^2.5.0",
     "@ubilabs/react-geosuggest": "^2.16.2",
     "axios": "^1.7.9",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.4.5",
     "leaflet": "^1.9.4",
     "lottie-web": "^5.12.2",
