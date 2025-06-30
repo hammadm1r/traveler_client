@@ -74,12 +74,12 @@ const Story = () => {
   };
 
   return (
-    <>
+    <div className="min-h-screen">
       {/* Title Section */}
       <Header />
       <div className="flex flex-col md:flex-row">
         {/* Map Section */}
-        <div className="flex-grow h-[80vh] md:w-2/3 relative z-0">
+        <div className="flex-grow min-h-screen md:w-2/3 relative z-0">
           {/* Add Story Button */}
           <Link to="/addstory">
             <button
@@ -124,7 +124,7 @@ const Story = () => {
             </MapContainer>
           ) : (
             <div className="flex justify-center items-center h-full">
-              Loading map...
+              <Loader/>
             </div>
           )}
         </div>
@@ -191,7 +191,7 @@ const Story = () => {
             document.body
           )}
       </div>
-    </>
+    </div>
   );
 };
 

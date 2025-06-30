@@ -1,19 +1,20 @@
 import React, { useState } from "react";
-import { CiLocationOn } from "react-icons/ci";
+import { CiLocationOn, CiCircleInfo } from "react-icons/ci";
 import { FiUpload } from "react-icons/fi";
-import ReactStars from "react-rating-stars-component"; // Import the star rating component
+import ReactStars from "react-rating-stars-component";
 import { useSelector } from "react-redux";
 import { axiosClient } from "../utils/axiosClient";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import { Tooltip } from "react-tooltip";
-import { CiCircleInfo } from "react-icons/ci";
 
 export const CreatePost = () => {
   const myProfile = useSelector((state) => state.appConfig.myProfile);
   const [loc, setLoc] = useState("Sialkot, Pakistan");
   const [title, setTitle] = useState("");
+  const [hashtags, setHashtags] = useState([]);
+  const [hashtagInput, setHashtagInput] = useState("");
   const navigate = useNavigate();
   const [desc, setDesc] = useState("");
   const [selectedImages, setSelectedImages] = useState([]);
@@ -21,10 +22,7 @@ export const CreatePost = () => {
   const [locationInput, setLocationInput] = useState("");
   const [rating, setRating] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
 
-  // Handle image upload
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     if (files.length + selectedImages.length > 5) {
@@ -35,14 +33,12 @@ export const CreatePost = () => {
     }
   };
 
-  // Function to remove an image
   const removeImage = (indexToRemove) => {
     setSelectedImages((prevImages) =>
       prevImages.filter((_, index) => index !== indexToRemove)
     );
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -51,44 +47,36 @@ export const CreatePost = () => {
     formData.append("description", desc);
     formData.append("location", loc);
     formData.append("rating", rating);
-
-    selectedImages.forEach((image) => {
-      formData.append("media[]", image);
-    });
+    formData.append("hashtags", JSON.stringify(hashtags));
+    selectedImages.forEach((image) => formData.append("media[]", image));
 
     try {
       setIsLoading(true);
       const response = await axiosClient.post("post/createpost", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      console.log(response);
 
       if (response.data.statusCode === 201) {
-        toast.success("Post has been uploaded successfully.");
+        toast.success("Post uploaded successfully!");
         if (response.data.result.achivement) {
           Swal.fire({
-            title: "Congratulations! You've earned the First Step  badge!",
+            title: "🎉 Congratulations! You've earned the First Step badge!",
             text: "You Have Created Your First Post",
             imageUrl:
               "https://res.cloudinary.com/djiqzvcev/image/upload/v1739281946/achivement3_hlkpml.png",
             imageWidth: 200,
             imageHeight: 200,
-            imageAlt: "First Step",
+            imageAlt: "First Step Badge",
             padding: "3em",
             width: 600,
             color: "#716add",
             background: "#fff url(/images/trees.png)",
-            backdrop: `
-    rgba(0,0,123,0.4)
-    url("/images/nyan-cat.gif")
-    left top
-    no-repeat
-  `,
+            backdrop: `rgba(0,0,123,0.4) url("/images/nyan-cat.gif") left top no-repeat`,
           });
         }
         setTimeout(() => {
           navigate(`/profile/${myProfile._id}`);
-        }, 2000); // Redirect after 2 seconds to show the success message
+        }, 2000);
       } else {
         toast.error("Failed to upload post. Please try again.");
       }
@@ -100,120 +88,128 @@ export const CreatePost = () => {
     }
   };
 
-  // Function to handle the star rating
   const ratingChanged = (newRating) => {
     setRating(newRating);
   };
 
   return (
     <div className="mt-16 md:mx-20 mx-4 flex justify-center">
-      <div className="bg-white max-w-2xl p-6 rounded-lg shadow-md transition-all hover:shadow-lg">
-        <h1 className="text-3xl font-bold mb-5 text-center text-bgPrimary tracking-normal">
-          Create Post
+      <div className="bg-gradient-to-br from-white to-blue-50 max-w-2xl p-8 rounded-xl shadow-2xl transition-shadow hover:shadow-3xl">
+        <h1 className="text-4xl font-extrabold mb-8 text-center text-bgPrimary tracking-wide drop-shadow-sm">
+          Create Your Journey Post
         </h1>
 
-        <div className="p-5 border border-gray-100 rounded-lg shadow-sm bg-gradient-to-b from-gray-50 to-white">
-          <div className="flex items-center mb-5">
+        <div className="p-6 bg-white rounded-xl shadow-lg">
+          <div className="flex items-center gap-4 mb-8">
             <img
               src={myProfile?.profilePicture?.url}
-              alt="User"
-              className="w-12 h-12 object-cover rounded-full mr-3"
+              alt="User Profile"
+              className="w-14 h-14 object-cover rounded-full ring-2 ring-bgPrimary shadow-md"
             />
             <div>
-              <p className="text-lg font-semibold">{myProfile.fullname}</p>
-              <div className="flex items-center gap-x-1">
-                <CiLocationOn className="text-xl text-bgPrimary" />
-                <p className="text-base text-gray-500">{loc}</p>
+              <p className="text-xl font-semibold text-gray-800">
+                {myProfile.fullname}
+              </p>
+              <div className="flex items-center gap-1 text-bgPrimary font-medium">
+                <CiLocationOn className="text-2xl" />
+                <span className="text-md">{loc}</span>
               </div>
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <input
               type="text"
-              placeholder="Title of the post"
+              placeholder="Post Title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="border border-gray-200 p-3 w-full rounded-md focus:ring focus:ring-bgPrimary text-base shadow-sm"
-              required
-            />
-            <textarea
-              placeholder="Write something about your post..."
-              value={desc}
-              onChange={(e) => setDesc(e.target.value)}
-              className="border border-gray-200 p-3 w-full rounded-md focus:ring focus:ring-bgPrimary text-base shadow-sm"
+              className="border border-gray-300 p-4 w-full rounded-lg text-lg font-medium placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-bgPrimary transition"
               required
             />
 
-            <div className="mb-5">
+            <textarea
+              placeholder="Describe your journey..."
+              value={desc}
+              onChange={(e) => setDesc(e.target.value)}
+              rows={5}
+              className="border border-gray-300 p-4 w-full rounded-lg text-md placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-bgPrimary transition resize-none"
+              required
+            />
+
+            <div className="mb-6">
               <label
                 htmlFor="file-upload"
-                className="w-full h-32 border-2 border-dashed border-gray-300 rounded-md cursor-pointer flex items-center justify-center hover:border-bgPrimary hover:bg-gray-50 transition-all"
+                className="relative w-full h-36 border-2 border-dashed border-bgPrimary rounded-lg cursor-pointer flex flex-col items-center justify-center text-bgPrimary hover:bg-bgPrimary hover:text-white transition-all shadow-sm"
               >
                 {selectedImages.length < 5 ? (
-                  <div className="flex flex-col items-center gap-2">
-                    <FiUpload className="text-4xl text-gray-600" />
-                    <p className="hidden md:block text-base text-gray-500">
-                      Drag and drop files or click to upload
+                  <>
+                    <FiUpload className="text-5xl mb-2" />
+                    <p className="text-lg font-semibold">
+                      Drag & drop or click to upload (max 5 images)
                     </p>
-                  </div>
+                    <p className="text-sm mt-1 text-gray-300">
+                      JPG, PNG supported
+                    </p>
+                  </>
                 ) : (
-                  <p className="text-center text-red-500">
-                    Maximum 5 images allowed
+                  <p className="text-lg font-semibold text-red-500">
+                    Maximum 5 images reached
                   </p>
                 )}
                 <input
                   id="file-upload"
                   type="file"
                   accept="image/*"
-                  className="hidden"
+                  className="absolute inset-0 opacity-0 cursor-pointer"
                   onChange={handleImageChange}
                   multiple
                   disabled={selectedImages.length >= 5}
                 />
               </label>
-              <p className="text-sm text-gray-400 mt-2">
-                Supported formats: JPG, PNG
-              </p>
               {errorMsg && (
-                <p className="text-red-500 text-sm mt-1">{errorMsg}</p>
+                <p className="text-red-500 text-center mt-2 font-medium">
+                  {errorMsg}
+                </p>
               )}
-            </div>
-
-            <div className="grid grid-cols-3 gap-4 mb-4">
-              {selectedImages.map((image, index) => (
-                <div key={index} className="relative group">
-                  <img
-                    src={URL.createObjectURL(image)}
-                    alt={`upload-preview-${index}`}
-                    className="h-24 w-full object-cover rounded-md shadow-sm"
-                  />
-                  <button
-                    type="button"
-                    className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                    onClick={() => removeImage(index)}
+              <div className="mt-4 grid grid-cols-3 gap-4">
+                {selectedImages.map((image, index) => (
+                  <div
+                    key={index}
+                    className="relative rounded-lg overflow-hidden shadow-md group"
                   >
-                    X
-                  </button>
-                </div>
-              ))}
+                    <img
+                      src={URL.createObjectURL(image)}
+                      alt={`Preview ${index}`}
+                      className="object-cover h-28 w-full transition-transform group-hover:scale-110"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeImage(index)}
+                      className="absolute top-1 right-1 bg-red-600 text-white rounded-full px-2 py-1 opacity-0 group-hover:opacity-90 hover:opacity-100 transition"
+                      aria-label="Remove image"
+                    >
+                      &times;
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div>
               <label
                 htmlFor="location-input"
-                className="flex mb-2 text-base font-medium text-bgPrimary"
+                className="flex items-center gap-2 mb-2 font-semibold text-bgPrimary text-lg"
               >
-                Location:{" "}
+                Location
                 <span
-                  data-tooltip-id="my-tooltip"
-                  data-tooltip-content="Format: (Name, City, Province)"
-                  className="cursor-pointer flex text-slate-400 ml-2 justify-center align-middle items-center"
+                  data-tooltip-id="location-tooltip"
+                  data-tooltip-content="Format: City, Province, Country"
+                  className="cursor-pointer text-gray-400 hover:text-bgPrimary transition"
                 >
-                  <CiCircleInfo size={16} className="" />
+                  <CiCircleInfo size={18} />
                 </span>
               </label>
-              <Tooltip id="my-tooltip" place="top" />
+              <Tooltip id="location-tooltip" place="top" />
               <input
                 id="location-input"
                 type="text"
@@ -223,41 +219,89 @@ export const CreatePost = () => {
                   setLocationInput(e.target.value);
                   setLoc(e.target.value);
                 }}
-                className="border border-gray-200 p-3 w-full rounded-md focus:ring focus:ring-bgPrimary shadow-sm"
+                className="border border-gray-300 p-3 w-full rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-bgPrimary transition"
               />
             </div>
 
             <div>
-              <label className="block mb-2 text-base font-medium text-bgPrimary">
-                Rate this post:
+              <label className="block mb-2 font-semibold text-bgPrimary text-lg">
+                Rate this Journey
               </label>
               <ReactStars
                 count={5}
                 onChange={ratingChanged}
-                size={25}
-                activeColor="#ffd700"
+                size={30}
+                activeColor="#facc15"
+                isHalf={true}
               />
+            </div>
+
+            <div>
+              <label className="block mb-2 font-semibold text-bgPrimary text-lg">
+                Hashtags (max 5)
+              </label>
+              <div className="flex items-center gap-3 mb-3">
+                <input
+                  type="text"
+                  value={hashtagInput}
+                  onChange={(e) => setHashtagInput(e.target.value)}
+                  placeholder="#nature"
+                  className="flex-grow border border-gray-300 p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-bgPrimary transition"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const trimmed = hashtagInput.trim();
+                    if (
+                      trimmed &&
+                      hashtags.length < 5 &&
+                      !hashtags.includes(trimmed)
+                    ) {
+                      setHashtags([...hashtags, trimmed]);
+                      setHashtagInput("");
+                    }
+                  }}
+                  className="px-5 py-3 bg-bgPrimary text-white font-semibold rounded-lg hover:bg-opacity-90 transition"
+                >
+                  Add
+                </button>
+              </div>
+              {hashtags.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {hashtags.map((tag, idx) => (
+                    <div
+                      key={idx}
+                      className="bg-bgPrimary/20 text-bgPrimary px-4 py-1 rounded-full text-sm flex items-center gap-2 select-none"
+                    >
+                      {tag}
+                      <button
+                        type="button"
+                        className="text-red-500 font-bold hover:text-red-600 transition"
+                        onClick={() =>
+                          setHashtags((prev) => prev.filter((_, i) => i !== idx))
+                        }
+                        aria-label={`Remove hashtag ${tag}`}
+                      >
+                        &times;
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             <button
               type="submit"
               disabled={isLoading}
-              className={`w-full py-3 rounded-md text-white font-semibold tracking-wide ${
+              className={`w-full py-4 rounded-lg text-white font-extrabold tracking-wide shadow-lg ${
                 isLoading
                   ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-bgPrimary hover:shadow-md hover:bg-opacity-90"
+                  : "bg-bgPrimary hover:bg-bgPrimary/90 transition"
               }`}
             >
-              {isLoading ? "Uploading..." : "Post"}
+              {isLoading ? "Uploading..." : "Post Journey"}
             </button>
           </form>
-
-          {successMessage && (
-            <p className="text-green-500 text-center mt-4">{successMessage}</p>
-          )}
-          {errorMessage && (
-            <p className="text-red-500 text-center mt-4">{errorMessage}</p>
-          )}
         </div>
       </div>
     </div>

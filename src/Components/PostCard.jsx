@@ -18,7 +18,7 @@ const PostCard = ({post}) => {
     navigate(`/profile/${post.owner._id}`);
   };
   return (
-    <div className="p-4 bg-white border-b-2" onClick={openPost}>
+    <div className="p-4 md:rounded-2xl bg-white border-b-2" onClick={openPost}>
       {/* User Info and Interaction Icons */}
       <div className="flex items-center justify-between mb-4">
         {/* User Information */}

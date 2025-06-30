@@ -25,6 +25,8 @@ import { io } from "socket.io-client";
 import toast from "react-hot-toast";
 import { axiosClient } from "./utils/axiosClient";
 import TravelAdvisor from "./Pages/TravelAdvisor";
+import Search from "./Pages/Search";
+import Loader from "./Components/Loader";
 
 function App() {
   const myProfile = useSelector((state) => state.appConfig.myProfile);
@@ -86,6 +88,7 @@ function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} /> {/* Corrected */}
+          
         </Route>
         {/* Other routes that require authentication */}
         <Route element={<RequireUser />}>
@@ -95,11 +98,14 @@ function App() {
           <Route path="/updateprofile" element={<ProfileUpdate />} />
           <Route path="/story" element={<Story />} />
           <Route path="/addstory" element={<UploadStory />} />
+          <Route path="/search" element={<Search />} />
           <Route path="/" element={<FeedLoad />}>
             <Route path="/forum" element={<Forum />} />
             <Route path="/post/:id" element={<Post />} />
           </Route>
           <Route path="/profile/:id" element={<Profile />} />
+          
+          <Route path="/loader" element={<Loader />} />
           <Route path="/notification" element={<Notifications notifications={notifications} />} />
         </Route>
       </Routes>

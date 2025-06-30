@@ -11,6 +11,7 @@ import { likeAndUnlikePost } from "../Toolkit/slices/feedSlice";
 import { FaShare } from "react-icons/fa";
 import { FaFacebookF, FaTwitter, FaWhatsapp, FaCopy } from "react-icons/fa";
 import toast from "react-hot-toast";
+import ReactStars from "react-rating-stars-component";
 
 const Post = ({ post, scrollToComment }) => {
   const myProfile = useSelector((state) => state.appConfig.myProfile);
@@ -47,25 +48,31 @@ const Post = ({ post, scrollToComment }) => {
   };
 
   const handleFacebookShare = () => {
-    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(postUrl)}`;
-    window.open(facebookUrl, '_blank', 'width=600,height=400');
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+      postUrl
+    )}`;
+    window.open(facebookUrl, "_blank", "width=600,height=400");
   };
 
   const handleTwitterShare = () => {
     const text = "Check out this post!";
-    const twitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(postUrl)}&text=${encodeURIComponent(text)}`;
-    window.open(twitterUrl, '_blank', 'width=600,height=400');
+    const twitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
+      postUrl
+    )}&text=${encodeURIComponent(text)}`;
+    window.open(twitterUrl, "_blank", "width=600,height=400");
   };
 
   const handleWhatsAppShare = () => {
     const text = "Check out this post!";
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}%20${encodeURIComponent(postUrl)}`;
-    window.open(whatsappUrl, '_blank');
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(
+      text
+    )}%20${encodeURIComponent(postUrl)}`;
+    window.open(whatsappUrl, "_blank");
   };
 
   return (
     <>
-      <div className="w-full flex items-center justify-center">
+      <div className="w-full items-center justify-center">
         <div className=" bg-white transition-shadow duration-300 rounded-lg">
           {/* User Info and Interaction Icons */}
           <div className="flex items-center justify-between mb-4">
@@ -118,6 +125,18 @@ const Post = ({ post, scrollToComment }) => {
             <h2 className="text-lg md:text-xl font-semibold text-gray-900 mt-4">
               {post?.title}
             </h2>
+            <p className="text-xs md:text-base text-gray-600 flex items-center gap-2">
+              <ReactStars
+                count={5}
+                value={post?.rating} // e.g., 3
+                edit={false} // read-only
+                size={15}
+                isHalf={true}
+                activeColor="#ffd700"
+              />
+              <span>| {formattedHashtags}</span>
+            </p>
+
             {post?.media?.length > 0 ? <Carousel data={post?.media} /> : ""}
 
             <p className="text-md md:text-base text-gray-600 mt-2 ">
@@ -129,25 +148,25 @@ const Post = ({ post, scrollToComment }) => {
           </div>
 
           {/* Location Information */}
-          <div className="mt-4 flex items-center text-gray-700">
+          <div className="mt-4 flex items-center text-gray-700 cursor-pointer" onClick={() => navigate(`/search?query=${encodeURIComponent(post?.location)}`)}>
             <CiLocationOn className="text-lg mr-1" />
-            <p className="text-sm">{post?.location}</p>
+            <p className="text-sm" >{post?.location}</p>
           </div>
           <div className="mt-4 flex items-center justify-end text-gray-700 gap-5">
-          {post?.owner?.koFiUrl ? (
-            <a
-              href={post?.owner?.koFiUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <img
-                height="36"
-                style={{ border: "0px", height: "36px" }}
-                src="https://storage.ko-fi.com/cdn/kofi5.png?v=6"
-                alt="Buy Me a Coffee at ko-fi.com"
-              />
-            </a>
-          ) : null}
+            {post?.owner?.koFiUrl ? (
+              <a
+                href={post?.owner?.koFiUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  height="36"
+                  style={{ border: "0px", height: "36px" }}
+                  src="https://storage.ko-fi.com/cdn/kofi5.png?v=6"
+                  alt="Buy Me a Coffee at ko-fi.com"
+                />
+              </a>
+            ) : null}
             <button
               type="button"
               aria-label="Like post"

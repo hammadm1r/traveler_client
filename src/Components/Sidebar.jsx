@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { PiChatsCircle } from "react-icons/pi";
 import { IoIosAddCircle } from "react-icons/io";
 import { FaEdit } from "react-icons/fa";
@@ -6,8 +6,13 @@ import { RiWechatPayLine } from "react-icons/ri";
 import { IoSearchSharp } from "react-icons/io5";
 import { Navigate, useNavigate } from "react-router";
 import { FaTrophy } from "react-icons/fa";
+import { axiosClient } from "../utils/axiosClient";
 const Sidebar = ({ active, setActive }) => {
   const navigate = useNavigate();
+  const inputRef = useRef(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState({ users: [], posts: [] });
+  const [showResults, setShowResults] = useState(false);
   const menuItems = [
     { id: "newPost", icon: <IoIosAddCircle />, label: "New Post" },
     { id: "feed", icon: <PiChatsCircle />, label: "Feed" },
@@ -26,14 +31,31 @@ const Sidebar = ({ active, setActive }) => {
       console.log(item.id);
     }
   };
+
+  const handleSearch = async () => {
+    const trimmedQuery = searchTerm.trim();
+    if (trimmedQuery) {
+    navigate(`/search?query=${encodeURIComponent(trimmedQuery)}`);
+  }
+  };
+
   return (
     <div>
       <div className="flex justify-center items-center relative w-full max-w-md border-b-2 pb-3">
         <input
+          ref={inputRef}
           className="py-2 px-4 bg-gray-200 rounded-xl pl-10 pr-10 w-full"
           placeholder="Search"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") handleSearch();
+          }}
         />
-        <IoSearchSharp className="text-2xl absolute right-3 top-5 transform -translate-y-1/2 text-gray-500" />
+        <IoSearchSharp
+          className="text-2xl absolute right-3 top-1/2 -translate-y-[68%] text-gray-500 cursor-pointer"
+          onClick={handleSearch}
+        />
       </div>
       {/* Render buttons dynamically */}
       <div className="hidden md:block ">
@@ -53,41 +75,24 @@ const Sidebar = ({ active, setActive }) => {
             {item.icon} {item.label}
           </button>
         ))}
-        <div className="mt-2  rounded-2xl p-2  mx-auto border-2">
-      <h1 className="text-blue-600 text-md font-bold text-center uppercase tracking-widest">
-         Achivers of The Week 
-      </h1>
+                <div className="mt-2 rounded-2xl p-2 mx-auto border-2">
+          <h1 className="text-blue-600 text-md font-bold text-center uppercase tracking-widest">
+            Trending Tags
+          </h1>
 
-      {awardList.map((item) => {
-        let trophyColor, bgColor, borderColor;
-        if (item.position === 1) {
-          trophyColor = "text-yellow-500"; // Gold
-          bgColor = "bg-yellow-100";
-          borderColor = "border-yellow-400";
-        } else if (item.position === 2) {
-          trophyColor = "text-gray-400"; // Silver
-          bgColor = "bg-gray-100";
-          borderColor = "border-gray-400";
-        } else {
-          trophyColor = "text-orange-500"; // Bronze
-          bgColor = "bg-orange-100";
-          borderColor = "border-orange-400";
-        }
-
-        return (
-          <div
-            key={item.id}
-            className={`flex items-center justify-between ${bgColor} border-l-4 ${borderColor} p-2 my-3 rounded-xl shadow-md transform transition duration-300 hover:scale-105 hover:shadow-lg`}
-          >
-            <div className="flex items-center space-x-3">
-              {item.icon}
-              <p className="text-lg font-semibold text-gray-800">{item.label}</p>
-            </div>
-            <FaTrophy className={`${trophyColor} text-2xl`} />
+          <div className="flex flex-wrap gap-2 justify-center mt-3">
+            {["#beach", "#hiking", "#adventure", "#mountains", "#foodie", "#nature"].map((tag, index) => (
+              <button
+                key={index}
+                onClick={() => navigate(`/search?query=${encodeURIComponent(tag)}`)}
+                className="px-3 py-1 bg-blue-100 hover:bg-blue-300 text-blue-700 rounded-full text-sm font-semibold transition-all"
+              >
+                {tag}
+              </button>
+            ))}
           </div>
-        );
-      })}
-    </div>
+        </div>
+
       </div>
 
       <div className="block sm:hidden">

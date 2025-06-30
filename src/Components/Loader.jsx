@@ -1,21 +1,12 @@
-import React from 'react';
-import Lottie from 'react-lottie';
-import loaderData from '../assets/circle-loader.json'; // Import the loader JSON
+import React from "react";
+import logo from "../assets/Images/t.gif";
 
 const Loader = () => {
-  const defaultOptions = {
-    loop: true, // The animation will repeat
-    autoplay: true, // Start playing automatically
-    animationData: loaderData, // Your loader JSON data
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice", // Ensures correct aspect ratio for the animation
-    },
-  };
-
-  return <div className='pt-36'>
-  {<Lottie options={defaultOptions} height={150} width={150} />}
-  <p className='text-center text-2xl font-bold text-bgPrimary'>Wait The Content Is Loading....</p>
-  </div>
+  return (
+    <div className="pt-36 flex justify-center">
+      <img src={logo} alt="Loading..." className="w-44 h-44" />
+    </div>
+  );
 };
 
 export default Loader;
