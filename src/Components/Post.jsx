@@ -134,7 +134,7 @@ const Post = ({ post, scrollToComment }) => {
                 isHalf={true}
                 activeColor="#ffd700"
               />
-              <span>| {formattedHashtags}</span>
+              <span> {formattedHashtags? "|": ""} {formattedHashtags}</span>
             </p>
 
             {post?.media?.length > 0 ? <Carousel data={post?.media} /> : ""}

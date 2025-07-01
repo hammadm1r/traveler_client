@@ -44,6 +44,12 @@ const userProfileSlice = createSlice({
     addPost: (state,action) =>{
       
     },
+    resetProfile(state) {
+      state.user = null;
+      state.posts = [];
+      state.isFollowing = false;
+      state.loading = false;
+    },
     toggleLike: (state, action) => {
       const postId = action.payload.postId;
       const curUserId = action.payload.curUserId;
@@ -93,5 +99,5 @@ const userProfileSlice = createSlice({
       });
   },
 });
-export const { toggleLike } = userProfileSlice.actions;
+export const { toggleLike,resetProfile } = userProfileSlice.actions;
 export default userProfileSlice.reducer;

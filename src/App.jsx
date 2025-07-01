@@ -18,7 +18,7 @@ import OnlyIfUserNotLoggedIn from "./Components/OnlyIfUserNotLoggedIn";
 import RequireUser from "./Components/RequireUser";
 import CreatePost from "./Pages/CreatePost";
 import ProfileUpdate from "./Pages/ProfileUpdate";
-import FeedLoad from "./Components/feedLoad";
+import FeedLoad from "./Components/FeedLoad";
 import UploadStory from "./Components/UploadStory";
 import Notifications from "./Components/Notification";
 import { io } from "socket.io-client";
