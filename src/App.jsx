@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useState,useEffect } from "react"; // Use 'React' (capitalized) in imports
+import React, { useState, useEffect } from "react"; // Use 'React' (capitalized) in imports
 import { useSelector } from "react-redux";
 import Login from "./Pages/Authentication/Login";
 import Signup from "./Pages/Authentication/Signup"; // Ensure this is correct
@@ -40,6 +40,8 @@ function App() {
   };
   // Fetch Notifications
   useEffect(() => {
+    if (!userId) return; // ✅ Prevent API call if user is not logged in
+
     const getNotifications = async () => {
       try {
         const { data } = await axiosClient.get("/user/getnotification");
@@ -54,19 +56,24 @@ function App() {
 
     getNotifications();
   }, [userId]);
-  const toasting = (message) =>{
+
+  const toasting = (message) => {
     toast.success(message);
-  }
+  };
   useEffect(() => {
     if (!userId) return;
 
     const newsocket = io("http://localhost:3000", { autoConnect: true });
     newsocket.emit("join", userId);
     const handleNewNotification = (notification) => {
-      const message = `${notification?.sender?.username} ${notificationMessages[notification?.type] || "performed an action!"}`;
+      const message = `${notification?.sender?.username} ${
+        notificationMessages[notification?.type] || "performed an action!"
+      }`;
       toasting(message);
       setNotifications((prev) =>
-        [notification, ...prev].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        [notification, ...prev].sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        )
       );
     };
 
@@ -88,7 +95,6 @@ function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} /> {/* Corrected */}
-          
         </Route>
         {/* Other routes that require authentication */}
         <Route element={<RequireUser />}>
@@ -104,9 +110,12 @@ function App() {
             <Route path="/post/:id" element={<Post />} />
           </Route>
           <Route path="/profile/:id" element={<Profile />} />
-          
+
           <Route path="/loader" element={<Loader />} />
-          <Route path="/notification" element={<Notifications notifications={notifications} />} />
+          <Route
+            path="/notification"
+            element={<Notifications notifications={notifications} />}
+          />
         </Route>
       </Routes>
     </>
