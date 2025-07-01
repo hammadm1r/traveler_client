@@ -1,10 +1,12 @@
 import axios from "axios";
 import { getItem,KEY_ACCESS_TOKEN } from "./LocalStorageManager";
 const REACT_APP_SERVER_BASE_URL = import.meta.env.VITE_SERVER_BASE_URL;
+console.log(REACT_APP_SERVER_BASE_URL);
 export const axiosClient = axios.create({
     baseURL:REACT_APP_SERVER_BASE_URL,
     withCredentials :true,
 })
+console.log(" Axios Base URL:", REACT_APP_SERVER_BASE_URL)
 
 axiosClient.interceptors.request.use(
     (request) =>{
