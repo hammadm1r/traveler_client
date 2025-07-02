@@ -27,7 +27,7 @@ import { axiosClient } from "./utils/axiosClient";
 import TravelAdvisor from "./Pages/TravelAdvisor";
 import Search from "./Pages/Search";
 import Loader from "./Components/Loader";
-
+const REACT_APP_SERVER_BASE_URL = import.meta.env.VITE_SERVER_BASE_URL;
 function App() {
   const myProfile = useSelector((state) => state.appConfig.myProfile);
   const userId = myProfile?._id;
@@ -63,7 +63,7 @@ function App() {
   useEffect(() => {
     if (!userId) return;
 
-    const newsocket = io("http://localhost:3000", { autoConnect: true });
+    const newsocket = io("REACT_APP_SERVER_BASE_URL", { autoConnect: true });
     newsocket.emit("join", userId);
     const handleNewNotification = (notification) => {
       const message = `${notification?.sender?.username} ${
