@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import Logo from "../assets/Images/t(3).gif";
-import { FaCircleUser } from "react-icons/fa6";
 import { IoReorderThreeOutline } from "react-icons/io5";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
@@ -28,27 +27,23 @@ const Navbar = () => {
   };
 
   const toggleSubMenu = () => {
-    setIsSubMenuOpen(!isSubMenuOpen);
+    setIsSubMenuOpen((prev) => !prev);
   };
 
-  // Close submenu on outside click or tap (desktop + mobile)
+  // ✅ Close submenu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (subMenuRef.current && !subMenuRef.current.contains(event.target)) {
         setIsSubMenuOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("touchstart", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("touchstart", handleClickOutside);
-    };
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
+  // ✅ Close menus on route change
   const location = useLocation();
   useEffect(() => {
-    // Close menus when navigating
     setIsSubMenuOpen(false);
     setIsMenuOpen(false);
   }, [location.pathname]);
@@ -70,7 +65,6 @@ const Navbar = () => {
     });
   };
 
-  // Desktop menu items without submenu
   const menuItems = (
     <>
       <li className="hover:text-blue-400">
@@ -85,28 +79,35 @@ const Navbar = () => {
       <li className="hover:text-blue-400">
         <Link to="/traveladvisor">Travel Advisor</Link>
       </li>
-    </>
-  );
 
-  // Desktop user submenu
-  const userSubMenu = (
-    <ul
-      ref={subMenuRef}
-      className="absolute right-0 mt-2 w-40 bg-gray-800 text-white rounded-lg shadow-lg p-2 z-50"
-    >
-      <li className="p-2 hover:bg-gray-700 rounded">
-        <Link to={`/profile/${userId}`}>Profile</Link>
-      </li>
-      <li className="p-2 hover:bg-gray-700 rounded">
-        <Link to="/notification">Notification</Link>
-      </li>
-      <li
-        className="p-2 hover:bg-gray-700 rounded cursor-pointer"
-        onClick={handleLogout}
-      >
-        Logout
-      </li>
-    </ul>
+      {isLoggedIn && (
+        <li className="relative" ref={subMenuRef}>
+          <button onClick={toggleSubMenu} className="focus:outline-none">
+            <img
+              src={myProfile?.profilePicture?.url || ""}
+              alt="User"
+              className="w-8 h-8 object-cover border-2 border-bgPrimary rounded-full"
+            />
+          </button>
+          {isSubMenuOpen && (
+            <ul className="absolute right-0 mt-2 w-40 bg-gray-800 text-white rounded-lg shadow-lg p-2 z-50">
+              <li className="p-2 hover:bg-gray-700 rounded">
+                <Link to={`/profile/${userId}`}>Profile</Link>
+              </li>
+              <li className="p-2 hover:bg-gray-700 rounded">
+                <Link to="/notification">Notification</Link>
+              </li>
+              <li
+                className="p-2 hover:bg-gray-700 rounded cursor-pointer"
+                onClick={handleLogout}
+              >
+                Logout
+              </li>
+            </ul>
+          )}
+        </li>
+      )}
+    </>
   );
 
   return (
@@ -114,53 +115,14 @@ const Navbar = () => {
       {/* Mobile Menu Overlay */}
       {isMenuOpen && (
         <div className="bg-white text-black dark:bg-gray-900 dark:text-white fixed inset-0 z-50 flex flex-col">
-          {/* Close Button */}
           <div className="flex justify-end p-6">
             <button onClick={menuHandler} className="text-3xl">
               <RxCross1 />
             </button>
           </div>
-
-          {/* Centered Items */}
           <div className="flex-grow flex justify-center ">
             <ul className="flex flex-col gap-6 text-xl font-semibold text-center">
-              {/* Main navigation links */}
               {menuItems}
-
-              {/* User-specific links inside mobile menu */}
-              {isLoggedIn && (
-                <>
-                  <li>
-                    <Link
-                      to="/notification"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      Notification
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to={`/profile/${userId}`}
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <img
-                        src={myProfile?.profilePicture?.url || ""}
-                        alt="User"
-                        className="w-8 h-8 object-cover border-2 border-bgPrimary rounded-full"
-                      />
-                    </Link>
-                  </li>
-                  <li
-                    onClick={() => {
-                      setIsMenuOpen(false);
-                      handleLogout();
-                    }}
-                    className="cursor-pointer"
-                  >
-                    Logout
-                  </li>
-                </>
-              )}
             </ul>
           </div>
         </div>
@@ -173,44 +135,20 @@ const Navbar = () => {
           <img src={Logo} alt="Logo" className="h-6 md:h-10" />
         </Link>
 
-        {/* Desktop Navigation */}
-        <div
-          className={`justify-center hidden ${
-            isLoggedIn ? "md:flex" : "md:hidden"
-          }`}
-        >
-          <ul className="flex gap-7 text-white text-lg font-semibold items-center">
+        {/* Desktop Menu */}
+        <div className={`justify-center hidden ${isLoggedIn ? "md:block" : "md:hidden"}`}>
+          <ul className="flex gap-7 text-white text-lg font-semibold">
             {menuItems}
-
-            {/* Profile Picture + Submenu toggle */}
-            {isLoggedIn && (
-              <li className="relative">
-                <button
-                  onClick={toggleSubMenu}
-                  className="focus:outline-none"
-                  aria-haspopup="true"
-                  aria-expanded={isSubMenuOpen}
-                  aria-label="User menu"
-                >
-                  <img
-                    src={myProfile?.profilePicture?.url || ""}
-                    alt="User"
-                    className="w-8 h-8 object-cover border-2 border-bgPrimary rounded-full"
-                  />
-                </button>
-                {isSubMenuOpen && userSubMenu}
-              </li>
-            )}
           </ul>
         </div>
 
-        {/* Mobile Menu Toggle Button */}
+        {/* Mobile Menu Toggle */}
         <div className={`md:hidden ${isLoggedIn ? "block" : "hidden"}`}>
           <button
             onClick={menuHandler}
             aria-expanded={isMenuOpen}
             aria-label="Toggle menu"
-            className={`text-white text-right text-3xl font-semibold transform transition-transform duration-300 ${
+            className={`text-white text-3xl font-semibold transition-transform ${
               isMenuOpen ? "rotate-90" : ""
             }`}
           >
