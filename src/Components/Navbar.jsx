@@ -10,16 +10,13 @@ import {
 } from "../utils/LocalStorageManager";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
-import { IoMdNotifications } from "react-icons/io";
 import { RxCross1 } from "react-icons/rx";
-import { setLoggedIn } from "../Toolkit/slices/appConfigSlice";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.appConfig.isLoggedIn);
   const myProfile = useSelector((state) => state.appConfig.myProfile);
-  const user = getItem(KEY_ACCESS_TOKEN);
   const userId = myProfile?._id;
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -34,6 +31,7 @@ const Navbar = () => {
     setIsSubMenuOpen(!isSubMenuOpen);
   };
 
+  // Close submenu on outside click or tap (desktop + mobile)
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (subMenuRef.current && !subMenuRef.current.contains(event.target)) {
@@ -41,11 +39,16 @@ const Navbar = () => {
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
   }, []);
 
   const location = useLocation();
   useEffect(() => {
+    // Close menus when navigating
     setIsSubMenuOpen(false);
     setIsMenuOpen(false);
   }, [location.pathname]);
@@ -67,6 +70,7 @@ const Navbar = () => {
     });
   };
 
+  // Desktop menu items without submenu
   const menuItems = (
     <>
       <li className="hover:text-blue-400">
@@ -81,44 +85,28 @@ const Navbar = () => {
       <li className="hover:text-blue-400">
         <Link to="/traveladvisor">Travel Advisor</Link>
       </li>
-
-      {isLoggedIn && (
-        <li className="relative">
-          <button onClick={toggleSubMenu} className="focus:outline-none">
-            <img
-              src={myProfile?.profilePicture?.url || ""}
-              alt="User"
-              className="w-8 h-8 object-cover border-2 border-bgPrimary rounded-full"
-            />
-          </button>
-          {isSubMenuOpen && (
-            <ul
-              ref={subMenuRef}
-              className="absolute right-0 mt-2 w-40 bg-gray-800 text-white rounded-lg shadow-lg p-2 z-50"
-            >
-              <li className="p-2 hover:bg-gray-700 rounded">
-                <Link to={`/profile/${userId}`}>
-                  Profile
-                </Link>
-              </li>
-              <li className="p-2 hover:bg-gray-700 rounded">
-                <Link to="/notification" >
-                  Notification
-                </Link>
-              </li>
-              <li
-                className="p-2 hover:bg-gray-700 rounded"
-                onClick={(e) => {
-                  handleLogout();
-                }}
-              >
-                Logout
-              </li>
-            </ul>
-          )}
-        </li>
-      )}
     </>
+  );
+
+  // Desktop user submenu
+  const userSubMenu = (
+    <ul
+      ref={subMenuRef}
+      className="absolute right-0 mt-2 w-40 bg-gray-800 text-white rounded-lg shadow-lg p-2 z-50"
+    >
+      <li className="p-2 hover:bg-gray-700 rounded">
+        <Link to={`/profile/${userId}`}>Profile</Link>
+      </li>
+      <li className="p-2 hover:bg-gray-700 rounded">
+        <Link to="/notification">Notification</Link>
+      </li>
+      <li
+        className="p-2 hover:bg-gray-700 rounded cursor-pointer"
+        onClick={handleLogout}
+      >
+        Logout
+      </li>
+    </ul>
   );
 
   return (
@@ -136,7 +124,39 @@ const Navbar = () => {
           {/* Centered Items */}
           <div className="flex-grow flex justify-center ">
             <ul className="flex flex-col gap-6 text-xl font-semibold text-center">
+              {/* Main navigation links */}
               {menuItems}
+
+              {/* User-specific links inside mobile menu */}
+              {isLoggedIn && (
+                <>
+                  <li>
+                    <Link
+                      to={`/profile/${userId}`}
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Profile
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/notification"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Notification
+                    </Link>
+                  </li>
+                  <li
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      handleLogout();
+                    }}
+                    className="cursor-pointer"
+                  >
+                    Logout
+                  </li>
+                </>
+              )}
             </ul>
           </div>
         </div>
@@ -152,11 +172,31 @@ const Navbar = () => {
         {/* Desktop Navigation */}
         <div
           className={`justify-center hidden ${
-            isLoggedIn ? "md:block" : "md:hidden"
+            isLoggedIn ? "md:flex" : "md:hidden"
           }`}
         >
-          <ul className="flex gap-7 text-white text-lg font-semibold">
+          <ul className="flex gap-7 text-white text-lg font-semibold items-center">
             {menuItems}
+
+            {/* Profile Picture + Submenu toggle */}
+            {isLoggedIn && (
+              <li className="relative">
+                <button
+                  onClick={toggleSubMenu}
+                  className="focus:outline-none"
+                  aria-haspopup="true"
+                  aria-expanded={isSubMenuOpen}
+                  aria-label="User menu"
+                >
+                  <img
+                    src={myProfile?.profilePicture?.url || ""}
+                    alt="User"
+                    className="w-8 h-8 object-cover border-2 border-bgPrimary rounded-full"
+                  />
+                </button>
+                {isSubMenuOpen && userSubMenu}
+              </li>
+            )}
           </ul>
         </div>
 
