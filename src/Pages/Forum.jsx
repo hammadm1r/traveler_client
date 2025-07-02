@@ -22,7 +22,7 @@ const Forum = () => {
     </div>
 
       {/* Content Section */}
-      <div className="md:container h-4/5 mx-auto mt-4 grid grid-cols-1 md:grid-cols-12 md:gap-4  sm:gap-2 md:px-4">
+      <div className="md:container md:h-4/5 h-dvh mx-auto md:mt-4 grid grid-cols-1 md:grid-cols-12 md:gap-4  sm:gap-2 md:px-4">
         {/* Sidebar Section */}
         <div className="col-span-12 md:col-span-3">
           <div className="sticky top-24 h-full bg-white md:shadow md:rounded-lg  p-4" style={{ boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)" }}>
