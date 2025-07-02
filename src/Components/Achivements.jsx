@@ -51,20 +51,20 @@ const Achivements = () => {
 
   return (
     <div className="rounded-t-xl overflow-hidden shadow-lg">
-      <div className="text-bgSecondary p-4 bg-bgPrimary justify-between flex items-center">
+      <div className="text-bgSecondary p-4 bg-bgPrimary justify-between flex items-center" onClick={handleToggleContent}>
         <p className="text-xl md:text-2xl font-semibold text-left">
           Achievements
         </p>
         <p
           className="text-xl md:text-3xl text-right cursor-pointer"
-          onClick={handleToggleContent}
+          
         >
           {isContentOpen ? <IoMdArrowDropup /> : <IoMdArrowDropdown />}
         </p>
       </div>
 
       {isContentOpen && (
-        <div className="flex overflow-x-auto gap-4 p-4 flex-nowrap scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
+        <div className="flex overflow-x-auto gap-4 p-4 flex-nowrap scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100" >
           {totalAchievements.map((achievement, index) => {
             const hasBadge = myProfile?.badges?.some(
               (badge) => badge.name === achievement.title

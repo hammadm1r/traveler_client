@@ -95,8 +95,11 @@ function Home() {
   }, []);
 
   return (
-    <div className="h-screen bg-cover bg-center overflow-x-hidden bg-image-home">
-      {/* Welcome */}
+   <div
+  className="h-screen bg-center bg-no-repeat bg-cover overflow-x-hidden"
+  style={{
+    backgroundImage: "url('https://res.cloudinary.com/djiqzvcev/image/upload/v1735323187/Profile_Pictures/z85wimxtvordqrr9u3sd.png')",
+  }}>
       <div className="grid grid-cols-2">
         <div className="flex flex-col items-start justify-start ml-6 mt-16 sm:ml-16 sm:mt-20 md:ml-20 md:mt-28">
           <p className="text-white text-2xl font-medium sm:text-2xl md:text-3xl lg:text-4xl">
@@ -120,7 +123,7 @@ function Home() {
           <p className="uppercase text-white text-sm text-left font-light md:text-base lg:text-lg mb-2">
             Wishlist
           </p>
-          <div className="bg-white bg-opacity-30 backdrop-blur-sm p-4 rounded-lg text-center shadow-lg w-full max-w-xs md:max-w-sm lg:max-w-md">
+          <div className="bg-black bg-opacity-30 backdrop-blur-sm p-4 rounded-lg text-center shadow-lg w-full max-w-xs md:max-w-sm lg:max-w-md">
             {wishlist.length === 0 ? (
               <p className="text-white text-md font-semibold md:text-lg lg:text-xl">
                 No items in wishlist

@@ -8,6 +8,7 @@ import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import { Tooltip } from "react-tooltip";
+import { uploadImagesToCloudinary } from "../utils/cloudinaryUpload"; // adjust path
 
 export const CreatePost = () => {
   const myProfile = useSelector((state) => state.appConfig.myProfile);
@@ -39,54 +40,62 @@ export const CreatePost = () => {
     );
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("description", desc);
-    formData.append("location", loc);
-    formData.append("rating", rating);
-    formData.append("hashtags", JSON.stringify(hashtags));
-    selectedImages.forEach((image) => formData.append("media[]", image));
+  try {
+    setIsLoading(true);
 
-    try {
-      setIsLoading(true);
-      const response = await axiosClient.post("post/createpost", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+    // 1️⃣ Upload images to Cloudinary
+    const uploadedMedia = await uploadImagesToCloudinary(selectedImages);
 
-      if (response.data.statusCode === 201) {
-        toast.success("Post uploaded successfully!");
-        if (response.data.result.achivement) {
-          Swal.fire({
-            title: "🎉 Congratulations! You've earned the First Step badge!",
-            text: "You Have Created Your First Post",
-            imageUrl:
-              "https://res.cloudinary.com/djiqzvcev/image/upload/v1739281946/achivement3_hlkpml.png",
-            imageWidth: 200,
-            imageHeight: 200,
-            imageAlt: "First Step Badge",
-            padding: "3em",
-            width: 600,
-            color: "#716add",
-            background: "#fff url(/images/trees.png)",
-            backdrop: `rgba(0,0,123,0.4) url("/images/nyan-cat.gif") left top no-repeat`,
-          });
-        }
-        setTimeout(() => {
-          navigate(`/profile/${myProfile._id}`);
-        }, 2000);
-      } else {
-        toast.error("Failed to upload post. Please try again.");
+    // 2️⃣ Prepare post data
+    const payload = {
+      title,
+      description: desc,
+      location: loc,
+      rating,
+      hashtags: JSON.stringify(hashtags),
+      media: JSON.stringify(uploadedMedia),
+    };
+
+    // 3️⃣ Send post data to backend
+    const response = await axiosClient.post("/post/createpost", payload);
+
+    if (response.data.statusCode === 201) {
+      toast.success("Post uploaded successfully!");
+
+      if (response.data.result.achivement) {
+        Swal.fire({
+          title: "🎉 Congratulations! You've earned the First Step badge!",
+          text: "You Have Created Your First Post",
+          imageUrl:
+            "https://res.cloudinary.com/djiqzvcev/image/upload/v1739281946/achivement3_hlkpml.png",
+          imageWidth: 200,
+          imageHeight: 200,
+          imageAlt: "First Step Badge",
+          padding: "3em",
+          width: 600,
+          color: "#716add",
+          background: "#fff url(/images/trees.png)",
+          backdrop: `rgba(0,0,123,0.4) url("/images/nyan-cat.gif") left top no-repeat`,
+        });
       }
-    } catch (error) {
-      toast.error("An error occurred. Please try again.");
-      console.error(error);
-    } finally {
-      setIsLoading(false);
+
+      setTimeout(() => {
+        navigate(`/profile/${myProfile._id}`);
+      }, 2000);
+    } else {
+      toast.error("Failed to upload post. Please try again.");
     }
-  };
+  } catch (error) {
+    toast.error("An error occurred. Please try again.");
+    console.error(error);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
   const ratingChanged = (newRating) => {
     setRating(newRating);

@@ -20,7 +20,6 @@ const NewPostPrompt = () => {
       <ProfileImage 
         userProfileImage={myProfile?.profilePicture?.url} 
         userId={myProfile._id} 
-        className="rounded-full w-12 h-12 object-cover" 
       />
 
       {/* Input field */}

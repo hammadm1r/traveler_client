@@ -114,7 +114,7 @@ const Profile = () => {
         {/* User Info Section */}
         <div className="md:col-span-4 text-center md:text-left">
           {/* Stats Section */}
-          <div className="max-w-sm mx-auto md:mx-0 justify-center bg-bgPrimary rounded-2xl grid grid-cols-3 gap-4 p-4">
+          <div className="max-w-sm mx-auto md:mx-0 justify-center bg-bgPrimary bg-opacity-70 backdrop-blur-sm  rounded-2xl grid grid-cols-3 gap-4 p-4">
             <div className="text-center">
               <p className="md:text-2xl text-lg font-bold text-bgSecondary">
                 {profile?.followers?.length}
@@ -293,13 +293,13 @@ const Profile = () => {
 
       {/* User's Posts */}
       <div className="rounded-t-xl overflow-hidden col-span-12 md:col-span-9 bg-white mt-2 mb-3 shadow-lg">
-        <div className="text-bgSecondary p-4 bg-bgPrimary flex justify-between items-center">
+        <div className="text-bgSecondary p-4 bg-bgPrimary flex justify-between items-center"  onClick={handleToggleContent}>
           <p className="text-xl md:text-2xl font-semibold text-left">
             My Journeys
           </p>
           <p
             className="text-xl md:text-3xl text-right cursor-pointer"
-            onClick={handleToggleContent}
+           
           >
             {isContentOpen ? <IoMdArrowDropup /> : <IoMdArrowDropdown />}
           </p>
