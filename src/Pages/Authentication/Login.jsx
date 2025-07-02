@@ -74,7 +74,7 @@ function Home() {
             <p className="mb-6 text-right text-bgPrimary underline underline-offset-1 text-xs sm:text-sm mt-1 cursor-pointer">
               Forget Password?
             </p>
-            <button className="px-4 py-2 text-bgPrimary text-white font-bold rounded w-full " onClick={submitHandler}>
+            <button className="px-4 py-2 bg-bgPrimary text-white font-bold rounded w-full " onClick={submitHandler}>
               Sign In
             </button>
             <p className="text-center text-sm sm:text-base mt-4">

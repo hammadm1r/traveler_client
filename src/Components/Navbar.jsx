@@ -86,7 +86,7 @@ const Navbar = () => {
             <img
               src={myProfile?.profilePicture?.url || ""}
               alt="User"
-              className="w-8 h-8 object-cover border-2 border-bgPrimary rounded-full"
+              className="w-10 h-10 object-cover border-2 border-bgPrimary rounded-full"
             />
           </button>
           {isSubMenuOpen && (
