@@ -3,7 +3,11 @@ import Logo from "../assets/Images/t(3).gif";
 import { FaCircleUser } from "react-icons/fa6";
 import { IoReorderThreeOutline } from "react-icons/io5";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { removeItem, getItem, KEY_ACCESS_TOKEN } from "../utils/LocalStorageManager";
+import {
+  removeItem,
+  getItem,
+  KEY_ACCESS_TOKEN,
+} from "../utils/LocalStorageManager";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import { IoMdNotifications } from "react-icons/io";
@@ -66,12 +70,12 @@ const Navbar = () => {
   const menuItems = (
     <>
       <li className="hover:text-blue-400">
-        <Link to="/home" >Home</Link>
+        <Link to="/home">Home</Link>
       </li>
-      <li className="hover:text-blue-400" >
-        <Link to="/story" >Story</Link>
+      <li className="hover:text-blue-400">
+        <Link to="/story">Story</Link>
       </li>
-      <li className="hover:text-blue-400" >
+      <li className="hover:text-blue-400">
         <Link to="/forum">Forum</Link>
       </li>
       <li className="hover:text-blue-400">
@@ -92,21 +96,21 @@ const Navbar = () => {
               ref={subMenuRef}
               className="absolute right-0 mt-2 w-40 bg-gray-800 text-white rounded-lg shadow-lg p-2 z-50"
             >
-              <Link to={`/profile/${userId}`}>
-                <li className="p-2 hover:bg-gray-700 rounded" onClick={(e) => e.stopPropagation()}>
+              <li className="p-2 hover:bg-gray-700 rounded">
+                <Link to={`/profile/${userId}`} onClick={menuHandler}>
                   Profile
-                </li>
-              </Link>
-              <Link to="/notification">
-                <li className="p-2 hover:bg-gray-700 rounded" onClick={(e) => e.stopPropagation()}>
+                </Link>
+              </li>
+              <li className="p-2 hover:bg-gray-700 rounded">
+                <Link to="/notification" onClick={menuHandler}>
                   Notification
-                </li>
-              </Link>
+                </Link>
+              </li>
               <li
                 className="p-2 hover:bg-gray-700 rounded"
                 onClick={(e) => {
-                  e.stopPropagation();
                   handleLogout();
+                  menuHandler();
                 }}
               >
                 Logout
@@ -147,8 +151,14 @@ const Navbar = () => {
         </Link>
 
         {/* Desktop Navigation */}
-        <div className={`justify-center hidden ${isLoggedIn ? "md:block" : "md:hidden"}`}>
-          <ul className="flex gap-7 text-white text-lg font-semibold">{menuItems}</ul>
+        <div
+          className={`justify-center hidden ${
+            isLoggedIn ? "md:block" : "md:hidden"
+          }`}
+        >
+          <ul className="flex gap-7 text-white text-lg font-semibold">
+            {menuItems}
+          </ul>
         </div>
 
         {/* Mobile Menu Toggle Button */}
