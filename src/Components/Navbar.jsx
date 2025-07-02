@@ -132,18 +132,22 @@ const Navbar = () => {
                 <>
                   <li>
                     <Link
-                      to={`/profile/${userId}`}
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      Profile
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
                       to="/notification"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Notification
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to={`/profile/${userId}`}
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <img
+                        src={myProfile?.profilePicture?.url || ""}
+                        alt="User"
+                        className="w-8 h-8 object-cover border-2 border-bgPrimary rounded-full"
+                      />
                     </Link>
                   </li>
                   <li
