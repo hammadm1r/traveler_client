@@ -97,12 +97,12 @@ const Navbar = () => {
               className="absolute right-0 mt-2 w-40 bg-gray-800 text-white rounded-lg shadow-lg p-2 z-50"
             >
               <li className="p-2 hover:bg-gray-700 rounded">
-                <Link to={`/profile/${userId}`} onClick={menuHandler}>
+                <Link to={`/profile/${userId}`}>
                   Profile
                 </Link>
               </li>
               <li className="p-2 hover:bg-gray-700 rounded">
-                <Link to="/notification" onClick={menuHandler}>
+                <Link to="/notification" >
                   Notification
                 </Link>
               </li>
@@ -110,7 +110,6 @@ const Navbar = () => {
                 className="p-2 hover:bg-gray-700 rounded"
                 onClick={(e) => {
                   handleLogout();
-                  menuHandler();
                 }}
               >
                 Logout
