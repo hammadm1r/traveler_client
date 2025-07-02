@@ -7,7 +7,9 @@ const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
 
 function Home() {
   const myProfile = useSelector((state) => state.appConfig.myProfile);
-  const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
+  const [currentTime, setCurrentTime] = useState(
+    new Date().toLocaleTimeString()
+  );
 
   // States
   const [weatherData, setWeatherData] = useState(null);
@@ -95,24 +97,21 @@ function Home() {
   }, []);
 
   return (
-   <div
-  className="h-screen bg-center bg-no-repeat bg-cover overflow-x-hidden"
-  style={{
-    backgroundImage: "url('https://res.cloudinary.com/djiqzvcev/image/upload/v1735323187/Profile_Pictures/z85wimxtvordqrr9u3sd.png')",
-  }}>
-      <div className="grid grid-cols-2">
+    <div
+      className="h-screen bg-center bg-no-repeat bg-cover overflow-x-hidden"
+      style={{
+        backgroundImage:
+          "url('https://res.cloudinary.com/djiqzvcev/image/upload/v1735323187/Profile_Pictures/z85wimxtvordqrr9u3sd.png')",
+      }}
+    >
+      <div className="">
         <div className="flex flex-col items-start justify-start ml-6 mt-16 sm:ml-16 sm:mt-20 md:ml-20 md:mt-28">
-          <p className="text-white text-2xl font-medium sm:text-2xl md:text-3xl lg:text-4xl">
+          <p className="text-white text-2xl sm:text-2xl md:text-3xl lg:text-4xl font-medium">
             Welcome back,
           </p>
-          <span className="text-white text-3xl font-bold sm:text-3xl md:text-4xl lg:text-5xl">
+          <span className="text-white text-3xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">
             {myProfile?.fullname}
           </span>
-        </div>
-        <div>
-          <p className="text-white text-center text-lg sm:text-xl md:text-3xl lg:text-5xl font-bold font-custom justify-start ml-6 mt-16 sm:ml-16 sm:mt-20 md:ml-20 md:mt-28 tracking-wider">
-            {currentTime}
-          </p>
         </div>
       </div>
 
@@ -131,7 +130,10 @@ function Home() {
             ) : (
               <ul className="text-white font-medium text-left list-disc list-inside space-y-1">
                 {wishlist.map((item) => (
-                  <li key={item.id} className="flex justify-between items-center">
+                  <li
+                    key={item.id}
+                    className="flex justify-between items-center"
+                  >
                     <span>{item.title}</span>
                     <button
                       onClick={() => deleteItem(item.id)}
@@ -178,9 +180,13 @@ function Home() {
                   {weatherData.location.country}
                 </p>
                 <div className="flex justify-center items-center mt-2">
-                  <img src={weatherData.current.condition.icon} alt="Weather Icon" />
+                  <img
+                    src={weatherData.current.condition.icon}
+                    alt="Weather Icon"
+                  />
                   <p className="text-white font-medium text-md ml-2">
-                    {weatherData.current.temp_c}°C - {weatherData.current.condition.text}
+                    {weatherData.current.temp_c}°C -{" "}
+                    {weatherData.current.condition.text}
                   </p>
                 </div>
                 <p className="text-white font-medium text-md mt-1">

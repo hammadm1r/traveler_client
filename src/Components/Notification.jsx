@@ -15,18 +15,21 @@ const Notifications = ({ notifications }) => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto mt-20 p-6 bg-white rounded-lg shadow-lg border border-gray-200">
-      <h2 className="text-xl font-bold text-gray-700 text-center mb-4">
+    <div className="max-w-2xl mx-au">
+      {/* Header Section */}
+          <div className=" md:min-h-24 min-h-16 bg-gradient-to-r from-blue-400 to-teal-400 text-white md:py-4 text-center">
+    </div>
+      <h2 className="text-xl font-bold mt-3 text-gray-700 text-center mb-4">
         🔔 Notifications
       </h2>
 
       {/* Scrollable Notification List */}
-      <div className="min-h-dvh overflow-y-auto space-y-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+      <div className="min-h-dvh overflow-y-auto  scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
         {notifications.length > 0 ? (
           notifications.map((notif, index) => (
             <div
               key={index}
-              className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg border border-gray-300 hover:bg-gray-100 transition-all duration-300"
+              className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg border-b-2 hover:bg-gray-100 transition-all duration-300"
             >
               {/* Profile Image */}
               <ProfileImage
