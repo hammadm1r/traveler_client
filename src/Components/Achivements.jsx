@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 import { useSelector } from "react-redux";
+
 const Achivements = () => {
-  const [isContentOpen, setIsContentOpen] = useState(false); // To track if content is open or closed
+  const [isContentOpen, setIsContentOpen] = useState(false);
   const myProfile = useSelector((state) => state.userProfile.user);
+
   const totalAchievements = [
     {
       id: 1,
@@ -17,7 +18,7 @@ const Achivements = () => {
       src: "https://res.cloudinary.com/djiqzvcev/image/upload/v1739281968/achivement2_xqn8uc.png",
       alt: "adventurer",
       title: "adventurer",
-    },  
+    },
     {
       id: 3,
       src: "https://res.cloudinary.com/djiqzvcev/image/upload/v1739309183/achivement4_xeacf0_c_crop_w_400_h_400_puophi.png",
@@ -45,7 +46,7 @@ const Achivements = () => {
   ];
 
   const handleToggleContent = () => {
-    setIsContentOpen(!isContentOpen); // Toggle the content visibility
+    setIsContentOpen(!isContentOpen);
   };
 
   return (
@@ -63,22 +64,17 @@ const Achivements = () => {
       </div>
 
       {isContentOpen && (
-        <div className="flex overflow-x-auto gap-4 p-4">
+        <div className="flex overflow-x-auto gap-4 p-4 flex-nowrap scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
           {totalAchievements.map((achievement, index) => {
             const hasBadge = myProfile?.badges?.some(
               (badge) => badge.name === achievement.title
             );
 
-            // Debugging Output (if needed)
-            console.log(
-              `Achievement: ${achievement.title}, Has Badge: ${hasBadge}`
-            );
-
             return (
               <div
                 key={index}
-                className={`relative group w-24 md:w-32 h-24 md:h-32 rounded-xl overflow-hidden transition-transform transform 
-            ${hasBadge ? "" : "grayscale"} hover:scale-105`}
+                className={`relative group min-w-[6rem] md:min-w-[8rem] h-24 md:h-32 rounded-xl overflow-hidden transition-transform transform 
+                ${hasBadge ? "" : "grayscale"} hover:scale-105`}
               >
                 <img
                   src={achievement.src}

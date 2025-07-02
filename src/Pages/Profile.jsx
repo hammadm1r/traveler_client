@@ -59,7 +59,7 @@ const Profile = () => {
         setOwner(false);
       }
     });
-  }, [id, dispatch, myProfile]);
+  }, [id, myProfile]);
 
   const handleToggleContent = () => {
     setIsContentOpen(!isContentOpen);
@@ -93,9 +93,9 @@ const Profile = () => {
     )}%20${encodeURIComponent(postUrl)}`;
     window.open(whatsappUrl, "_blank");
   };
-  const loading = useSelector((state) => state.userProfile.loading);
 
-  if (loading || !profile) {
+
+  if (!profile) {
     return <Loader />;
   }
 
