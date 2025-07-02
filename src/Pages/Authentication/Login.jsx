@@ -71,15 +71,15 @@ function Home() {
               className="px-4 py-2 bg-textBox rounded w-full mb-4"
               onChange={(e)=> setPassword(e.target.value)}
             />
-            <p className="mb-6 text-right text-[#AC68F7] underline underline-offset-1 text-xs sm:text-sm mt-1 cursor-pointer">
+            <p className="mb-6 text-right text-bgPrimary underline underline-offset-1 text-xs sm:text-sm mt-1 cursor-pointer">
               Forget Password?
             </p>
-            <button className="px-4 py-2 bg-[#AC68F7] text-white font-bold rounded w-full " onClick={submitHandler}>
+            <button className="px-4 py-2 text-bgPrimary text-white font-bold rounded w-full " onClick={submitHandler}>
               Sign In
             </button>
             <p className="text-center text-sm sm:text-base mt-4">
               Not a Member Yet?{" "}
-              <span className="text-[#AC68F7] cursor-pointer"><Link to="/signup">Sign Up</Link></span>
+              <span className="text-bgPrimary cursor-pointer"><Link to="/signup">Sign Up</Link></span>
             </p>
           </div>
         </div>

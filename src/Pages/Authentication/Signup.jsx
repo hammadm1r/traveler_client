@@ -148,7 +148,7 @@ const Signup = () => {
           <StepperControl currentStep={currentStep} setCurrentStep={setCurrentStep} handleNext={handleNext}/>
           <p className="text-center text-sm sm:text-base">
           Already have an Account?{" "}
-          <span className="text-[#AC68F7] cursor-pointer">
+          <span className="text-bgPrimary cursor-pointer">
           <Link to="/login" >Log In</Link>
           </span>
         </p>
