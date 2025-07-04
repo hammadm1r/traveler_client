@@ -53,7 +53,7 @@ const TravelAdvisor = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `http://127.0.0.1:5000/recommend?district=${encodeURIComponent(
+        `https://aae26050-01cf-47f0-b15c-7d6f334e28f6-00-25sw2s41mfz0l.pike.replit.dev:5000/recommend?district=${encodeURIComponent(
           province
         )}&category=${encodeURIComponent(destinationType)}`
       );
