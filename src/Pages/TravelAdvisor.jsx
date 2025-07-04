@@ -75,21 +75,23 @@ const TravelAdvisor = () => {
   return (
     <>
       <Header />
-      <div className="h-auto flex flex-col items-center justify-center bg-cover  bg-center text-white py-10" style={{
+      <div className="h-max flex flex-col items-center justify-center bg-no-repeat bg-contain bg-center text-white py-10" 
+      style={{
         backgroundImage:
-          "url('https://res.cloudinary.com/djiqzvcev/image/upload/v1751669906/30765-3-travel-photos_c2rmpx.png')",
-      }}>
+          "url('https://res.cloudinary.com/djiqzvcev/image/upload/v1751670820/Lovepik_com-380060060-travel-map-illustration-hand-painted-colorful-color_tuyiqw.png')",
+      }}
+      >
         <div className=" fixed w-full h-full top-0 left-0"></div>
 
-        <h1 className="text-4xl font-bold mb-2 relative z-10">
+        <h1 className="text-4xl font-bold mb-2 relative z-10 text-bgPrimary">
           Discover Your Next Adventure
         </h1>
-        <p className="mb-6 text-lg relative z-10">
+        <p className="mb-6 text-lg relative z-10 text-bgPrimary">
           Select your province and destination type, and let us suggest the best
           travel spots for you!
         </p>
 
-        <div className="relative z-10 bg-white bg-opacity-20 backdrop-blur-lg p-6 rounded-2xl shadow-lg w-96">
+        <div className="relative z-10 bg-black bg-opacity-40 backdrop-blur-lg p-6 rounded-2xl shadow-lg w-96">
           <div className="mb-4">
             <label className="block text-lg mb-2">Province</label>
             <div className="flex items-center bg-white p-2 rounded-lg">
@@ -142,7 +144,7 @@ const TravelAdvisor = () => {
           {results.map((place, index) => (
             <div
               key={index}
-              className="bg-white bg-opacity-20 p-4 rounded-lg backdrop-blur-lg shadow-lg w-80 relative"
+              className="bg-black bg-opacity-40 p-4 rounded-lg backdrop-blur-lg shadow-lg w-80 relative"
             >
               {/* Map positioned on top */}
               <div className="relative h-40 w-full">
