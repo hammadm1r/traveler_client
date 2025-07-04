@@ -75,7 +75,10 @@ const TravelAdvisor = () => {
   return (
     <>
       <Header />
-      <div className="h-auto flex flex-col items-center justify-center bg-cover  bg-center bg-travelAdvisor text-white py-10">
+      <div className="h-auto flex flex-col items-center justify-center bg-cover  bg-center text-white py-10" style={{
+        backgroundImage:
+          "url('https://res.cloudinary.com/djiqzvcev/image/upload/v1751669906/30765-3-travel-photos_c2rmpx.png')",
+      }}>
         <div className=" fixed w-full h-full top-0 left-0"></div>
 
         <h1 className="text-4xl font-bold mb-2 relative z-10">
