@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Loader from "../Components/Loader";
-
+import logo from "../assets/Images/t(3).gif";
 const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
 
 function Home() {
@@ -172,7 +172,9 @@ function Home() {
           </p>
           <div className="bg-black bg-opacity-30 backdrop-blur-sm p-4 rounded-lg text-center shadow-lg w-full max-w-xs md:max-w-sm lg:max-w-md">
             {loading ? (
-              <Loader />
+              <div className="flex justify-center">
+                <img src={logo} alt="Loading..." className="w-44" />
+              </div>
             ) : weatherData ? (
               <div>
                 <p className="text-white text-lg font-semibold">

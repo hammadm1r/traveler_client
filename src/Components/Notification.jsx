@@ -15,7 +15,7 @@ const Notifications = ({ notifications }) => {
   };
 
   return (
-    <div className="max-w-2xl mx-au">
+    <div className="mx-auto justify-content-between">
       {/* Header Section */}
           <div className=" md:min-h-24 min-h-16 bg-gradient-to-r from-blue-400 to-teal-400 text-white md:py-4 text-center">
     </div>
@@ -24,7 +24,7 @@ const Notifications = ({ notifications }) => {
       </h2>
 
       {/* Scrollable Notification List */}
-      <div className="min-h-dvh overflow-y-auto  scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+      <div className="min-h-dvh max-w-xl mx-auto overflow-y-auto  scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
         {notifications.length > 0 ? (
           notifications.map((notif, index) => (
             <div

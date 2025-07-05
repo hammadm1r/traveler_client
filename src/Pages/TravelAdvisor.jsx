@@ -7,6 +7,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import MoreInfoModal from "../Components/MoreInfoModel";
+import Loader from "../Components/Loader";
 const TravelAdvisor = () => {
   const [province, setProvince] = useState("");
   const [destinationType, setDestinationType] = useState("");
@@ -75,7 +76,7 @@ const TravelAdvisor = () => {
   return (
     <>
       <Header />
-      <div className="h-max flex flex-col items-center justify-center bg-no-repeat bg-contain bg-center text-white py-10" 
+      <div className="max-h-max min-h-screen flex flex-col items-center justify-center bg-no-repeat bg-contain bg-center text-white py-10" 
       style={{
         backgroundImage:
           "url('https://res.cloudinary.com/djiqzvcev/image/upload/v1751670820/Lovepik_com-380060060-travel-map-illustration-hand-painted-colorful-color_tuyiqw.png')",
@@ -137,7 +138,7 @@ const TravelAdvisor = () => {
         </div>
 
         {loading && (
-          <AiOutlineLoading3Quarters className="mt-6 text-4xl animate-spin" />
+          <Loader/>
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8 relative z-10">

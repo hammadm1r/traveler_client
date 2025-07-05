@@ -14,6 +14,7 @@ import Achivements from "../Components/Achivements";
 import { FaShare } from "react-icons/fa";
 import { FaFacebookF, FaTwitter, FaWhatsapp, FaCopy } from "react-icons/fa";
 import Loader from "../Components/Loader";
+import Header from "../Components/Header";
 const Profile = () => {
   const { id } = useParams(); // User profile id from URL params
   const dispatch = useDispatch();
@@ -100,8 +101,9 @@ const Profile = () => {
   }
 
   return (
-    <div className="mt-24 md:mx-20 mx-4">
-      <div className="grid grid-cols-1 md:grid-cols-6 gap-6 items-center">
+    <div className="">
+      <Header />
+      <div className="container grid grid-cols-1 md:grid-cols-6 gap-6 items-center mt-4">
         {/* User Image Section */}
         <div className="md:col-span-2 flex justify-center relative">
           <img
@@ -114,28 +116,28 @@ const Profile = () => {
         {/* User Info Section */}
         <div className="md:col-span-4 text-center md:text-left">
           {/* Stats Section */}
-          <div className="max-w-sm mx-auto md:mx-0 justify-center bg-bgPrimary bg-opacity-70 backdrop-blur-sm  rounded-2xl grid grid-cols-3 gap-4 p-4">
+          <div className="max-w-sm mx-auto md:mx-0 justify-center bg-opacity-60 bg-white backdrop-blur-sm text-bgPrimary rounded-2xl grid grid-cols-3 gap-4 p-4">
             <div className="text-center">
-              <p className="md:text-2xl text-lg font-bold text-bgSecondary">
+              <p className="md:text-2xl text-lg font-bold text-bgPrimary">
                 {profile?.followers?.length}
               </p>
-              <p className="md:text-md text-sm font-medium text-bgSecondary">
+              <p className="md:text-md text-sm font-medium text-bgPrimary ">
                 Followers
               </p>
             </div>
             <div className="border-x-2 border-t-textBox text-center">
-              <p className="md:text-2xl text-lg font-bold text-bgSecondary">
+              <p className="md:text-2xl text-lg font-bold text-bgPrimary">
                 {profile?.following?.length}
               </p>
-              <p className="md:text-md text-sm font-medium text-bgSecondary">
+              <p className="md:text-md text-sm font-medium text-bgPrimary">
                 Following
               </p>
             </div>
             <div className="text-center">
-              <p className="md:text-2xl text-lg font-bold text-bgSecondary">
+              <p className="md:text-2xl text-lg font-bold text-bgPrimary">
                 {profile?.posts?.length}
               </p>
-              <p className="md:text-md text-sm font-medium text-bgSecondary">
+              <p className="md:text-md text-sm font-medium text-bgPrimary">
                 Posts
               </p>
             </div>
@@ -278,7 +280,7 @@ const Profile = () => {
           </div>
         </div>
       </div>
-
+            <div className="md:mx-10">
       {/* New Post Prompt */}
       {owner && (
         <div className=" my-4">
@@ -323,6 +325,7 @@ const Profile = () => {
                   No posts available.
                 </p>
               )}
+        </div>
         </div>
       </div>
     </div>

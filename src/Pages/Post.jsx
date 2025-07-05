@@ -33,7 +33,7 @@ const Post = () => {
   if (post) {
     return (
       <>
-        <div className="md:h-24 h-16 block"></div>
+        <div className="md:h-24 h-16 block bg-gradient-to-r from-blue-400 to-teal-400"></div>
         <div className="flex items-center justify-center">
           <div className="w-full md:w-4/6">
             <div className="border bg-white py-6 px-2 md:p-10 md:rounded-lg">
