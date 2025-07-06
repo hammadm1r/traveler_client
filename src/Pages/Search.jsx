@@ -111,12 +111,12 @@ const Search = () => {
       </div>
 
       {/* Type Filter */}
-      <div className="flex gap-4 mt-6 justify-center items-center">
+      <div className="flex md:gap-4 gap-2 mt-6 justify-center items-center">
   {/* Filter Buttons */}
   {["all", "users", "posts"].map((type) => (
     <button
       key={type}
-      className={`px-4 py-1 rounded-lg ${
+      className={`md:px-4 px-2 py-1 rounded-lg ${
         filter === type
           ? "bg-blue-500 text-white"
           : "bg-white text-gray-700 border"
