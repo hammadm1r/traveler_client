@@ -103,7 +103,7 @@ const handleSubmit = async (e) => {
 
   return (
     <div className="mt-16 md:mx-20 mx-4 flex justify-center">
-      <div className="bg-gradient-to-br from-white to-blue-50 max-w-2xl p-8 rounded-xl shadow-2xl transition-shadow hover:shadow-3xl">
+      <div className="md:min-h-24 min-h-16 bg-gradient-to-r from-blue-400 to-teal-400  max-w-2xl p-8 rounded-xl shadow-2xl transition-shadow hover:shadow-3xl">
         <h1 className="text-4xl font-extrabold mb-8 text-center text-bgPrimary tracking-wide drop-shadow-sm">
           Create Your Journey Post
         </h1>
