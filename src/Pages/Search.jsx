@@ -111,12 +111,12 @@ const Search = () => {
       </div>
 
       {/* Type Filter */}
-      <div className="flex gap-4 mt-6 justify-center items-center">
+      <div className="flex md:gap-4 gap-2 mt-6 justify-center items-center">
   {/* Filter Buttons */}
   {["all", "users", "posts"].map((type) => (
     <button
       key={type}
-      className={`px-4 py-1 rounded-lg ${
+      className={`md:px-4 px-2 py-1 rounded-lg ${
         filter === type
           ? "bg-blue-500 text-white"
           : "bg-white text-gray-700 border"
@@ -130,9 +130,9 @@ const Search = () => {
   {/* Sort dropdown only if filtering posts */}
   {filter === "posts" && (
     <>
-      <span className="text-gray-500 mx-2">|</span>
+      <span className="text-gray-500 md:mx-2 mx-1">|</span>
       <select
-        className="border border-gray-300 rounded-lg px-3 py-1 text-gray-700"
+        className="border border-gray-300 rounded-lg md:px-3 px-2 py-1 text-gray-700"
         value={sortOrder}
         onChange={(e) => setSortOrder(e.target.value)}
       >
