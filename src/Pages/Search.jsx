@@ -89,7 +89,7 @@ const Search = () => {
     <div className="bg-gray-100 min-h-screen">
       {/* Header Section */}
       <div className="md:min-h-24 min-h-16 bg-gradient-to-r from-blue-400 to-teal-400 text-white py-4 text-center">
-        <h1 className="text-2xl font-semibold">Search</h1>
+        
       </div>
 
       {/* Search Bar */}
