@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import { Tooltip } from "react-tooltip";
 import { uploadImagesToCloudinary } from "../utils/cloudinaryUpload"; // adjust path
+import Header from "../Components/Header";
 
 export const CreatePost = () => {
   const myProfile = useSelector((state) => state.appConfig.myProfile);
@@ -102,13 +103,16 @@ const handleSubmit = async (e) => {
   };
 
   return (
-    <div className="mt-16 md:mx-20 mx-4 flex justify-center">
-      <div className="bg-gradient-to-br from-white to-blue-50 max-w-2xl p-8 rounded-xl shadow-2xl transition-shadow hover:shadow-3xl">
+    <>
+    <div className=" md:min-h-24 min-h-16 bg-gradient-to-r from-blue-400 to-teal-400 text-white py-4 text-center">
+    </div>
+    <div className="mt-2 md:mx-20 mx-4 flex justify-center">
+      <div className="md:bg-gradient-to-br from-white to-blue-50 max-w-2xl p-8 rounded-xl shadow-2xl transition-shadow hover:shadow-3xl">
         <h1 className="text-4xl font-extrabold mb-8 text-center text-bgPrimary tracking-wide drop-shadow-sm">
           Create Your Journey Post
         </h1>
 
-        <div className="p-6 bg-white rounded-xl shadow-lg">
+        <div className="p-6 md:bg-white md:rounded-xl md:shadow-lg">
           <div className="flex items-center gap-4 mb-8">
             <img
               src={myProfile?.profilePicture?.url}
@@ -314,6 +318,7 @@ const handleSubmit = async (e) => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
