@@ -63,7 +63,7 @@ function App() {
   useEffect(() => {
     if (!userId) return;
 
-    const newsocket = io("REACT_APP_SERVER_BASE_URL", { autoConnect: true });
+    const newsocket = io({REACT_APP_SERVER_BASE_URL}, { autoConnect: true });
     newsocket.emit("join", userId);
     const handleNewNotification = (notification) => {
       const message = `${notification?.sender?.username} ${
