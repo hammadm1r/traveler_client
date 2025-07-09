@@ -163,7 +163,7 @@ const TravelAdvisor = () => {
         className="flex flex-col items-center justify-center bg-no-repeat bg-contain bg-center text-white mt-6"
       >
         {loading && <Loader />}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10 mb-3">
         {results.map((place, index) => (
           <div
             key={index}
