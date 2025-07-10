@@ -13,31 +13,36 @@ function ResetPassword() {
   const navigate = useNavigate();
 
   const handleResetPassword = async () => {
-    if (password !== confirmPassword) {
-      toast.error("Passwords don't match");
-      return;
+  if (password !== confirmPassword) {
+    toast.error("Passwords don't match");
+    return;
+  }
+
+  setIsResetting(true);
+  try {
+    const response = await axiosClient.post("auth/reset-password", {
+      token,
+      newPassword: password
+    });
+
+    if (response.status === 200) {
+      toast.success("Password reset successfully!");
+      navigate("/login", { replace: true }); // 👈 redirect to login
+    } else {
+      toast.error(response.data.message || "Failed to reset password");
     }
-
-    setIsResetting(true);
-    try {
-      const response = await axiosClient.post("auth/reset-password", {
-        token,
-        newPassword: password
-      });
-
-      if (response.data.status === "ok") {
-        toast.success("Password reset successfully!");
-        navigate("/", { replace: true });
-      } else {
-        toast.error(response.data.message || "Failed to reset password");
-      }
-    } catch (err) {
-      console.log(err);
+  } catch (err) {
+    console.log(err);
+    if (err.response && err.response.data?.error) {
+      toast.error(err.response.data.error);
+    } else {
       toast.error("Failed to reset password. Please try again.");
-    } finally {
-      setIsResetting(false);
     }
-  };
+  } finally {
+    setIsResetting(false);
+  }
+};
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
