@@ -64,18 +64,22 @@ function App() {
   useEffect(() => {
     if (!userId) return;
 
-    const newsocket = io({REACT_APP_SERVER_BASE_URL}, { autoConnect: true });
+    const newsocket = io(REACT_APP_SERVER_BASE_URL, { autoConnect: true });
+
     newsocket.emit("join", userId);
+
     const handleNewNotification = (notification) => {
       const message = `${notification?.sender?.username} ${
         notificationMessages[notification?.type] || "performed an action!"
       }`;
       toasting(message);
-      setNotifications((prev) =>
-        [notification, ...prev].sort(
+      setNotifications((prev) => {
+        const isDuplicate = prev.some((n) => n._id === notification._id);
+        if (isDuplicate) return prev;
+        return [notification, ...prev].sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-        )
-      );
+        );
+      });
     };
 
     newsocket.on("newNotification", handleNewNotification);
