@@ -2,6 +2,7 @@ import "./App.css";
 import React, { useState, useEffect } from "react"; // Use 'React' (capitalized) in imports
 import { useSelector } from "react-redux";
 import Login from "./Pages/Authentication/Login";
+import ResetPassword from "./Pages/Authentication/ResetPassword";
 import Signup from "./Pages/Authentication/Signup"; // Ensure this is correct
 import Home from "./Pages/Home";
 import Landing from "./Pages/Landing";
@@ -94,6 +95,7 @@ function App() {
         <Route element={<OnlyIfUserNotLoggedIn />}>
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/signup" element={<Signup />} /> {/* Corrected */}
         </Route>
         {/* Other routes that require authentication */}
