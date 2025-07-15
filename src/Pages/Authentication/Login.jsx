@@ -8,6 +8,8 @@ import { axiosClient } from "../../utils/axiosClient";
 import { setItem, KEY_ACCESS_TOKEN } from "../../utils/LocalStorageManager";
 import { setLoggedIn } from "../../Toolkit/slices/appConfigSlice";
 import { toast } from "react-hot-toast";
+import { useLocation } from "react-router-dom";
+
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -18,6 +20,8 @@ function Login() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+const location = useLocation();
+const from = location.state?.from?.pathname || "/home";
 
   const submitHandler = async () => {
     try {
@@ -33,7 +37,8 @@ function Login() {
       console.log(response);
       setItem(KEY_ACCESS_TOKEN, response.data.result.token);
       dispatch(setLoggedIn(true));
-      navigate("/home", { replace: true });
+      navigate(from, { replace: true });
+      window.location.reload();
     } catch (err) {
       console.log(err);
       toast.error("Login failed! Please try again.");
