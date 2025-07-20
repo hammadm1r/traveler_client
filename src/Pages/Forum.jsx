@@ -18,7 +18,7 @@ const Forum = () => {
   return (
     <div className="bg-gray-100 h-screen">
       {/* Header Section */}
-          <div className=" md:min-h-24 min-h-16 bg-gradient-to-r from-blue-400 to-teal-400 text-white md:py-4 text-center">
+          <div className=" md:min-h-24 min-h-16 bg-gradient-to-r from-blue-400 to-teal-400 text-white md:py-4 text-center ">
     </div>
 
       {/* Content Section */}

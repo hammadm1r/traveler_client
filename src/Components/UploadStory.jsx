@@ -34,9 +34,17 @@ const UploadStory = () => {
     if (!selectedFile) return;
 
     // Validate file type
-    const validTypes = ["image/jpeg", "image/png", "image/gif", "video/mp4", "video/webm"];
+    const validTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/gif",
+      "video/mp4",
+      "video/webm",
+    ];
     if (!validTypes.includes(selectedFile.type)) {
-      toast.error("Please select an image (JPEG, PNG, GIF) or video (MP4, WebM) file.");
+      toast.error(
+        "Please select an image (JPEG, PNG, GIF) or video (MP4, WebM) file."
+      );
       return;
     }
 
@@ -116,7 +124,7 @@ const UploadStory = () => {
             const percent = Math.round((e.loaded / e.total) * 50);
             setProgress(percent);
           },
-          timeout: 30000 // 30 seconds timeout
+          timeout: 30000, // 30 seconds timeout
         }
       );
 
@@ -136,15 +144,15 @@ const UploadStory = () => {
             onUploadProgress: (e) => {
               const percent = 50 + Math.round((e.loaded / e.total) * 50);
               setProgress(percent);
-            }
+            },
           }
         );
         console.log(process?.data);
         dispatch(addedStory(process?.data?.data?.story));
         toast.success(`${process?.data?.message}`);
-        
+
         // Smooth transition to stories page
-        setTimeout(() => navigate('/story', { replace: true }), 1500);
+        setTimeout(() => navigate("/story", { replace: true }), 1500);
       } catch (error) {
         console.error("Location error:", error);
         setLocationError(true);
@@ -152,9 +160,10 @@ const UploadStory = () => {
       }
     } catch (error) {
       console.error("Upload error:", error);
-      const errorMessage = error.response?.data?.message || 
-                         error.message || 
-                         "Failed to upload story. Please try again.";
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to upload story. Please try again.";
       toast.error(errorMessage);
     } finally {
       setIsUploading(false);
@@ -162,149 +171,205 @@ const UploadStory = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
-      <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-lg">
-        <h1 className="text-2xl font-semibold text-bgPrimary mb-4 text-center">Upload a Story</h1>
+    <>
+      <div className="w-full h-16 md:h-24 bg-gradient-to-r from-blue-400 to-teal-400" />
+      <div className="flex  items-center justify-center min-h-screen bg-gray-100 p-4">
+        <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-lg">
+          <h1 className="text-2xl font-semibold text-bgPrimary mb-4 text-center">
+            Upload a Story
+          </h1>
 
-        {/* File Upload Section */}
-        {!file ? (
-          <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 mb-4 transition hover:border-blue-400">
+          {/* File Upload Section */}
+          {!file ? (
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 mb-4 transition hover:border-blue-400">
+              <label
+                htmlFor="file-upload"
+                className="cursor-pointer flex flex-col items-center gap-2"
+              >
+                <FiUpload className="text-4xl text-gray-500" />
+                <span className="text-sm text-gray-600">
+                  Click to select a file
+                </span>
+                <span className="text-xs text-gray-500 mt-2">
+                  Supported formats: JPEG, PNG, GIF, MP4, WebM (Max 20MB)
+                </span>
+              </label>
+              <input
+                id="file-upload"
+                type="file"
+                onChange={handleFileChange}
+                className="hidden"
+                ref={fileInputRef}
+                accept="image/jpeg, image/png, image/gif, video/mp4, video/webm"
+              />
+            </div>
+          ) : (
+            <div className="mb-4">
+              <div className="relative group">
+                {file.type.startsWith("image/") ? (
+                  <img
+                    src={previewUrl}
+                    alt="Preview"
+                    className="w-full h-64 object-cover rounded-lg"
+                  />
+                ) : (
+                  <video
+                    src={previewUrl}
+                    controls
+                    className="w-full h-64 object-cover rounded-lg"
+                  />
+                )}
+                <button
+                  onClick={handleRemoveFile}
+                  className="absolute top-2 right-2 bg-white/90 rounded-full p-1.5 shadow-md hover:bg-gray-100 transition"
+                  title="Remove file"
+                >
+                  <FiX className="text-red-500 text-lg" />
+                </button>
+              </div>
+              <div className="mt-2 text-sm text-gray-600 space-y-1">
+                <p className="truncate">
+                  <span className="font-medium">File:</span> {file.name}
+                </p>
+                <p>
+                  <span className="font-medium">Size:</span>{" "}
+                  {(file.size / (1024 * 1024)).toFixed(2)} MB
+                </p>
+                <p>
+                  <span className="font-medium">Type:</span>{" "}
+                  {file.type.split("/")[1].toUpperCase()}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Title Input */}
+          <div className="mb-4">
             <label
-              htmlFor="file-upload"
-              className="cursor-pointer flex flex-col items-center gap-2"
+              htmlFor="story-title"
+              className="block text-sm font-medium text-gray-700 mb-1"
             >
-              <FiUpload className="text-4xl text-gray-500" />
-              <span className="text-sm text-gray-600">
-                Click to select a file
-              </span>
-              <span className="text-xs text-gray-500 mt-2">
-                Supported formats: JPEG, PNG, GIF, MP4, WebM (Max 20MB)
-              </span>
+              Story Title
             </label>
             <input
-              id="file-upload"
-              type="file"
-              onChange={handleFileChange}
-              className="hidden"
-              ref={fileInputRef}
-              accept="image/jpeg, image/png, image/gif, video/mp4, video/webm"
+              id="story-title"
+              type="text"
+              placeholder="What's your story about?"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="border p-3 w-full rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              maxLength={100}
             />
+            <p className="text-xs text-gray-500 text-right mt-1">
+              {title.length}/100 characters
+            </p>
           </div>
-        ) : (
-          <div className="mb-4">
-            <div className="relative group">
-              {file.type.startsWith("image/") ? (
-                <img
-                  src={previewUrl}
-                  alt="Preview"
-                  className="w-full h-64 object-cover rounded-lg"
-                />
-              ) : (
-                <video
-                  src={previewUrl}
-                  controls
-                  className="w-full h-64 object-cover rounded-lg"
-                />
-              )}
-              <button
-                onClick={handleRemoveFile}
-                className="absolute top-2 right-2 bg-white/90 rounded-full p-1.5 shadow-md hover:bg-gray-100 transition"
-                title="Remove file"
-              >
-                <FiX className="text-red-500 text-lg" />
-              </button>
-            </div>
-            <div className="mt-2 text-sm text-gray-600 space-y-1">
-              <p className="truncate">
-                <span className="font-medium">File:</span> {file.name}
-              </p>
-              <p>
-                <span className="font-medium">Size:</span>{" "}
-                {(file.size / (1024 * 1024)).toFixed(2)} MB
-              </p>
-              <p>
-                <span className="font-medium">Type:</span> {file.type.split('/')[1].toUpperCase()}
-              </p>
-            </div>
-          </div>
-        )}
 
-        {/* Title Input */}
-        <div className="mb-4">
-          <label htmlFor="story-title" className="block text-sm font-medium text-gray-700 mb-1">
-            Story Title
-          </label>
-          <input
-            id="story-title"
-            type="text"
-            placeholder="What's your story about?"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="border p-3 w-full rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            maxLength={100}
-          />
-          <p className="text-xs text-gray-500 text-right mt-1">
-            {title.length}/100 characters
-          </p>
-        </div>
-
-        {/* Location Status */}
-        <div className="mb-4 flex items-center text-sm">
-          <FiMapPin className="mr-2" />
-          {location ? (
-            <span className="text-green-600">Location added</span>
-          ) : locationError ? (
-            <span className="text-yellow-600">Location not available</span>
-          ) : (
-            <span className="text-gray-600">Location will be added automatically</span>
-          )}
-        </div>
-
-        {/* Upload Button */}
-        <button
-          onClick={uploadFile}
-          disabled={isUploading || !file || !title.trim()}
-          className={`w-full py-3 px-4 text-white rounded-lg transition duration-300 flex items-center justify-center gap-2 ${
-            isUploading || !file || !title.trim()
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700"
-          }`}
-        >
-          {isUploading ? (
-            <>
-              <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              Uploading...
-            </>
-          ) : (
-            "Upload Story"
-          )}
-        </button>
-
-        {/* Progress Indicator */}
-        {progress > 0 && (
-          <div className="mt-4 space-y-2">
-            <div className="flex justify-between text-sm text-gray-600">
-              <span>Upload Progress</span>
-              <span>{progress}%</span>
-            </div>
-            <div className="w-full bg-gray-200 h-2.5 rounded-full overflow-hidden">
-              <div
-                className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
-                style={{ width: `${progress}%` }}
-              ></div>
-            </div>
-            {progress === 100 && (
-              <div className="flex items-center justify-center text-green-600 text-sm">
-                <FiCheck className="mr-1" /> Upload complete! Redirecting...
-              </div>
+          {/* Location Status */}
+          <div className="mb-4 flex items-center text-sm">
+            <FiMapPin className="mr-2" />
+            {location ? (
+              <span className="text-green-600">Location added</span>
+            ) : locationError ? (
+              <span className="text-yellow-600">Location not available</span>
+            ) : (
+              <span className="text-gray-600">
+                Location will be added automatically
+              </span>
             )}
           </div>
-        )}
+
+          {/* Upload Button */}
+          <button
+            onClick={uploadFile}
+            disabled={isUploading || !file || !title.trim()}
+            className={`w-full py-3 px-4 text-white rounded-lg transition duration-300 flex items-center justify-center gap-2 ${
+              isUploading || !file || !title.trim()
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700"
+            }`}
+          >
+            {isUploading ? (
+              <>
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                Uploading...
+              </>
+            ) : (
+              "Upload Story"
+            )}
+          </button>
+
+          {/* Progress Indicator */}
+          {progress > 0 && (
+            <div className="mt-4 space-y-2">
+              <div className="flex justify-between text-sm text-gray-600">
+                <span>Upload Progress</span>
+                <span>{progress}%</span>
+              </div>
+              <div className="w-full bg-gray-200 h-2.5 rounded-full overflow-hidden">
+                <div
+                  className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
+                  style={{ width: `${progress}%` }}
+                ></div>
+              </div>
+              {progress === 100 && (
+                <div className="flex items-center justify-center text-green-600 text-sm">
+                  <FiCheck className="mr-1" /> Upload complete! Redirecting...
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+      {isUploading && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center">
+          <div className="bg-white p-4 rounded-lg shadow-md flex items-center gap-3">
+            <svg
+              className="animate-spin h-6 w-6 text-blue-600"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+              />
+            </svg>
+            <span className="text-sm font-medium text-gray-700">
+              Uploading your story...
+            </span>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
