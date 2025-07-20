@@ -108,6 +108,7 @@ const UploadStory = () => {
       // Step 1: Get Cloudinary signature
       const { data } = await axiosClient.get("/story/generate-signature");
       const { apiKey, timestamp, signature, cloudName } = data.data;
+
       // Step 2: Upload to Cloudinary
       const formData = new FormData();
       formData.append("file", file);
@@ -124,14 +125,14 @@ const UploadStory = () => {
             const percent = Math.round((e.loaded / e.total) * 50);
             setProgress(percent);
           },
-          timeout: 30000, // 30 seconds timeout
+          timeout: 120000,
         }
       );
 
       const uploadedUrl = cloudinaryRes.data.secure_url;
       const publicId = cloudinaryRes.data.public_id;
 
-      // Step 3: Get user location
+      // Step 3: Get user location (strict requirement)
       try {
         const { lat, long } = await getLocation();
         setLocation({ lat, long });
@@ -147,16 +148,16 @@ const UploadStory = () => {
             },
           }
         );
-        console.log(process?.data);
         dispatch(addedStory(process?.data?.data?.story));
         toast.success(`${process?.data?.message}`);
 
         // Smooth transition to stories page
         setTimeout(() => navigate("/story", { replace: true }), 1500);
-      } catch (error) {
-        console.error("Location error:", error);
+      } catch (locationError) {
+        console.error("Location error:", locationError);
         setLocationError(true);
-        toast("Story uploaded without location", { icon: "⚠️" });
+        toast.error("Location permission is required to upload a story.");
+        return; // ⛔️ Abort upload if location is not available
       }
     } catch (error) {
       console.error("Upload error:", error);
