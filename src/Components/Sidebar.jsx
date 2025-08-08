@@ -42,7 +42,7 @@ const Sidebar = ({ active, setActive }) => {
     { id: "myPosts", icon: <FaEdit />, label: "My Posts" },
     { id: "newPost", icon: <IoIosAddCircle />, label: "New Post" },
   ];
- const postUrl = `${window.location.origin}/profile/${myProfile?._id}`;
+  const postUrl = `${window.location.origin}/profile/${myProfile?._id}`;
   const menuHandler = (item) => {
     if (item.id === "newPost") {
       navigate("/createpost");
@@ -59,18 +59,18 @@ const Sidebar = ({ active, setActive }) => {
   return (
     <div>
       {/* Profile Card - hidden on mobile */}
-      <div className="hidden sm:block border-b-2 pb-3 mt-4">
-        <div className="ProfileCard px-5 py-2 mt-4 mx-auto max-w-sm ">
+      <div className="hidden sm:block border-b-2 pb-2 mt-1">
+        <div className="ProfileCard py-2 mx-auto max-w-sm ">
           <div className="flex flex-col items-center text-center">
             {/* Profile Image */}
             <div className="relative">
-              <ProfileImage
-                userProfileImage={myProfile?.profilePicture?.url}
-                userId={myProfile?._id}
-                className="w-24 h-24 rounded-full border-4 border-white shadow-md"
+              <img
+                src={myProfile?.profilePicture?.url}
+                alt={myProfile?.fullname || "Profile Picture"}
+                className="w-24 h-24 rounded-full border-white shadow-md object-cover"
               />
               {/* Status Indicator */}
-              <span className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></span>
+              <span className="absolute bottom-3 right-0 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></span>
             </div>
 
             {/* Name */}
@@ -79,7 +79,7 @@ const Sidebar = ({ active, setActive }) => {
             </h4>
 
             {/* Bio */}
-            <h4 className="text-md md:text-md font-medium text-left mt-2 text-lightText line-clamp-3">
+            <h4 className="text-md md:text-md font-medium text-left text-lightText line-clamp-3">
               {myProfile?.bio}
             </h4>
             <div className="space-x-4 mt-2 flex">
@@ -109,7 +109,7 @@ const Sidebar = ({ active, setActive }) => {
       </div>
 
       {/* Search Bar */}
-      <div className="flex justify-center items-center relative w-full max-w-md border-b-2 pb-3 mt-4">
+      <div className="flex justify-center items-center relative w-full max-w-md border-b-2 pb-2 mt-4">
         <input
           ref={inputRef}
           className="py-2 px-4 bg-gray-200 rounded-xl pl-10 pr-10 w-full"
@@ -164,7 +164,7 @@ const Sidebar = ({ active, setActive }) => {
           <h1 className="text-blue-600 text-sm sm:text-md font-bold text-center uppercase tracking-widest">
             Trending Tags
           </h1>
-          <div className="flex flex-wrap gap-2 justify-center mt-3">
+          <div className="flex flex-wrap gap-2 justify-center mt-2">
             {[
               "#beach",
               "#hiking",
@@ -178,7 +178,7 @@ const Sidebar = ({ active, setActive }) => {
                 onClick={() =>
                   navigate(`/search?query=${encodeURIComponent(tag)}`)
                 }
-                className="px-2 sm:px-3 py-1 bg-white hover:bg-gradient-to-r hover:from-blue-400 hover:to-green-400 hover:text-white text-blue-600 rounded-full text-xs sm:text-sm font-medium shadow-sm hover:shadow-md transition-all duration-300 ease-in-out"
+                className=" hover:text-blue-800 text-blue-400 rounded-full text-sm transition-all duration-300 ease-in-out"
               >
                 {tag}
               </button>
