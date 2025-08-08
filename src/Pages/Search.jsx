@@ -17,31 +17,35 @@ const Search = () => {
   const [sortOrder, setSortOrder] = useState("latest"); // latest | oldest
   const query = searchParams.get("query");
 
-  const handleSearch = () => {
-    const trimmedQuery = searchTerm.trim();
-    if (trimmedQuery) {
-      setSearchParams({ query: trimmedQuery });
+const handleSearch = () => {
+  const trimmedQuery = searchTerm.trim();
+  if (trimmedQuery) {
+    const encoded = encodeURIComponent(trimmedQuery);
+    setSearchParams({ query: encoded });
+  }
+};
+
+useEffect(() => {
+  if (!query) return;
+
+  const decodedQuery = decodeURIComponent(query);
+  setSearchTerm(decodedQuery);
+
+  const fetchResults = async () => {
+    setLoading(true);
+    try {
+      const res = await axiosClient.get(`/post/search?query=${encodeURIComponent(decodedQuery)}`);
+      setSearchResults(res.data.result);
+    } catch (err) {
+      console.error("Search failed:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    setSearchTerm(query || "");
-    if (!query) return;
+  fetchResults();
+}, [query]);
 
-    const fetchResults = async () => {
-      setLoading(true);
-      try {
-        const res = await axiosClient.get(`/post/search?query=${query}`);
-        setSearchResults(res.data.result);
-      } catch (err) {
-        console.error("Search failed:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchResults();
-  }, [query]);
 
   // Helper: Parse "timeAgo" strings like "2 hours ago" into minutes
   const parseTimeAgo = (timeAgo) => {
